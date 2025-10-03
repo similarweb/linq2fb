@@ -1,0 +1,26 @@
+# Build & tooling
+bin/
+obj/
+out/
+artifacts/
+TestResults/
+.vs/
+.idea/
+*.user
+*.suo
+
+# Packaging
+*.nupkg
+*.snupkg
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+.coverage
+coverage*.json
+lcov*.info
+
+*.local.json
