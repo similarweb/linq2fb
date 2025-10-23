@@ -1,0 +1,26 @@
+{
+    "linqToDbTestSettings": {
+        "accountName": "core"
+    },
+    "accounts": {
+        "core": {
+            "clientid": "id",
+            "clientsecret": "cs",
+            "database": "northwind",
+            "url": "http://localhost:3473/"
+        },
+        "core_prepared": {
+            "clientid": "id",
+            "clientsecret": "cs",
+            "database": "northwind",
+            "url": "http://localhost:3473/",
+            "PreparedStatementParamStyle": "FbNumeric"
+        },
+        "mock": {
+            "clientId": "<...>",
+            "clientSecret": "<...>",
+            "database": "<...>",
+            "engine": "<...>"
+        }
+    }
+}

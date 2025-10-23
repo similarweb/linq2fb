@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <FireboltSdkVersion>1.9.1</FireboltSdkVersion>
+    <LinqToDbVersion>3.7.0</LinqToDbVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Build / analyzers -->
+    <PackageVersion Include="MinVer" Version="5.0.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
+    <!-- Test stack -->
+    <PackageVersion Include="xunit.v3" Version="3.0.1" />
+    <PackageVersion Include="xunit.v3.assert" Version="3.0.1" />
+    <PackageVersion Include="Xunit.DependencyInjection" Version="11.0.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <!-- LinqToDb -->
+    <PackageVersion Include="linq2db" Version="$(LinqToDbVersion)" />
+    <!-- Firebolt -->
+    <PackageVersion Include="FireboltNetSDK" Version="$(FireboltSdkVersion)" />
+  </ItemGroup>
+</Project>

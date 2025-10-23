@@ -1,0 +1,106 @@
+name: ci
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+    build-test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                tfm: [net8.0, net9.0]
+                fb: ["1.9.0", "1.9.1"]
+                include:
+                    # net8.0
+                    - tfm: net8.0
+                      sdk: "8.0.414"
+                      fb: "1.9.0"
+                    - tfm: net8.0
+                      sdk: "8.0.414"
+                      fb: "1.9.1"
+                    # net9.0
+                    - tfm: net9.0
+                      sdk: "9.0.305"
+                      fb: "1.9.0"
+                    - tfm: net9.0
+                      sdk: "9.0.305"
+                      fb: "1.9.1"
+        steps:
+            - uses: actions/checkout@v4
+              with: { fetch-depth: 0 }
+
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: |
+                      8.0.x
+                      9.0.x
+                  cache: true
+                  cache-dependency-path: |
+                      **/packages.lock.json
+                      **/Directory.Packages.props
+                      **/global.json
+
+            - name: Pin SDK for this lane
+              run: |
+                  cat > global.json <<JSON
+                  {
+                    "sdk": { "version": "${{ matrix.sdk }}", "rollForward": "disable", "allowPrerelease": false }
+                  }
+                  JSON
+                  dotnet --info
+
+            - name: Start Firebolt (Docker Compose)
+              run: |
+                  docker compose version
+                  docker compose -f ./docker-compose.yml up -d
+                  docker ps -a
+
+            - name: Wait
+              run: sleep 5
+
+            - name: Check version
+              run: docker exec firebolt-core fbcli --format PSQL -- "SELECT VERSION()"
+
+            - name: Seed Northwind data
+              run: |
+                  ./scripts/seed_db.py \
+                    --file=./sql/northwind.sql \
+                    --container=firebolt-core \
+                    --smoke="SELECT COUNT(*) FROM northwind.public.\"Customers\";" \
+                    --smoke="SELECT COUNT(*) FROM northwind.public.products;"
+
+            - name: Restore tools
+              run: dotnet tool restore
+
+            - name: Restore (${{ matrix.tfm }}, Firebolt ${{ matrix.firebolt }})
+              run: dotnet restore -p:TargetFramework=${{ matrix.tfm }} -p:FireboltSdkVersion=${{ matrix.firebolt }}
+
+            - name: Build (${{ matrix.tfm }})
+              run: dotnet build -c Release -p:TargetFramework=${{ matrix.tfm }} -p:FireboltSdkVersion=${{ matrix.firebolt }} --no-restore
+
+            - name: Test (${{ matrix.tfm }})
+              env:
+                  ACCOUNTS__CORE__URL: "http://localhost:3473"
+                  ACCOUNTS__CORE_PREPARED__URL: "http://localhost:3473"
+              run: |
+                  dotnet test \
+                    -c Release \
+                    --collect:"XPlat Code Coverage" \
+                    --results-directory ./coverage \
+                    -f ${{ matrix.tfm }} \
+                    -p:FireboltSdkVersion=${{ matrix.firebolt }} \
+                    --no-build
+
+            - name: Report coverage
+              run: |
+                reportgenerator -reports:coverage/*/coverage.cobertura.xml -targetdir:coverage/report -reporttypes:Html
+
+            - name: Upload coverage report
+              uses: actions/upload-artifact@v4
+              with:
+                name: coverage
+                path: coverage/report
