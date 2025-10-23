@@ -1010,8 +1010,8 @@ public class AggregationTests(
     [Fact]
     public async Task Test_HllCountBuild()
     {
-        var dataToCount1 = northwind.Context.GenerateSeriesWrap(0, 1_000_000, 3).AsCte();
-        var dataToCount2 = northwind.Context.GenerateSeriesWrap(0, 1_000_000, 2).AsCte();
+        var dataToCount1 = northwind.Context.GenerateSeries(0, 1_000_000, 3).AsCte();
+        var dataToCount2 = northwind.Context.GenerateSeries(0, 1_000_000, 2).AsCte();
         var sketch1 = dataToCount1
             .GroupBy(x => 1)
             .Select(group => new
@@ -1054,8 +1054,8 @@ public class AggregationTests(
     [Fact]
     public async Task Test_HllCountBuild_Extension()
     {
-        var dataToCount1 = northwind.Context.GenerateSeriesWrap(0, 1_000_000, 3).AsCte();
-        var dataToCount2 = northwind.Context.GenerateSeriesWrap(0, 1_000_000, 2).AsCte();
+        var dataToCount1 = northwind.Context.GenerateSeries(0, 1_000_000, 3).AsCte();
+        var dataToCount2 = northwind.Context.GenerateSeries(0, 1_000_000, 2).AsCte();
         var sketch1 = dataToCount1.Select(element => Sql.Ext.HllCountBuild(element).ToValue());
         var sketch2 = dataToCount2.Select(element => Sql.Ext.HllCountBuild(element).ToValue());
         var aggregate = sketch1.Concat(sketch2)

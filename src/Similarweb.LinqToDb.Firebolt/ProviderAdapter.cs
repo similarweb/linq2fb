@@ -4,31 +4,13 @@ using LinqToDB.Expressions;
 
 namespace Similarweb.LinqToDB.Firebolt;
 
-#if NET8_0
-internal partial class ProviderAdapter
-{
-    private static readonly object AdapterInstanceLock = new();
-}
-#elif NET9_0_OR_GREATER
-internal partial class ProviderAdapter
-{
-    private static readonly Lock AdapterInstanceLock = new();
-}
-#endif
-
+/// <summary>Adapter for DataProvider. Holds all types required for work, plus wrappers (if needed).</summary>
 internal partial class ProviderAdapter : IDynamicProviderAdapter
 {
-    private static ProviderAdapter? _adapterInstance;
-
     private const string SdkAssemblyName = "FireboltDotNetSdk";
     private const string SdkNamespace = "FireboltDotNetSdk.Client";
 
-    public Type ConnectionType { get; }
-    public Type DataReaderType { get; }
-    public Type ParameterType { get; }
-    public Type CommandType { get; }
-    public Type TransactionType { get; }
-    public global::LinqToDB.Mapping.MappingSchema MappingSchema { get; }
+    private static ProviderAdapter? _adapterInstance;
 
     protected ProviderAdapter(
         Type connectionType,
@@ -36,7 +18,7 @@ internal partial class ProviderAdapter : IDynamicProviderAdapter
         Type parameterType,
         Type commandType,
         Type transactionType,
-        global::LinqToDB.Mapping.MappingSchema mappingSchema,
+        MappingSchema mappingSchema,
         Func<IDbDataParameter, DbType> dbTypeGetter
     )
     {
@@ -48,6 +30,25 @@ internal partial class ProviderAdapter : IDynamicProviderAdapter
         MappingSchema = mappingSchema;
         GetDbType = dbTypeGetter;
     }
+
+    /// <inheritdoc/>
+    public Type ConnectionType { get; }
+
+    /// <inheritdoc/>
+    public Type DataReaderType { get; }
+
+    /// <inheritdoc/>
+    public Type ParameterType { get; }
+
+    /// <inheritdoc/>
+    public Type CommandType { get; }
+
+    /// <inheritdoc/>
+    public Type TransactionType { get; }
+
+    public MappingSchema MappingSchema { get; }
+
+    public Func<IDbDataParameter, DbType> GetDbType { get; }
 
     public static ProviderAdapter GetInstance(string name)
     {
@@ -96,6 +97,4 @@ internal partial class ProviderAdapter : IDynamicProviderAdapter
     {
         public DbType DbType { get; set; }
     }
-
-    public readonly Func<IDbDataParameter, DbType> GetDbType;
 }

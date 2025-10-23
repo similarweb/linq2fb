@@ -9,27 +9,36 @@ using MappingSchemaBase = LinqToDB.Mapping.MappingSchema;
 
 namespace Similarweb.LinqToDB.Firebolt;
 
+/// <summary>
+/// Firebolt Data Provider.
+/// </summary>
 internal class DataProvider : DynamicDataProviderBase<ProviderAdapter>
 {
+    /// <summary>Provider ID.</summary>
     internal const string V2Id = "Firebolt.v2";
     private static readonly HashSet<Type> ArrayTypes = [typeof(double[]), typeof(int[]), typeof(float[]), typeof(long[]), typeof(string[])];
 
     private readonly ISqlOptimizer _sqlOptimizer;
 
-    public override TableOptions SupportedTableOptions => TableOptions.DropIfExists | TableOptions.CreateIfNotExists;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DataProvider"/> class.
+    /// </summary>
+    public DataProvider()
+        : this(V2Id)
+    {
+    }
 
-    public DataProvider() : this(V2Id) { }
-
-    public DataProvider(string name) : this(name, null) { }
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DataProvider"/> class.
+    /// </summary>
+    /// <param name="name">Provider ID.</param>
+    /// <param name="mappingSchema">Mapping schema for provider.</param>
     protected DataProvider(
         string name,
-        MappingSchemaBase? mappingSchema
+        MappingSchemaBase? mappingSchema = null
     ) : base(
         name,
-        mappingSchema != null
-            ? new MappingSchemaBase(mappingSchema, ProviderAdapter.GetInstance(name).MappingSchema)
-            : GetMappingSchema(name, ProviderAdapter.GetInstance(name).MappingSchema),
+        GetMappingSchema(name, mappingSchema),
         ProviderAdapter.GetInstance(name)
     )
     {
@@ -40,22 +49,20 @@ internal class DataProvider : DynamicDataProviderBase<ProviderAdapter>
         _sqlOptimizer = new SqlOptimizer(SqlProviderFlags);
     }
 
-    private static MappingSchemaBase GetMappingSchema(string name, MappingSchemaBase providerSchema)
-    {
-        return name switch
-        {
-            V2Id => new MappingSchemaBase(name, providerSchema, Firebolt.MappingSchema.Instance),
-            _ => throw new NotSupportedException($"Only {V2Id} is supported"),
-        };
-    }
+    /// <inheritdoc />
+    public override TableOptions SupportedTableOptions => TableOptions.DropIfExists | TableOptions.CreateIfNotExists;
 
+    /// <inheritdoc />
     public override ISchemaProvider GetSchemaProvider() => new SchemaProvider();
 
+    /// <inheritdoc />
     public override ISqlBuilder CreateSqlBuilder(MappingSchemaBase mappingSchema) =>
         new SqlBuilder(this, mappingSchema, GetSqlOptimizer(), SqlProviderFlags);
 
+    /// <inheritdoc />
     public override ISqlOptimizer GetSqlOptimizer() => _sqlOptimizer;
 
+    /// <inheritdoc />
     public override void SetParameter(DataConnection dataConnection, IDbDataParameter parameter, string name, DbDataType dataType, object? value)
     {
         var newName = name.StartsWith(SqlBuilder.ParameterSymbol)
@@ -64,6 +71,7 @@ internal class DataProvider : DynamicDataProviderBase<ProviderAdapter>
         base.SetParameter(dataConnection, parameter, newName, dataType, value);
     }
 
+    /// <inheritdoc />
     protected override void SetParameterType(DataConnection dataConnection, IDbDataParameter parameter, DbDataType dataType)
     {
         if (ArrayTypes.Contains(dataType.SystemType))
@@ -80,5 +88,20 @@ internal class DataProvider : DynamicDataProviderBase<ProviderAdapter>
         }
 
         base.SetParameterType(dataConnection, parameter, dataType);
+    }
+
+    private static MappingSchemaBase GetMappingSchema(string name, MappingSchemaBase? providerSchema)
+    {
+        var localSchema = ProviderAdapter.GetInstance(name).MappingSchema;
+
+        return providerSchema switch
+        {
+            not null => new MappingSchemaBase(providerSchema, localSchema),
+            _ => name switch
+            {
+                V2Id => new MappingSchemaBase(name, localSchema, Firebolt.MappingSchema.Instance),
+                _ => throw new NotSupportedException($"Only {V2Id} is supported"),
+            },
+        };
     }
 }

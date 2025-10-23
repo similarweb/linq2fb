@@ -1,15 +1,17 @@
 using System.Globalization;
 using System.Text;
 using LinqToDB;
-using LinqToDB.Data;
 using LinqToDB.Linq;
 using LinqToDB.SqlQuery;
 using Similarweb.LinqToDB.Firebolt.Extensions;
 
 namespace Similarweb.LinqToDB.Firebolt;
 
+/// <inheritdoc/>
 internal class MappingSchema : global::LinqToDB.Mapping.MappingSchema
 {
+    internal static readonly global::LinqToDB.Mapping.MappingSchema Instance = new MappingSchema();
+
     public MappingSchema() : this(DataProvider.V2Id)
     {
     }
@@ -48,10 +50,12 @@ internal class MappingSchema : global::LinqToDB.Mapping.MappingSchema
         AddScalarType(typeof(decimal?), decimalDataType);
         return;
 
-        static void ArrayConverter<T>(StringBuilder sb, SqlDataType _, object arr)
+        static void ArrayConverter<T>(StringBuilder sb, SqlDataType dataType, object arr)
         {
             if (arr is not T[] data)
+            {
                 return;
+            }
 
             sb.Append('[');
             for (var i = 0; i < data.Length - 1; i++)
@@ -59,12 +63,16 @@ internal class MappingSchema : global::LinqToDB.Mapping.MappingSchema
                 sb.Append(ConvertToString(data[i]));
                 sb.Append(',');
             }
+
             if (data.Length >= 1)
+            {
                 sb.Append(ConvertToString(data[^1]));
+            }
+
             sb.Append(']');
         }
 
-        static void ConvertToSql(StringBuilder sb, SqlDataType _, object obj)
+        static void ConvertToSql(StringBuilder sb, SqlDataType dataType, object obj)
         {
             sb.Append(ConvertToString(obj));
         }
@@ -84,6 +92,4 @@ internal class MappingSchema : global::LinqToDB.Mapping.MappingSchema
 
         static string EscapeQuotes(string s) => s.Replace("'", "''");
     }
-
-    internal static readonly global::LinqToDB.Mapping.MappingSchema Instance = new MappingSchema();
 }

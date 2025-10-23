@@ -7,6 +7,48 @@ namespace Similarweb.LinqToDB.Firebolt.Extensions;
 
 public static class FBSql
 {
+    [Sql.Extension(DataProvider.V2Id, "Extract({part} from {date})", ServerSideOnly = false, PreferServerSide = false, BuilderType = typeof(DatePartBuilder))]
+    public static int? DatePart([SqlQueryDependent] Sql.DateParts part, [ExprParameter] DateTime? date)
+    {
+        if (date == null)
+        {
+            return null;
+        }
+
+        return part switch
+        {
+            Sql.DateParts.Year => date.Value.Year,
+            Sql.DateParts.Quarter => ((date.Value.Month - 1) / 3) + 1,
+            Sql.DateParts.Month => date.Value.Month,
+            Sql.DateParts.DayOfYear => date.Value.DayOfYear,
+            Sql.DateParts.Day => date.Value.Day,
+            Sql.DateParts.Week => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(date.Value, CalendarWeekRule.FirstDay, DayOfWeek.Sunday),
+            Sql.DateParts.WeekDay => (((int)date.Value.DayOfWeek + 1 + Sql.DateFirst + 6) % 7) + 1,
+            Sql.DateParts.Hour => date.Value.Hour,
+            Sql.DateParts.Minute => date.Value.Minute,
+            Sql.DateParts.Second => date.Value.Second,
+            Sql.DateParts.Millisecond => date.Value.Millisecond,
+            _ => throw new InvalidOperationException(),
+        };
+    }
+
+    [Sql.Extension(DataProvider.V2Id, "DateDiff", BuilderType = typeof(DateDiffBuilder))]
+    public static int? DateDiff(DateTime? startDate, DateTime? endDate)
+    {
+        if (startDate == null || endDate == null)
+        {
+            return null;
+        }
+
+        return (int)(endDate - startDate).Value.TotalDays;
+    }
+
+    [Sql.Extension(DataProvider.V2Id, "CURRENT_DATE", ServerSideOnly = true)]
+    public static DateTime CurrentDateTime()
+    {
+        return DateTime.Now;
+    }
+
     #region Builders
     private class DatePartBuilder : Sql.IExtensionCallBuilder
     {
@@ -44,7 +86,7 @@ public static class FBSql
                 Sql.DateParts.Minute => "minute",
                 Sql.DateParts.Second => "second",
                 Sql.DateParts.Millisecond => "millisecond",
-                _ => throw new InvalidOperationException($"Unexpected datepart: {part}")
+                _ => throw new InvalidOperationException($"Unexpected datepart: {part}"),
             };
         }
     }
@@ -60,42 +102,4 @@ public static class FBSql
         }
     }
     #endregion // Builders
-
-    [Sql.Extension(DataProvider.V2Id, "Extract({part} from {date})", ServerSideOnly = false, PreferServerSide = false, BuilderType = typeof(DatePartBuilder))]
-    public static int? DatePart([SqlQueryDependent] Sql.DateParts part, [ExprParameter] DateTime? date)
-    {
-        if (date == null)
-            return null;
-
-        return part switch
-        {
-            Sql.DateParts.Year => date.Value.Year,
-            Sql.DateParts.Quarter => (date.Value.Month - 1) / 3 + 1,
-            Sql.DateParts.Month => date.Value.Month,
-            Sql.DateParts.DayOfYear => date.Value.DayOfYear,
-            Sql.DateParts.Day => date.Value.Day,
-            Sql.DateParts.Week => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(date.Value, CalendarWeekRule.FirstDay, DayOfWeek.Sunday),
-            Sql.DateParts.WeekDay => ((int)date.Value.DayOfWeek + 1 + Sql.DateFirst + 6) % 7 + 1,
-            Sql.DateParts.Hour => date.Value.Hour,
-            Sql.DateParts.Minute => date.Value.Minute,
-            Sql.DateParts.Second => date.Value.Second,
-            Sql.DateParts.Millisecond => date.Value.Millisecond,
-            _ => throw new InvalidOperationException(),
-        };
-    }
-
-    [Sql.Extension(DataProvider.V2Id, "DateDiff", BuilderType = typeof(DateDiffBuilder))]
-    public static int? DateDiff(DateTime? startDate, DateTime? endDate)
-    {
-        if (startDate == null || endDate == null)
-            return null;
-
-        return (int)(endDate - startDate).Value.TotalDays;
-    }
-
-    [Sql.Extension(DataProvider.V2Id, "CURRENT_DATE", ServerSideOnly = true)]
-    public static DateTime CurrentDateTime()
-    {
-        return DateTime.Now;
-    }
 }

@@ -6,23 +6,17 @@ using LinqToDB;
 
 namespace Similarweb.LinqToDB.Firebolt.Extensions.Builders;
 
-internal class LambdaBuilder<T>() : LambdaBuilder(typeof(T));
-
 /// <summary>
 /// <para>Lambda builder for Array lambda methods.</para>
 /// <para>TODO: make it use ISqlExpression</para>
 /// </summary>
-/// <param name="expectedResultType"></param>
+/// <param name="expectedResultType">expected Result type.</param>
 internal class LambdaBuilder(
     Type? expectedResultType
 ) : Sql.IExtensionCallBuilder
 {
     private const string LambdaSign = "->";
     private const string ExpectedLambdaName = "lambda";
-
-    public LambdaBuilder() : this(null)
-    {
-    }
 
     private static readonly ReadOnlyDictionary<string, string> MethodList = new(
         new Dictionary<string, string>
@@ -33,6 +27,11 @@ internal class LambdaBuilder(
         }
     );
 
+    public LambdaBuilder() : this(null)
+    {
+    }
+
+    /// <inheritdoc/>
     public void Build(Sql.ISqExtensionBuilder builder)
     {
         var lambda = builder.GetValue<Expression>(ExpectedLambdaName);
@@ -56,6 +55,7 @@ internal class LambdaBuilder(
             sqlExpr.Append(", ");
             sqlExpr.Append(validLambda.Parameters[i].Name);
         }
+
         RecursiveParse(validLambda.Body, sqlExpr.Append(' ').Append(LambdaSign).Append(' '));
         builder.AddExpression(ExpectedLambdaName, sqlExpr.ToString());
         return;
@@ -95,10 +95,16 @@ internal class LambdaBuilder(
                             break;
                         case ExpressionType.Convert:
                             RecursiveParse(unaryExpression.Operand, innerBuilder);
-                            if (Nullable.GetUnderlyingType(unaryExpression.Type) == null) // usually we don't need to explicitly cast to nullables.
+
+                            // usually we don't need to explicitly cast to nullables.
+                            if (Nullable.GetUnderlyingType(unaryExpression.Type) == null)
+                            {
                                 innerBuilder.Append("::").Append(builder.Mapping.GetDataType(unaryExpression.Type).Type.DbType);
+                            }
+
                             break;
                     }
+
                     break;
                 case BinaryExpression binaryExpr:
                     var left = RecursiveParse(binaryExpr.Left);
@@ -137,6 +143,7 @@ internal class LambdaBuilder(
                         innerBuilder.Append("NULL");
                         break;
                     }
+
                     if (constantExpr.Type == typeof(string) ||
                         constantExpr.Type == typeof(Guid) ||
                         constantExpr.Type == typeof(DateTime))
@@ -144,6 +151,7 @@ internal class LambdaBuilder(
                         innerBuilder.Append('\'').Append(constantExpr.Value).Append('\'');
                         break;
                     }
+
                     innerBuilder.Append(constantExpr.Value);
                     break;
                 case MethodCallExpression methodCallExpr:
@@ -151,6 +159,7 @@ internal class LambdaBuilder(
                     {
                         throw new LinqToDBException("Unsupported method: " + methodCallExpr.Method.Name);
                     }
+
                     if (!string.IsNullOrEmpty(sqlMethodName))
                     {
                         innerBuilder.Append(sqlMethodName).Append('(');
@@ -162,6 +171,7 @@ internal class LambdaBuilder(
                         {
                             innerBuilder.Append(", ");
                         }
+
                         RecursiveParse(methodCallExpr.Arguments[i], innerBuilder);
                     }
 

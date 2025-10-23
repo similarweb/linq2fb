@@ -18,7 +18,9 @@ public static class LinqExtensions
     public static IQueryable<TSource> AsMaterializedCte<TSource>(this IQueryable<TSource> source)
     {
         if (source == null)
+        {
             throw new ArgumentNullException(nameof(source));
+        }
 
         var currentSource = global::LinqToDB.LinqExtensions.ProcessSourceQueryable?.Invoke(source) ?? source;
 
@@ -43,7 +45,9 @@ public static class LinqExtensions
         string? name)
     {
         if (source == null)
+        {
             throw new ArgumentNullException(nameof(source));
+        }
 
         var currentSource = global::LinqToDB.LinqExtensions.ProcessSourceQueryable?.Invoke(source) ?? source;
 
