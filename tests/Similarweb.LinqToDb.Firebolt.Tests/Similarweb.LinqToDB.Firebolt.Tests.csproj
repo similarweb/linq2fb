@@ -5,17 +5,10 @@
   </PropertyGroup>
     
   <PropertyGroup>
-    <UseAppHost>true</UseAppHost>
-    <SelfContained>false</SelfContained>
-    <PublishSingleFile>false</PublishSingleFile>
-    <PublishAot>false</PublishAot>
-    <PublishTrimmed>false</PublishTrimmed>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <UseAppHost>true</UseAppHost>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
@@ -26,11 +19,13 @@
 
   <ItemGroup>
     <PackageReference Include="FireboltNetSDK" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="Xunit.DependencyInjection" />
+
+    <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.v3.assert" />
-    <PackageReference Include="coverlet.collector" />
     <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Xunit.DependencyInjection" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
   </ItemGroup>
 
   <ItemGroup>

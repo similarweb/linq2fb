@@ -30,7 +30,7 @@ public class ArrayTests(
             })
             .Where(pair => pair.CheapStuff > 0)
             .OrderByDescending(pair => pair.CheapStuff)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(348, result.Count);
@@ -50,7 +50,7 @@ public class ArrayTests(
                     .ArrayCount(productName => (productName ?? "").Length < 10),
             })
             .Where(pair => pair.WithShortNamesCount > 0)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(11, result.Count);
@@ -70,7 +70,7 @@ public class ArrayTests(
                     .ArrayFilter(productName => (productName ?? "").Length < 10),
             })
             .Where(pair => pair.WithShortNames.ArrayLength() > 0)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(11, result.Count);
@@ -99,7 +99,7 @@ public class ArrayTests(
                 FilteredPrices = item.Prices.ArrayFilter(price => price < 10),
                 FilteredQnt = item.Qnt.ArrayFilter(item.Prices, (qnt, price) => price < 10),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.All(
@@ -135,7 +135,7 @@ public class ArrayTests(
                 FilteredPrices = item.Prices.ArrayFilter(item.ProductNames, (price, name) => Regex.IsMatch(name, @"(^Pav|che|c.*?r)")),
                 FilteredQnt = item.Qnt.ArrayFilter(item.ProductNames, (qnt, name) => Regex.IsMatch(name, @"(^Pav|che|c.*?r)")),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.All(
@@ -163,7 +163,7 @@ public class ArrayTests(
                     .ArrayAnyMatch(name => (name ?? "unknown") == "Pavlova"),
             })
             .Where(pair => pair.HasPavlova)
-            .CountAsync();
+            .CountAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(43, result);
     }
@@ -188,7 +188,7 @@ public class ArrayTests(
             })
             .Where(item => item.AreThereAnyNameWithLengthMoreThanQnt)
             .Select(item => item.OrderId)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(546, result.Count);
     }
@@ -205,7 +205,7 @@ public class ArrayTests(
                     .ArrayAggregate(item => item.Quantity).ToValue()
                     .ArraySort(x => -x),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         result.ForEach(pair => Assert.Equal(pair.Sorted.Max(), pair.Sorted.First()));
@@ -223,7 +223,7 @@ public class ArrayTests(
                     .ArrayAggregate(item => item.Quantity).ToValue()
                     .ArrayReverseSort(x => -x),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         result.ForEach(pair => Assert.Equal(pair.ReverseSorted.Min(), pair.ReverseSorted.First()));
@@ -241,7 +241,7 @@ public class ArrayTests(
                     .ArrayAggregate(item => item.Quantity).ToValue()
                     .ArrayTransform(x => -x),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.True(result.All(item => item.Transformed.All(x => x < 0)));
@@ -264,7 +264,7 @@ public class ArrayTests(
                     .ArrayAggregate(item => item.Product.ProductName).ToValue()
                     .ArrayContains("Pavlova"),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(43, result.Count(item => item.OrderHasPavlova));
@@ -287,7 +287,7 @@ public class ArrayTests(
                 DistinctOrderIds = group.ArrayAggregate(int? (item) => item.Order.CustomerId).ToValue()
                     .ArrayDistinct(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         foreach (var item in result)
@@ -317,7 +317,7 @@ public class ArrayTests(
                 northwind.Context.Products.Where(product => product.ProductName == "Pavlova"),
                 (pair, product) => pair.ProductId == product.Id,
                 (pair, _) => pair.CustomerNames)
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(43, result.Length);
@@ -351,7 +351,7 @@ public class ArrayTests(
                 northwind.Context.Products.Where(product => product.ProductName == "Pavlova"),
                 (pair, product) => pair.ProductId == product.Id,
                 (pair, _) => pair.CustomerNames)
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(43, result.Length);
@@ -382,7 +382,7 @@ public class ArrayTests(
                     .ArrayCount(),
             })
             .OrderBy(item => item.OrderId)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
     }
@@ -415,7 +415,7 @@ public class ArrayTests(
                 pair.TwoDim,
                 Flattened = pair.TwoDim.ArrayFlatten(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
 
@@ -466,7 +466,7 @@ public class ArrayTests(
                 Flatten1 = r.Arr3D.ArrayFlatten(), // int[][]
                 Flatten2 = r.Arr3D.ArrayFlatten().ArrayFlatten(), // int[]
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
 
@@ -501,7 +501,7 @@ public class ArrayTests(
                     .ArrayReverse()
                     .ArrayReverse(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         // Sanity: we actually queried something
         Assert.NotEmpty(rows);
@@ -536,7 +536,7 @@ public class ArrayTests(
                 x.Arr,
                 MinServer = x.Arr.ArrayMin(), // int
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
         foreach (var r in rows)
@@ -566,7 +566,7 @@ public class ArrayTests(
                 x.Arr,
                 MaxServer = x.Arr.ArrayMax(), // int
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
         foreach (var r in rows)
@@ -595,7 +595,7 @@ public class ArrayTests(
                 x.Arr,
                 SumServer = x.Arr.ArraySum(), // int
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
         foreach (var r in rows)
@@ -621,7 +621,7 @@ public class ArrayTests(
                 x.Arr,
                 SumServer = x.Arr.ArraySum(), // long
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
         foreach (var r in rows)
@@ -647,7 +647,7 @@ public class ArrayTests(
                 x.Arr,
                 SumServer = x.Arr.ArraySum(), // double
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
         foreach (var r in rows)
@@ -681,7 +681,7 @@ public class ArrayTests(
             .SelectMany(first => orderItemsByOrder
                 .Where(pair => pair.OrderId == 47)
                 .Select(second => first.ProductIds.ArrayIntersect(second.ProductIds)))
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Contains(1, result);
@@ -711,7 +711,7 @@ public class ArrayTests(
                 (first, secondAndThird) =>
                     first.OrderIds.ArrayIntersect(secondAndThird.second.OrderIds, secondAndThird.third.OrderIds)
             )
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Contains(777, result);
@@ -744,7 +744,7 @@ public class ArrayTests(
                 (first, secondAndThird) =>
                     first.OrderIds.ArraysOverlap(secondAndThird.second.OrderIds, secondAndThird.third.OrderIds)
             )
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.True(result);
     }
@@ -753,6 +753,7 @@ public class ArrayTests(
 
     #region Length
 
+    [Fact]
     public async Task Test_ArrayLength()
     {
         var rows = await northwind.Context.OrderItems
@@ -768,7 +769,7 @@ public class ArrayTests(
                 x.Arr,
                 ArrLenServer = x.Arr.ArrayLength(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
         foreach (var r in rows)
@@ -803,7 +804,7 @@ public class ArrayTests(
                 x.Arr,
                 SliceServer = x.Arr.ArraySlice(startIndex)
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
         Assert.All(rows, r => Assert.True(r.Count >= startIndex));
@@ -837,7 +838,7 @@ public class ArrayTests(
                 x.Arr,
                 SliceServer = x.Arr.ArraySlice(startIndex, length)
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
 
@@ -869,7 +870,7 @@ public class ArrayTests(
                 x.Arr,
                 ServerText = x.Arr.ArrayToString(), // ARRAY_TO_STRING(arr)
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
 
@@ -903,7 +904,7 @@ public class ArrayTests(
                 x.Arr,
                 ServerText = x.Arr.ArrayToString(sep), // ARRAY_TO_STRING(arr, sep)
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
 
@@ -939,7 +940,7 @@ public class ArrayTests(
                 x.TwoDim,
                 ServerText = x.TwoDim.ArrayFlatten().ArrayToString(), // join with no separator
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
 
@@ -979,7 +980,7 @@ public class ArrayTests(
                 x.TwoDim,
                 ServerText = x.TwoDim.ArrayFlatten().ArrayToString(sep), // join with separator
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
 
@@ -1007,7 +1008,7 @@ public class ArrayTests(
                 x.Arr,
                 ServerText = x.Arr.ArrayToString(), // no separator
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
 
@@ -1039,7 +1040,7 @@ public class ArrayTests(
                 x.Arr,
                 ServerText = x.Arr.ArrayToString(sep),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(rows);
 

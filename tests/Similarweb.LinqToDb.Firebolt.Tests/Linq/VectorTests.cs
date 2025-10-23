@@ -18,7 +18,7 @@ public class VectorTests(
         var arr = await northwind.Context
             .FromSql<ArrHolder<double>>("SELECT [1.0, 2] arr")
             .Select(dto => dto.Arr)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
         var item = Assert.Single(arr);
         Assert.Equal([1, 2], item);
     }
@@ -29,7 +29,7 @@ public class VectorTests(
         var arr = await northwind.Context
             .FromSql<ArrHolder<double>>("SELECT [1.0, 2] arr")
             .Select(dto => dto.Arr)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
         var item = Assert.Single(arr);
         Assert.Equal([1, 2], item);
     }
@@ -45,7 +45,7 @@ public class VectorTests(
             .FromSql<ArrHolder<double>>("SELECT [3, 4] arr");
         var result = await first
             .SelectMany(firstDto => second.Select(secondDto => firstDto.Arr.VectorCosineSimilarity(secondDto.Arr)))
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var res = Assert.Single(result);
         Assert.Equal(0.9838699100999074, res, precision: 14);
@@ -60,7 +60,7 @@ public class VectorTests(
             .FromSql<ArrHolder<float>>("SELECT [3, 4] arr");
         var result = await first
             .SelectMany(firstDto => second.Select(secondDto => firstDto.Arr.VectorCosineSimilarity(secondDto.Arr)))
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var res = Assert.Single(result);
         Assert.Equal(0.98386991024017334, res, precision: 7);

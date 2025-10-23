@@ -18,7 +18,7 @@ public class StringTests(
         var result = await northwind.Context.Products
             .Where(product => product.ProductName.RegexpLikeAny(patterns))
             .Select(product => new { product.Id, product.ProductName, })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(5, result.Count);
@@ -31,7 +31,7 @@ public class StringTests(
         var result = await northwind.Context.Products
             .Where(product => product.ProductName.RegexpLikeAny(patterns))
             .Select(product => new { product.Id, product.ProductName, })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(6, result.Count);
@@ -44,7 +44,7 @@ public class StringTests(
         var result = await northwind.Context.Customers
             .Where(customer => customer.FirstName.RegexpLikeAny(patterns) || customer.LastName.RegexpLikeAny(patterns))
             .Select(customer => new { customer.Id, customer.FirstName, customer.LastName, })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(4, result.Count);

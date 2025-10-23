@@ -21,6 +21,7 @@ public class Startup
         var envType = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? string.Empty;
 
         var configuration = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory)
             .AddJsonFile("testsettings.json", optional: true, reloadOnChange: true)
             .AddJsonFile($"testsettings.{envType}.json", optional: true, reloadOnChange: true)
             .AddJsonFile($"testsettings.local.json", optional: true, reloadOnChange: true)

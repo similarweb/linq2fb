@@ -33,7 +33,7 @@ public class AggregationTests(
                 Orders = group.ArrayAggregate(item => item.TotalAmount).ToValue(),
                 Any = group.AnyValue(item => item.TotalAmount).ToValue(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.All(result, item => Assert.Contains(item.Any, item.Orders));
@@ -61,7 +61,7 @@ public class AggregationTests(
                     .ToValue(),
             })
             .Where(item => item.FirstName == "Horst")
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.All(result, item => Assert.Contains(item.Any, item.Orders));
@@ -80,7 +80,7 @@ public class AggregationTests(
                 Approx = Sql.Ext.ApproxCountDistinct(orderItem.Id).ToValue(),
                 Count = Sql.Ext.Count(orderItem.Id).ToValue(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         var item = Assert.Single(result);
@@ -108,7 +108,7 @@ public class AggregationTests(
                 Filtered = group.ArrayAggregate(item => item.TotalAmount).ToValue()
                     .ArrayTransform(amount => amount > 500m ? amount : null),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.All(result, item => Assert.Equal(item.Orders.Select(x => x > 500m ? x : null), item.Filtered));
@@ -129,7 +129,7 @@ public class AggregationTests(
                 SupplierName = group.Key!.CompanyName,
                 MostExpensive = group.MaxBy(product => product.ProductName, product => product.UnitPrice),
             })
-            .ToDictionaryAsync(pair => pair.SupplierName, pair => pair.MostExpensive);
+            .ToDictionaryAsync(pair => pair.SupplierName, pair => pair.MostExpensive, TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(data);
         Assert.Equal(29, data.Count);
@@ -151,7 +151,7 @@ public class AggregationTests(
                 (pair, supplier) => pair.SupplierId == supplier.Id,
                 (pair, supplier) => new { supplier.CompanyName, pair.MostExpensive, }
             )
-            .ToDictionaryAsync(pair => pair.CompanyName, pair => pair.MostExpensive);
+            .ToDictionaryAsync(pair => pair.CompanyName, pair => pair.MostExpensive, TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(data);
         Assert.Equal(29, data.Count);
@@ -184,7 +184,7 @@ public class AggregationTests(
                     .PartitionBy(product.SupplierId)
                     .ToValue(),
             })
-            .FirstAsync(pair => pair.SupplierId == 1);
+            .FirstAsync(pair => pair.SupplierId == 1, TestContext.Current.CancellationToken);
 
         Assert.Equivalent(new[] { 1, 2, 3, }, first.Ids);
     }
@@ -201,7 +201,7 @@ public class AggregationTests(
                     .ArrayAggregate(product => product.UnitPrice)
                     .ToValue(),
             })
-            .ToDictionaryAsync(pair => pair.Id, pair => pair.Arr);
+            .ToDictionaryAsync(pair => pair.Id, pair => pair.Arr, TestContext.Current.CancellationToken);
 
         Assert.Equal(29, allPricesBySupplier.Count);
         Assert.Equivalent(new[] { 18.0m, 19.0m, 10.0m, }, allPricesBySupplier[1]);
@@ -225,7 +225,7 @@ public class AggregationTests(
             join pair in cte on supplier.Id equals pair.SupplierId
             orderby supplier.Id
             select new { supplier.Id, supplier.CompanyName, pair.Products };
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(29, result.Count);
@@ -247,7 +247,7 @@ public class AggregationTests(
                 Prices = group.ArrayAggregate(item => item.UnitPrice * item.Quantity).ToValue(),
                 Avg = group.Average(item => item.UnitPrice * item.Quantity),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.All(result, x => Assert.Equal(x.Avg, Math.Round(x.Prices.Average(), 2, MidpointRounding.AwayFromZero)));
@@ -262,7 +262,7 @@ public class AggregationTests(
                 .Average<decimal>(item.UnitPrice * item.Quantity)
                 .ToValue()
             )
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(232, result);
     }
@@ -284,7 +284,7 @@ public class AggregationTests(
                 First = Sql.Ext.BitAnd(it.First).ToValue(),
                 Second = Sql.Ext.BitAnd(it.Second).ToValue(),
             })
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(4, result.First);
         Assert.Equal(0, result.Second);
@@ -305,7 +305,7 @@ public class AggregationTests(
                 Second = group.BitAnd(it => it.Second),
             })
             .OrderBy(it => it.Group)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Count);
         Assert.Equal([4, 4], result.Select(it => it.First));
@@ -327,7 +327,7 @@ public class AggregationTests(
                 First = Sql.Ext.BitOr(it.First).ToValue(),
                 Second = Sql.Ext.BitOr(it.Second).ToValue(),
             })
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(15, result.First);
         Assert.Equal(7, result.Second);
@@ -348,7 +348,7 @@ public class AggregationTests(
                 Second = group.BitOr(it => it.Second),
             })
             .OrderBy(it => it.Group)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Count);
         Assert.Equal([3, 12], result.Select(it => it.First));
@@ -370,7 +370,7 @@ public class AggregationTests(
                 First = Sql.Ext.BitXor(it.First).ToValue(),
                 Second = Sql.Ext.BitXor(it.Second).ToValue(),
             })
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(15, result.First);
         Assert.Equal(0, result.Second);
@@ -391,7 +391,7 @@ public class AggregationTests(
                 Second = group.BitXor(it => it.Second),
             })
             .OrderBy(it => it.Group)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Count);
         Assert.Equal([3, 18], result.Select(it => it.First));
@@ -421,7 +421,7 @@ public class AggregationTests(
                 Third = Sql.Ext.BoolAnd(it.Third).ToValue(),
                 Forth = Sql.Ext.BoolAnd(it.Fourth).ToValue(),
             })
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.True(result.First);
         Assert.False(result.Second);
@@ -444,7 +444,7 @@ public class AggregationTests(
                 Second = group.BoolAnd(it => it.Second),
             })
             .OrderBy(it => it.Group)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Count);
         Assert.Equal([false, false], result.Select(it => it.First));
@@ -470,7 +470,7 @@ public class AggregationTests(
                 Third = Sql.Ext.BoolOr(it.Third).ToValue(),
                 Forth = Sql.Ext.BoolOr(it.Fourth).ToValue(),
             })
-            .FirstAsync();
+            .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.True(result.First);
         Assert.True(result.Second);
@@ -493,7 +493,7 @@ public class AggregationTests(
                 Second = group.BoolOr(it => it.Second),
             })
             .OrderBy(it => it.Group)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Count);
         Assert.Equal([true, false], result.Select(it => it.First));
@@ -518,7 +518,7 @@ public class AggregationTests(
                 Items = group.ArrayAggregate(item => item.ProductId).ToValue(),
                 Prices = group.ArrayAggregate(item => item.UnitPrice).ToValue(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.All(result,
@@ -538,7 +538,7 @@ public class AggregationTests(
                 Items = Sql.Ext.ArrayAggregate(item.ProductId).ToValue(),
                 Prices = Sql.Ext.ArrayAggregate(item.UnitPrice).ToValue(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var item = Assert.Single(result);
         Assert.Equal(item.MostExpensiveItem,
@@ -589,7 +589,7 @@ public class AggregationTests(
                 Quantities = group.ArrayAggregate(it => it.Quantity).ToValue(),
                 Corr = group.Corr(it => it.UnitPrice, it => it.Quantity),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.All(result,
@@ -621,7 +621,7 @@ public class AggregationTests(
                 Quantities = Sql.Ext.ArrayAggregate(item.Qnt).ToValue(),
                 Corr = Sql.Ext.Corr<double>(item.UnitPrice, item.Qnt).ToValue(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var item = Assert.Single(result);
         Assert.Equal(item.Corr, Correlation(item.Prices, item.Quantities), Tolerance);
@@ -642,7 +642,7 @@ public class AggregationTests(
                 UnitPrices = group.ArrayAggregate(item => item.UnitPrice).ToValue(),
                 Count = group.Count(item => item.UnitPrice > 50),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.All(result, item => Assert.Equal(item.Count, item.UnitPrices.Count(x => x > 50)));
@@ -661,7 +661,7 @@ public class AggregationTests(
                     .Count(item.UnitPrice, Sql.AggregateModifier.Distinct)
                     .ToValue(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var item = Assert.Single(result);
         Assert.Equal(item.Count, item.UnitPrices.Distinct().Count());
@@ -709,7 +709,7 @@ public class AggregationTests(
                 Quantities = group.ArrayAggregate(it => it.Quantity).ToValue(),
                 CovarPop = (double)group.CovarPop(it => it.UnitPrice, it => it.Quantity),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.All(result, item => Assert.Equal(item.CovarPop, CovariancePop(item.Prices, item.Quantities), Tolerance));
@@ -740,7 +740,7 @@ public class AggregationTests(
                 Quantities = Sql.Ext.ArrayAggregate(item.Qnt).ToValue(),
                 CovarPop = Sql.Ext.CovarPop(item.UnitPrice, item.Qnt).ToValue(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var item = Assert.Single(result);
         Assert.Equal(item.CovarPop ?? 0, CovariancePop(item.Prices, item.Quantities), Tolerance);
@@ -788,7 +788,7 @@ public class AggregationTests(
                 Quantities = group.ArrayAggregate(it => it.Quantity).ToValue(),
                 CovarSamp = (double)group.CovarSamp(it => it.UnitPrice, it => it.Quantity),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.All(result,
@@ -820,7 +820,7 @@ public class AggregationTests(
                 Quantities = Sql.Ext.ArrayAggregate(item.Qnt).ToValue(),
                 CovarSamp = Sql.Ext.CovarSamp(item.UnitPrice, item.Qnt).ToValue(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var item = Assert.Single(result);
         Assert.Equal(item.CovarSamp ?? 0, CovarianceSample(item.Prices, item.Quantities), Tolerance);
@@ -854,7 +854,7 @@ public class AggregationTests(
             .OrderByDescending(item => item.Grouping)
             .ThenBy(item => item.SupplierId)
             .ThenBy(item => item.ProductId)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var sums = result
             .Where(item => item.Grouping == 0)
@@ -886,7 +886,7 @@ public class AggregationTests(
             .OrderByDescending(item => item.Grouping)
             .ThenBy(item => item.SupplierId)
             .ThenBy(item => item.ProductId)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var sums = result
             .Where(item => item.Grouping == 0)
@@ -899,7 +899,7 @@ public class AggregationTests(
         Assert.NotNull(result);
         Assert.All(result.Where(item => item.Grouping == 1),
             item => Assert.Equal(item.ItemsCount, sums.GetValueOrDefault(item.SupplierId)));
-        var totalItem = Assert.Single(result.Where(item => item.Grouping == 3));
+        var totalItem = Assert.Single(result, item => item.Grouping == 3);
         Assert.Equal(total, totalItem.ItemsCount);
     }
 
@@ -923,7 +923,7 @@ public class AggregationTests(
             .OrderByDescending(item => item.Grouping)
             .ThenBy(item => item.SupplierId)
             .ThenBy(item => item.ProductId)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var sumsBySupplier = result
             .Where(item => item.Grouping == 0)
@@ -945,7 +945,7 @@ public class AggregationTests(
             item => Assert.Equal(item.ItemsCount, sumsBySupplier.GetValueOrDefault(item.SupplierId)));
         Assert.All(result.Where(item => item.Grouping == 2),
             item => Assert.Equal(item.ItemsCount, sumsByProduct.GetValueOrDefault(item.ProductId)));
-        var totalItem = Assert.Single(result.Where(item => item.Grouping == 3));
+        var totalItem = Assert.Single(result, item => item.Grouping == 3);
         Assert.Equal(totalBySupplier, totalItem.ItemsCount);
         Assert.Equal(totalByProduct, totalItem.ItemsCount);
     }
@@ -962,7 +962,7 @@ public class AggregationTests(
         var result = await northwind.Context.OrderItems
             .GroupBy(item => item.OrderId)
             .Select(group => group.HashAgg())
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.All(result, item => Assert.NotEqual(0, item));
@@ -973,7 +973,7 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .Select(item => Sql.Ext.HashAgg().ToValue())
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var hash = Assert.Single(result);
         Assert.NotEqual(0, hash);
@@ -990,7 +990,7 @@ public class AggregationTests(
                 HashPartial = group.HashAgg(x => x.ProductId, x => x.UnitPrice),
                 HashFull = group.HashAgg(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.All(result, item =>
@@ -1044,7 +1044,7 @@ public class AggregationTests(
                 Estimate1 = Sql.Ext.HllCountEstimate(item.Merged).ToValue(),
                 item.Estimate2,
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var item = Assert.Single(result);
         Assert.NotEqual(0, item.Estimate1);
@@ -1077,7 +1077,7 @@ public class AggregationTests(
                 Estimate1 = Sql.Ext.HllCountEstimate(item.Merged).ToValue(),
                 item.Estimate2,
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         var item = Assert.Single(result);
         Assert.NotEqual(0, item.Estimate1);

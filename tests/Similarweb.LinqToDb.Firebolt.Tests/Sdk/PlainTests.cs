@@ -6,7 +6,7 @@ using Similarweb.LinqToDB.Firebolt.Tests.CoreConnection;
 using Similarweb.LinqToDB.Firebolt.Tests.MockedConnection;
 using Xunit;
 
-namespace Similarweb.LinqToDB.Firebolt.Tests.PoC;
+namespace Similarweb.LinqToDB.Firebolt.Tests.Sdk;
 
 public class PlainTests(
     ConnectionStringsProvider stringsProvider
@@ -21,7 +21,7 @@ public class PlainTests(
             new TestDataProvider(),
             query => captured = query.Trim()
         );
-        await conn.OpenAsync();
+        await conn.OpenAsync(TestContext.Current.CancellationToken);
         var cmdText =
             """
             SELECT u.Name
@@ -30,8 +30,8 @@ public class PlainTests(
             """;
         await using var cmd = new FireboltCommand(conn, cmdText);
         cmd.Parameters.Add(new FireboltParameter("@name", "'"));
-        await using var reader = await cmd.ExecuteReaderAsync();
-        await reader.ReadAsync();
+        await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+        await reader.ReadAsync(TestContext.Current.CancellationToken);
 
         const string expected =
             """
@@ -53,11 +53,11 @@ public class PlainTests(
             CultureInfo.CurrentCulture = new CultureInfo("CS-cz");
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("CS-cz");
             await using var conn = new FireboltCoreConnection(stringsProvider.Get("core"));
-            await conn.OpenAsync();
+            await conn.OpenAsync(TestContext.Current.CancellationToken);
             await using var cmd = new FireboltCommand(conn, "SELECT 18.0::DOUBLE dbl, 18.0::DECIMAL(18,2) dec");
 
-            await using var reader = await cmd.ExecuteReaderAsync();
-            Assert.True(await reader.ReadAsync());
+            await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+            Assert.True(await reader.ReadAsync(TestContext.Current.CancellationToken));
             var dbl = reader.GetDouble(0);
             var dec = reader.GetDecimal(1);
             Assert.Equal(18.0, dbl);
@@ -70,7 +70,7 @@ public class PlainTests(
         }
     }
 
-    [Fact]
+    [Fact(Skip = "For local runs only: requires secret to cloud Firebolt")]
     public async Task Test_Read_Decimal_Cloud()
     {
         var oldCulture = CultureInfo.CurrentCulture;
@@ -80,10 +80,10 @@ public class PlainTests(
             CultureInfo.CurrentCulture = new CultureInfo("CS-cz");
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("CS-cz");
             await using var conn = new FireboltConnection(stringsProvider.Get("web-production"));
-            await conn.OpenAsync();
+            await conn.OpenAsync(TestContext.Current.CancellationToken);
             await using var cmd = new FireboltCommand(conn, "SELECT 18.0::DOUBLE dbl, 18.0::DECIMAL(18,2) dec");
-            await using var reader = await cmd.ExecuteReaderAsync();
-            Assert.True(await reader.ReadAsync());
+            await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+            Assert.True(await reader.ReadAsync(TestContext.Current.CancellationToken));
             var dbl = reader.GetDouble(0);
             var dec = reader.GetDecimal(1);
             Assert.Equal(18.0, dbl);
@@ -102,32 +102,32 @@ public class PlainTests(
         var guid = Guid.NewGuid();
 
         await using var conn = new FireboltCoreConnection(stringsProvider.Get("core"));
-        await conn.OpenAsync();
+        await conn.OpenAsync(TestContext.Current.CancellationToken);
         await using var cmd = new FireboltCommand(conn, "SELECT @param g");
         cmd.Parameters.Add(new FireboltParameter("@param", guid));
         var ex = await Assert.ThrowsAsync<AggregateException>(async () =>
         {
-            await using var reader = await cmd.ExecuteReaderAsync();
-            Assert.True(await reader.ReadAsync());
+            await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+            Assert.True(await reader.ReadAsync(TestContext.Current.CancellationToken));
             var got = reader.GetGuid(0);
             Assert.Equal(guid, got);
         });
         _ = Assert.IsType<FireboltStructuredException>(ex.InnerException);
     }
 
-    [Fact]
+    [Fact(Skip = "For local runs only: requires secret to cloud Firebolt")]
     public async Task Test_Read_Guid_Cloud()
     {
         var guid = Guid.NewGuid();
 
         await using var conn = new FireboltConnection(stringsProvider.Get("web-production"));
-        await conn.OpenAsync();
+        await conn.OpenAsync(TestContext.Current.CancellationToken);
         await using var cmd = new FireboltCommand(conn, "SELECT @param g");
         cmd.Parameters.Add(new FireboltParameter("@param", guid));
         var ex = await Assert.ThrowsAsync<AggregateException>(async () =>
         {
-            await using var reader = await cmd.ExecuteReaderAsync();
-            Assert.True(await reader.ReadAsync());
+            await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+            Assert.True(await reader.ReadAsync(TestContext.Current.CancellationToken));
             var got = reader.GetGuid(0);
             Assert.Equal(guid, got);
         });
@@ -139,10 +139,10 @@ public class PlainTests(
     {
         CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("EN-us");
         await using var conn = new FireboltCoreConnection(stringsProvider.Get("core"));
-        await conn.OpenAsync();
+        await conn.OpenAsync(TestContext.Current.CancellationToken);
         await using var cmd = new FireboltCommand(conn, "SELECT '1979-09-22'::DATE dt");
-        await using var reader = await cmd.ExecuteReaderAsync();
-        Assert.True(await reader.ReadAsync());
+        await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+        Assert.True(await reader.ReadAsync(TestContext.Current.CancellationToken));
         var date = reader.GetDateTime(0);
         Assert.Equal(new DateTime(1979, 9, 22), date);
     }
@@ -151,7 +151,7 @@ public class PlainTests(
     public async Task Test_EscapeRegex_Server()
     {
         await using var conn = new FireboltCoreConnection(stringsProvider.Get("core_prepared"));
-        await conn.OpenAsync();
+        await conn.OpenAsync(TestContext.Current.CancellationToken);
         var cmdText =
             """
             SELECT
@@ -164,10 +164,10 @@ public class PlainTests(
             """;
         await using var cmd = new FireboltCommand(conn, cmdText);
         cmd.Parameters.Add(new FireboltParameter("$1", new[] { "^Pa@", "ta$", "al.*?o" }.ToArray()));
-        await cmd.PrepareAsync();
+        await cmd.PrepareAsync(TestContext.Current.CancellationToken);
 
-        await using var reader = await cmd.ExecuteReaderAsync();
-        Assert.True(await reader.ReadAsync());
+        await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+        Assert.True(await reader.ReadAsync(TestContext.Current.CancellationToken));
         var id = reader.GetInt32(0);
         var name = reader.GetString(1);
         Assert.Equal(77, id);
@@ -178,7 +178,7 @@ public class PlainTests(
     public async Task Test_EscapeRegex_Client()
     {
         await using var conn = new FireboltCoreConnection(stringsProvider.Get("core"));
-        await conn.OpenAsync();
+        await conn.OpenAsync(TestContext.Current.CancellationToken);
         var cmdText =
             """
             SELECT
@@ -194,8 +194,8 @@ public class PlainTests(
         await using var cmd = new FireboltCommand(conn, cmdText);
         cmd.Parameters.Add(new FireboltParameter("@patterns", new[] { "^Pa@", "ta$", "al.*?o" }.ToArray()));
 
-        await using var reader = await cmd.ExecuteReaderAsync();
-        Assert.True(await reader.ReadAsync());
+        await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+        Assert.True(await reader.ReadAsync(TestContext.Current.CancellationToken));
         var id = reader.GetInt32(0);
         var name = reader.GetString(1);
         Assert.Equal(50, id);
@@ -206,7 +206,7 @@ public class PlainTests(
     public async Task Test_Avg_Rounding()
     {
         await using var conn = new FireboltCoreConnection(stringsProvider.Get("core"));
-        await conn.OpenAsync();
+        await conn.OpenAsync(TestContext.Current.CancellationToken);
         var cmdText =
             """
             select avg(x), avg(y)
@@ -217,8 +217,8 @@ public class PlainTests(
             """;
         await using var cmd = new FireboltCommand(conn, cmdText);
 
-        await using var reader = await cmd.ExecuteReaderAsync();
-        Assert.True(await reader.ReadAsync());
+        await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+        Assert.True(await reader.ReadAsync(TestContext.Current.CancellationToken));
         var first = reader.GetDecimal(0);
         var second = reader.GetDecimal(1);
         Assert.NotEqual(first, second);
@@ -228,7 +228,7 @@ public class PlainTests(
     public async Task Test_Dollar_Client()
     {
         await using var conn = new FireboltCoreConnection(stringsProvider.Get("core"));
-        await conn.OpenAsync();
+        await conn.OpenAsync(TestContext.Current.CancellationToken);
         var cmdText =
             """
             SELECT
@@ -241,8 +241,8 @@ public class PlainTests(
             """;
         await using var cmd = new FireboltCommand(conn, cmdText);
         cmd.Parameters.Add(new FireboltParameter("@name", "some$value"));
-        await using var reader = await cmd.ExecuteReaderAsync();
-        while (await reader.ReadAsync())
+        await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+        while (await reader.ReadAsync(TestContext.Current.CancellationToken))
         {
             var id = reader.GetInt32(0);
             var name = reader.GetString(1);

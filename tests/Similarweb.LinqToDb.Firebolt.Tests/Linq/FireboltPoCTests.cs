@@ -20,7 +20,7 @@ public class FireboltPoCTests(
     public async Task TestSelect_WithDefaultSettings()
     {
         var query = from customer in northwind.Context.Customers select customer;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
         Assert.NotEmpty(result);
         Assert.Equal(92, result.Count);
     }
@@ -29,7 +29,7 @@ public class FireboltPoCTests(
     public async Task TestSelect_WithSnakeCase()
     {
         var query = from product in northwind.Context.Products select product;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
         Assert.NotEmpty(result);
         Assert.Equal(78, result.Count);
     }
@@ -43,7 +43,7 @@ public class FireboltPoCTests(
             .Union(northwind.Context.Customers
                 .Where(customer => new[] { 3, 4, 5 }.Contains(customer.Id))
                 .Select(customer => new { customer.Id, customer.FirstName, customer.LastName, }))
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(5, result.Count);
@@ -59,7 +59,7 @@ public class FireboltPoCTests(
             .Concat(northwind.Context.Customers
                 .Where(customer => new[] { 3, 4, 5 }.Contains(customer.Id))
                 .Select(customer => new { customer.Id, customer.FirstName, customer.LastName, }))
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(6, result.Count);
@@ -73,7 +73,7 @@ public class FireboltPoCTests(
             .SelectMany(customer => northwind.Context.Suppliers
                 .Select(supplier => new { Name = customer.FirstName, Company = supplier.CompanyName })
             )
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(92 * 29, result.Count);
@@ -88,7 +88,7 @@ public class FireboltPoCTests(
             .GroupBy(order => order.CustomerId)
             .Select(grouping => new { CustomerId = grouping.Key, OrderCount = grouping.Count() })
             .OrderByDescending(grouping => grouping.OrderCount)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(31, result.First().OrderCount);
@@ -113,7 +113,7 @@ public class FireboltPoCTests(
                 })
             .OrderByDescending(grouping => grouping.OrderCount)
             .ThenBy(grouping => grouping.LastName)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Null(result.First().OrderCount);
@@ -130,7 +130,7 @@ public class FireboltPoCTests(
     public async Task TestFind_ById()
     {
         var query = from customer in northwind.Context.Customers where customer.Id == 1 select customer;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         var item = Assert.Single(result);
         Assert.NotNull(item);
@@ -141,7 +141,7 @@ public class FireboltPoCTests(
     public async Task TestFind_ByString()
     {
         var query = from customer in northwind.Context.Customers where customer.LastName == "Al'dhib" select customer.Id;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         var id = Assert.Single(result);
         Assert.Equal(92, id);
@@ -154,7 +154,7 @@ public class FireboltPoCTests(
             from supplier in northwind.Context.Suppliers
             where supplier.CompanyName.ToLower().Trim() == "mayumi's"
             select supplier;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         var found = Assert.Single(result);
         Assert.NotNull(found);
@@ -165,7 +165,7 @@ public class FireboltPoCTests(
     public async Task TestFind_ByGuid()
     {
         var query = from supplier in northwind.Context.Suppliers where supplier.PublicId == Guid.Parse("05A09602-F480-4914-8FA0-7B3D93F5DAD4") select supplier;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         var item = Assert.Single(result);
@@ -178,7 +178,7 @@ public class FireboltPoCTests(
     {
         var ids = new[] { 1, 2, 3, 123, };
         var query = from supplier in northwind.Context.Suppliers where ids.Contains(supplier.Id) select supplier;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(3, result.Count);
@@ -190,7 +190,7 @@ public class FireboltPoCTests(
     {
         var ids = new[] { Guid.Parse("9C2D54C3-4B50-4E88-987A-4644E3DB40EA"), Guid.Parse("411974c9-adc2-42ff-b5a2-fca346929a8b"), Guid.NewGuid(), };
         var query = from supplier in northwind.Context.Suppliers where ids.Contains(supplier.PublicId) select supplier;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(2, result.Count);
@@ -202,7 +202,7 @@ public class FireboltPoCTests(
     {
         var names = new[] { "Mayumi's", "G'day, Mate", "some_crap" };
         var query = from supplier in northwind.Context.Suppliers where names.Contains(supplier.CompanyName) select supplier;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(2, result.Count);
@@ -214,7 +214,7 @@ public class FireboltPoCTests(
     {
         var names = new[] { "tunnbröd", "original frankfurter grüne soße" };
         var query = from product in northwind.Context.Products where names.Contains(product.ProductName.ToLower()) select product;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(2, result.Count);
@@ -226,7 +226,7 @@ public class FireboltPoCTests(
     {
         var names = new[] { "' OR 1 = 1; --" };
         var query = from product in northwind.Context.Products where names.Contains(product.ProductName) select product;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Empty(result);
     }
@@ -235,7 +235,7 @@ public class FireboltPoCTests(
     public async Task TestFind_UsingStartingLike()
     {
         var query = from product in northwind.Context.Products where product.ProductName.StartsWith("Sir") select product;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(3, result.Count);
@@ -247,20 +247,18 @@ public class FireboltPoCTests(
     {
         var result = await northwind.Context.Customers
             .Where(customer => includes.All(include => customer.FirstName.Contains(include)) && excludes.All(exclude => customer.FirstName.Contains(exclude)))
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
-        Assert.NotEmpty(result);
-        Assert.Equal(1, result.Count);
+        _ = Assert.Single(result);
     }
 
     [Fact]
     public async Task TestFind_UsingContainingLike()
     {
         var query = from customer in northwind.Context.Customers where customer.FirstName.Contains("eg") select customer;
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
-        Assert.NotEmpty(result);
-        Assert.Equal(1, result.Count);
+        _ = Assert.Single(result);
     }
     #endregion // Find
 
@@ -272,11 +270,11 @@ public class FireboltPoCTests(
             .OrderBy(customer => customer.FirstName)
             .Skip(5)
             .Take(10)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
         var noSkip = await northwind.Context.Customers
             .OrderBy(customer => customer.FirstName)
             .Take(6)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.NotEmpty(noSkip);
@@ -293,7 +291,7 @@ public class FireboltPoCTests(
             .Skip(5)
             .Take(10)
             .Where(customer => customer.LastName.StartsWith('C'))
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.True(result.Count < 10);
@@ -307,7 +305,7 @@ public class FireboltPoCTests(
     {
         var result = await northwind.Context.Orders
             .Where(order => order.OrderDate.Year == 2012)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(152, result.Count);
@@ -319,7 +317,7 @@ public class FireboltPoCTests(
     {
         var result = await northwind.Context.Orders
             .Select(order => order.OrderDate.Month)
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(830, result.Count);
@@ -331,7 +329,7 @@ public class FireboltPoCTests(
     {
         var result = await northwind.Context.Orders
             .Select(order => FBSql.DatePart(Sql.DateParts.Year, order.OrderDate))
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(830, result.Count);
@@ -354,7 +352,7 @@ public class FireboltPoCTests(
                 (order, firstOrder) => order.CustomerId == firstOrder.CustomerId,
                 (order, firstOrder) => new { order.OrderNumber, order.OrderDate, firstOrder.FirstOrderDate, })
             .Select(join => new { join.OrderNumber, join.OrderDate, join.FirstOrderDate, Diff = FBSql.DateDiff(join.OrderDate, join.FirstOrderDate) })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(830, result.Count);
@@ -381,7 +379,7 @@ public class FireboltPoCTests(
             .Select(group => new { CustomerId = group.Key, Count = group.Count() })
             .OrderBy(order => order.CustomerId)
             .AsCte()
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(89, result.Count);
@@ -405,7 +403,7 @@ public class FireboltPoCTests(
                 SqlJoinType.Left,
                 (year, yearMonth) => year.OrderYear == yearMonth.OrderYear,
                 (year, yearMonth) => new { year.OrderYear, yearMonth.OrderMonth, YearCount = year.Count, YearMonthCount = yearMonth.Count })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(23, result.Count);
@@ -441,7 +439,7 @@ public class FireboltPoCTests(
             join productStat in cte on supplier.Id equals productStat.SupplierId
             orderby supplier.CompanyName descending
             select new { supplier.Id, supplier.CompanyName, productStat.Count };
-        var result = await query.ToListAsync();
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(29, result.Count);
@@ -458,7 +456,7 @@ public class FireboltPoCTests(
             .GroupBy(product => product.Supplier)
             .Select(group => new { Supplier = group.Key, Count = group.Count() })
             .AsMaterializedCte()
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Contains("MATERIALIZED", northwind.Context.LastQuery);
         Assert.NotEmpty(result);
@@ -482,7 +480,7 @@ public class FireboltPoCTests(
                 SqlJoinType.Left,
                 (year, yearMonth) => year.OrderYear == yearMonth.OrderYear,
                 (year, yearMonth) => new { year.OrderYear, yearMonth.OrderMonth, YearCount = year.Count, YearMonthCount = yearMonth.Count })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Contains("MATERIALIZED", northwind.Context.LastQuery);
         Assert.NotEmpty(result);
@@ -524,7 +522,7 @@ public class FireboltPoCTests(
                 SqlJoinType.Left,
                 (year, yearMonth) => year.OrderYear == yearMonth.OrderYear,
                 (year, yearMonth) => new { year.OrderYear, yearMonth.OrderMonth, YearCount = year.Count, YearMonthCount = yearMonth.Count })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Contains("MATERIALIZED", northwind.Context.LastQuery);
         Assert.NotEmpty(result);
@@ -574,8 +572,8 @@ public class FireboltPoCTests(
         var query =
             from supplier in northwind.Context.Suppliers
             join product in mostPopularProducts on supplier.Id equals product.SupplierId
-            select new { supplier.Id, CompanyName = supplier.CompanyName, ProductId = product.Id, product.ProductName, product.UnitPrice };
-        var result = await query.ToListAsync();
+            select new { supplier.Id, supplier.CompanyName, ProductId = product.Id, product.ProductName, product.UnitPrice };
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(29, result.Count);
@@ -649,7 +647,7 @@ public class FireboltPoCTests(
                 Prices = group.ArrayAggregate(item => Convert.ToInt32(item.UnitPrice)).ToValue(),
                 UnitPrices = group.ArrayAggregate(item => item.UnitPrice).ToValue(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.All(result, x => Assert.Equal(x.UnitPrices.Select(price => (int)Math.Round(price)), x.Prices));
@@ -666,7 +664,7 @@ public class FireboltPoCTests(
                 Prices = group.ArrayAggregate(item => Convert.ToInt32(Math.Round(item.UnitPrice))).ToValue(),
                 UnitPrices = group.ArrayAggregate(item => item.UnitPrice).ToValue(),
             })
-            .ToListAsync();
+            .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.All(result, x => Assert.Equal(x.UnitPrices.Select(price => (int)Math.Round(price)), x.Prices));

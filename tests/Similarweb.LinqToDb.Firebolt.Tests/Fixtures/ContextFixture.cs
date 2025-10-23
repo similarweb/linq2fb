@@ -47,11 +47,11 @@ public class ContextFixture<TContext> : IDisposable, IAsyncDisposable
 
     public void LogLastQuery()
     {
-        // _testOutputHelperAccessor.Output?.WriteLine(
-        //     "-- Firebolt Test SQL for {0}:\n{1}\n\n",
-        //     _testContextAccessor.Current.Test?.TestDisplayName ?? "<unknown test>",
-        //     Context.LastQuery ?? "<unknown query>"
-        // );
+        _testOutputHelperAccessor.Output?.WriteLine(
+            "-- Firebolt Test SQL for {0}:\n{1}\n\n",
+            _testContextAccessor.Current.Test?.TestDisplayName ?? "<unknown test>",
+            Context.LastQuery ?? "<unknown query>"
+        );
     }
 
     public void Dispose()
