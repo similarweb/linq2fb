@@ -1,0 +1,2194 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class AggregationMethods | LinqToFirebolt </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class AggregationMethods | LinqToFirebolt ">
+    
+    <meta name="description" content="Implementation for aggregation functions. in Firebolt.">
+      <link rel="shortcut icon" href="../images/favicon32.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/Logo_h40.png" alt="Similarweb.LinqToFirebolt">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods">
+
+
+
+  <h1 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods" class="text-break">Class AggregationMethods</h1>
+  <div class="markdown level0 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/">aggregation functions.</a> in Firebolt.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">object</span></div>
+    <div class="level1"><span class="xref">AggregationMethods</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Similarweb.html">Similarweb</a>.<a class="xref" href="Similarweb.LinqToDB.html">LinqToDB</a>.<a class="xref" href="Similarweb.LinqToDB.Firebolt.html">Firebolt</a>.<a class="xref" href="Similarweb.LinqToDB.Firebolt.Extensions.html">Extensions</a></h6>
+  <h6><strong>Assembly</strong>: Similarweb.LinqToDB.Firebolt.dll</h6>
+  <h5 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class AggregationMethods</code></pre>
+  </div>
+  <h3 id="methods">Methods
+</h3>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_AnyValue_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.AnyValue*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_AnyValue__1_LinqToDB_Sql_ISqlExtension___0_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.AnyValue``1(LinqToDB.Sql.ISqlExtension,``0)">AnyValue&lt;TR&gt;(ISqlExtension?, TR?)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/any-value.html">ANY_VALUE</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;ANY_VALUE({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;TR?&gt; AnyValue&lt;TR&gt;(this Sql.ISqlExtension? dummy, TR? expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TR</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>expression to get value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;TR&gt;</td>
+        <td><p>first non-<code>null.</code> value (or <code>null.</code> if all are <code>null.</code>s).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TR</span></td>
+        <td><p>Resulting type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_AnyValue_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.AnyValue*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_AnyValue__2_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0___1___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.AnyValue``2(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">AnyValue&lt;T, TR&gt;(IEnumerable&lt;T&gt;, Expression&lt;Func&lt;T, TR&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/any-value.html">ANY_VALUE</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;ANY_VALUE({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;TR?&gt; AnyValue&lt;T, TR&gt;(this IEnumerable&lt;T&gt; collection, Expression&lt;Func&lt;T, TR&gt;&gt; expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>collection to retrieve preferably non-<code>null.</code> value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;T, TR&gt;&gt;</td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>selector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;TR&gt;</td>
+        <td><p>first non-<code>null.</code> value (or <code>null.</code> if all are <code>null.</code>s).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>Type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TR</span></td>
+        <td><p>Resulting type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_ApproxCountDistinct_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.ApproxCountDistinct*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_ApproxCountDistinct__1_LinqToDB_Sql_ISqlExtension___0_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.ApproxCountDistinct``1(LinqToDB.Sql.ISqlExtension,``0)">ApproxCountDistinct&lt;T&gt;(ISqlExtension?, T?)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/approx-count-distinct.html">APPROX_COUNT_DISTINCT</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;APPROX_COUNT_DISTINCT({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;int&gt; ApproxCountDistinct&lt;T&gt;(this Sql.ISqlExtension? dummy, T? expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>expression to get value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">int</span>&gt;</td>
+        <td><p>approximate count.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>Item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_ApproxCountDistinct_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.ApproxCountDistinct*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_ApproxCountDistinct__2_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0___1___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.ApproxCountDistinct``2(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">ApproxCountDistinct&lt;T, TR&gt;(IEnumerable&lt;T&gt;, Expression&lt;Func&lt;T, TR?&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/approx-count-distinct.html">APPROX_COUNT_DISTINCT</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;APPROX_COUNT_DISTINCT({1})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static int ApproxCountDistinct&lt;T, TR&gt;(this IEnumerable&lt;T&gt; collection, Expression&lt;Func&lt;T, TR?&gt;&gt; selector)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>collection to retrieve preferably non-<code>null.</code> value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;T, TR&gt;&gt;</td>
+        <td><span class="parametername">selector</span></td>
+        <td><p>selector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">int</span></td>
+        <td><p>approximate count.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>Type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TR</span></td>
+        <td><p>Resulting type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitAnd_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitAnd*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitAnd_LinqToDB_Sql_ISqlExtension_System_Int32_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitAnd(LinqToDB.Sql.ISqlExtension,System.Int32)">BitAnd(ISqlExtension?, int)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-and.html">BIT_AND</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;BIT_AND({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;int&gt; BitAnd(this Sql.ISqlExtension? dummy, int expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">int</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>value to be aggregated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">int</span>&gt;</td>
+        <td><p>Bitwise <code>AND</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitAnd_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitAnd*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitAnd_LinqToDB_Sql_ISqlExtension_System_Int64_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitAnd(LinqToDB.Sql.ISqlExtension,System.Int64)">BitAnd(ISqlExtension?, long)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-and.html">BIT_AND</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;BIT_AND({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;long&gt; BitAnd(this Sql.ISqlExtension? dummy, long expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">long</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>value to be aggregated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">long</span>&gt;</td>
+        <td><p>Bitwise <code>AND</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitAnd_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitAnd*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitAnd__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Int32___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitAnd``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">BitAnd&lt;TEntity&gt;(IEnumerable&lt;TEntity&gt;, Expression&lt;Func&lt;TEntity, int&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-and.html">BIT_AND</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;BIT_AND({1})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static int BitAnd&lt;TEntity&gt;(this IEnumerable&lt;TEntity&gt; collection, Expression&lt;Func&lt;TEntity, int&gt;&gt; dataExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, <span class="xref">int</span>&gt;&gt;</td>
+        <td><span class="parametername">dataExpression</span></td>
+        <td><p>expression to extract value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">int</span></td>
+        <td><p>Bitwise <code>AND</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitAnd_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitAnd*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitAnd__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Int64___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitAnd``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int64}})">BitAnd&lt;TEntity&gt;(IEnumerable&lt;TEntity&gt;, Expression&lt;Func&lt;TEntity, long&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-and.html">BIT_AND</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;BIT_AND({1})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;long&gt; BitAnd&lt;TEntity&gt;(this IEnumerable&lt;TEntity&gt; collection, Expression&lt;Func&lt;TEntity, long&gt;&gt; dataExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, <span class="xref">long</span>&gt;&gt;</td>
+        <td><span class="parametername">dataExpression</span></td>
+        <td><p>expression to extract value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">long</span>&gt;</td>
+        <td><p>Bitwise <code>AND</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitAnd_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitAnd*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitAnd__1_System_Linq_IQueryable___0__System_Linq_Expressions_Expression_System_Func___0_System_Int32___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitAnd``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">BitAnd&lt;TEntity&gt;(IQueryable&lt;TEntity&gt;, Expression&lt;Func&lt;TEntity, int&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-and.html">BIT_AND</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;BIT_AND({1})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;int&gt; BitAnd&lt;TEntity&gt;(this IQueryable&lt;TEntity&gt; collection, Expression&lt;Func&lt;TEntity, int&gt;&gt; dataExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IQueryable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, <span class="xref">int</span>&gt;&gt;</td>
+        <td><span class="parametername">dataExpression</span></td>
+        <td><p>expression to extract value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">int</span>&gt;</td>
+        <td><p>Bitwise <code>AND</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitOr_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitOr*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitOr_LinqToDB_Sql_ISqlExtension_System_Int32_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitOr(LinqToDB.Sql.ISqlExtension,System.Int32)">BitOr(ISqlExtension?, int)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-or.html">BIT_OR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;BIT_OR({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;int&gt; BitOr(this Sql.ISqlExtension? dummy, int expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">int</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>value to be aggregated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">int</span>&gt;</td>
+        <td><p>Bitwise <code>OR</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitOr_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitOr*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitOr_LinqToDB_Sql_ISqlExtension_System_Int64_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitOr(LinqToDB.Sql.ISqlExtension,System.Int64)">BitOr(ISqlExtension?, long)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-or.html">BIT_OR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;BIT_OR({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;long&gt; BitOr(this Sql.ISqlExtension? dummy, long expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">long</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>value to be aggregated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">long</span>&gt;</td>
+        <td><p>Bitwise <code>OR</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitOr_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitOr*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitOr__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Int32___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitOr``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">BitOr&lt;TEntity&gt;(IEnumerable&lt;TEntity&gt;, Expression&lt;Func&lt;TEntity, int&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-or.html">BIT_OR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;BIT_OR({1})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static int BitOr&lt;TEntity&gt;(this IEnumerable&lt;TEntity&gt; collection, Expression&lt;Func&lt;TEntity, int&gt;&gt; dataExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, <span class="xref">int</span>&gt;&gt;</td>
+        <td><span class="parametername">dataExpression</span></td>
+        <td><p>expression to extract value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">int</span></td>
+        <td><p>Bitwise <code>OR</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitOr_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitOr*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitOr__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Int64___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitOr``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int64}})">BitOr&lt;TEntity&gt;(IEnumerable&lt;TEntity&gt;, Expression&lt;Func&lt;TEntity, long&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-or.html">BIT_OR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;BIT_OR({1})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static long BitOr&lt;TEntity&gt;(this IEnumerable&lt;TEntity&gt; collection, Expression&lt;Func&lt;TEntity, long&gt;&gt; dataExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, <span class="xref">long</span>&gt;&gt;</td>
+        <td><span class="parametername">dataExpression</span></td>
+        <td><p>expression to extract value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">long</span></td>
+        <td><p>Bitwise <code>AND</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitXor_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitXor*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitXor_LinqToDB_Sql_ISqlExtension_System_Int32_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitXor(LinqToDB.Sql.ISqlExtension,System.Int32)">BitXor(ISqlExtension?, int)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-xor.html">BIT_XOR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;BIT_XOR({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;int&gt; BitXor(this Sql.ISqlExtension? dummy, int expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">int</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>value to be aggregated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">int</span>&gt;</td>
+        <td><p>Bitwise <code>XOR</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitXor_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitXor*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitXor_LinqToDB_Sql_ISqlExtension_System_Int64_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitXor(LinqToDB.Sql.ISqlExtension,System.Int64)">BitXor(ISqlExtension?, long)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-xor.html">BIT_XOR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;BIT_XOR({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;long&gt; BitXor(this Sql.ISqlExtension? dummy, long expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">long</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>value to be aggregated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">long</span>&gt;</td>
+        <td><p>Bitwise <code>XOR</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitXor_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitXor*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitXor__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Int32___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitXor``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">BitXor&lt;TEntity&gt;(IEnumerable&lt;TEntity&gt;, Expression&lt;Func&lt;TEntity, int&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-xor.html">BIT_XOR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;BIT_XOR({1})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static int BitXor&lt;TEntity&gt;(this IEnumerable&lt;TEntity&gt; collection, Expression&lt;Func&lt;TEntity, int&gt;&gt; dataExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, <span class="xref">int</span>&gt;&gt;</td>
+        <td><span class="parametername">dataExpression</span></td>
+        <td><p>expression to extract value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">int</span></td>
+        <td><p>Bitwise <code>XOR</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitXor_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitXor*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BitXor__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Int64___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BitXor``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int64}})">BitXor&lt;TEntity&gt;(IEnumerable&lt;TEntity&gt;, Expression&lt;Func&lt;TEntity, long&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bit-xor.html">BIT_XOR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;BIT_XOR({1})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static long BitXor&lt;TEntity&gt;(this IEnumerable&lt;TEntity&gt; collection, Expression&lt;Func&lt;TEntity, long&gt;&gt; dataExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, <span class="xref">long</span>&gt;&gt;</td>
+        <td><span class="parametername">dataExpression</span></td>
+        <td><p>expression to extract value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">long</span></td>
+        <td><p>Bitwise <code>XOR</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BoolAnd_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BoolAnd*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BoolAnd_LinqToDB_Sql_ISqlExtension_System_Boolean_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BoolAnd(LinqToDB.Sql.ISqlExtension,System.Boolean)">BoolAnd(ISqlExtension?, bool)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bool-and.html">BOOL_AND</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;BOOL_AND({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;bool&gt; BoolAnd(this Sql.ISqlExtension? dummy, bool expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">bool</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>value to be aggregated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">bool</span>&gt;</td>
+        <td><p>Bool <code>AND</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BoolAnd_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BoolAnd*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BoolAnd__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Boolean___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BoolAnd``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">BoolAnd&lt;TEntity&gt;(IEnumerable&lt;TEntity&gt;, Expression&lt;Func&lt;TEntity, bool&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bool-and.html">BOOL_AND</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;BOOL_AND({1})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static bool BoolAnd&lt;TEntity&gt;(this IEnumerable&lt;TEntity&gt; collection, Expression&lt;Func&lt;TEntity, bool&gt;&gt; dataExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, <span class="xref">bool</span>&gt;&gt;</td>
+        <td><span class="parametername">dataExpression</span></td>
+        <td><p>expression to extract value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">bool</span></td>
+        <td><p>Bool <code>AND</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BoolOr_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BoolOr*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BoolOr_LinqToDB_Sql_ISqlExtension_System_Boolean_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BoolOr(LinqToDB.Sql.ISqlExtension,System.Boolean)">BoolOr(ISqlExtension?, bool)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bool-or.html">BOOL_OR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;BOOL_OR({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;bool&gt; BoolOr(this Sql.ISqlExtension? dummy, bool expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">bool</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>value to be aggregated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">bool</span>&gt;</td>
+        <td><p>Bool <code>OR</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BoolOr_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BoolOr*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_BoolOr__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Boolean___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.BoolOr``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">BoolOr&lt;TEntity&gt;(IEnumerable&lt;TEntity&gt;, Expression&lt;Func&lt;TEntity, bool&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/bool-or.html">BOOL_OR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;BOOL_OR({1})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static bool BoolOr&lt;TEntity&gt;(this IEnumerable&lt;TEntity&gt; collection, Expression&lt;Func&lt;TEntity, bool&gt;&gt; dataExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, <span class="xref">bool</span>&gt;&gt;</td>
+        <td><span class="parametername">dataExpression</span></td>
+        <td><p>expression to extract value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">bool</span></td>
+        <td><p>Bool <code>OR</code> on collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_Corr_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.Corr*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_Corr_LinqToDB_Sql_ISqlExtension_System_Double_System_Double_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.Corr(LinqToDB.Sql.ISqlExtension,System.Double,System.Double)">Corr(ISqlExtension?, double, double)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/corr.html">CORR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;CORR({first}, {second})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;double&gt; Corr(this Sql.ISqlExtension? dummy, double first, double second)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">double</span></td>
+        <td><span class="parametername">first</span></td>
+        <td><p>first value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">double</span></td>
+        <td><span class="parametername">second</span></td>
+        <td><p>second value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">double</span>&gt;</td>
+        <td><p>Pearson correlation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_Corr_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.Corr*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_Corr_LinqToDB_Sql_ISqlExtension_System_Int64_System_Int64_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.Corr(LinqToDB.Sql.ISqlExtension,System.Int64,System.Int64)">Corr(ISqlExtension?, long, long)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/corr.html">CORR</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;CORR({first}, {second})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;double&gt; Corr(this Sql.ISqlExtension? dummy, long first, long second)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">long</span></td>
+        <td><span class="parametername">first</span></td>
+        <td><p>first value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">long</span></td>
+        <td><span class="parametername">second</span></td>
+        <td><p>second value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">double</span>&gt;</td>
+        <td><p>Pearson correlation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HashAgg_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HashAgg*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HashAgg_LinqToDB_Sql_ISqlExtension_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HashAgg(LinqToDB.Sql.ISqlExtension)">HashAgg(ISqlExtension?)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/hash-agg.html">HASH_AGG</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;HASH_AGG(*)&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;long&gt; HashAgg(this Sql.ISqlExtension? dummy)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">long</span>&gt;</td>
+        <td><p>Aggregating hashes on all cols.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HashAgg_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HashAgg*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HashAgg__1_System_Collections_Generic_IEnumerable___0__" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HashAgg``1(System.Collections.Generic.IEnumerable{``0})">HashAgg&lt;TEntity&gt;(IEnumerable&lt;TEntity&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/hash-agg.html">HASH_AGG</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;HASH_AGG(*)&quot;, PreferServerSide = true, IsAggregate = true)]
+public static long HashAgg&lt;TEntity&gt;(this IEnumerable&lt;TEntity&gt; collection)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">long</span></td>
+        <td><p>Aggregating hashes on all cols.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HashAgg_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HashAgg*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HashAgg__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Object_____" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HashAgg``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Object}}[])">HashAgg&lt;TEntity&gt;(IEnumerable&lt;TEntity&gt;, params Expression&lt;Func&lt;TEntity, object?&gt;&gt;[])</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/hash-agg.html">HASH_AGG</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;HASH_AGG({exprSelectors, &#39;, &#39;})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static long HashAgg&lt;TEntity&gt;(this IEnumerable&lt;TEntity&gt; collection, params Expression&lt;Func&lt;TEntity, object?&gt;&gt;[] exprSelectors)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TEntity&gt;</td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>Collection on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, <span class="xref">object</span>&gt;&gt;[]</td>
+        <td><span class="parametername">exprSelectors</span></td>
+        <td><p>expression 1.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">long</span></td>
+        <td><p>Aggregating hashes on selected cols.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>collection item type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountBuild_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountBuild__1_LinqToDB_Sql_ISqlExtension___0_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild``1(LinqToDB.Sql.ISqlExtension,``0)">HllCountBuild&lt;TR&gt;(ISqlExtension?, TR)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/hll-count-build.html">HLL_COUNT_BUILD</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;HLL_COUNT_BUILD({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;byte[]&gt; HllCountBuild&lt;TR&gt;(this Sql.ISqlExtension? dummy, TR expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p>dummy.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TR</span></td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>Column accessor.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">byte</span>[]&gt;</td>
+        <td><p>Pearson correlation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TR</span></td>
+        <td><p>Field type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountBuild_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountBuild__2_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0___1___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild``2(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">HllCountBuild&lt;T, TR&gt;(IEnumerable&lt;T&gt;, Expression&lt;Func&lt;T, TR&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/hll-count-build.html">HLL_COUNT_BUILD</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;HLL_COUNT_BUILD({expr})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static byte[] HllCountBuild&lt;T, TR&gt;(this IEnumerable&lt;T&gt; data, Expression&lt;Func&lt;T, TR&gt;&gt; expr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">data</span></td>
+        <td><p>Collection.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;T, TR&gt;&gt;</td>
+        <td><span class="parametername">expr</span></td>
+        <td><p>Column accessor.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">byte</span>[]</td>
+        <td><p>Pearson correlation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>Entity type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TR</span></td>
+        <td><p>Field type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountEstimate_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountEstimate_LinqToDB_Sql_ISqlExtension_System_Byte___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate(LinqToDB.Sql.ISqlExtension,System.Byte[])">HllCountEstimate(ISqlExtension?, byte[])</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/reference-sql/functions-reference/numeric/hll-count-estimate">HLL_COUNT_ESTIMATE</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;HLL_COUNT_ESTIMATE({builtItem})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;long&gt; HllCountEstimate(this Sql.ISqlExtension? dummy, byte[] builtItem)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p>dummy.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">byte</span>[]</td>
+        <td><span class="parametername">builtItem</span></td>
+        <td><p>Column.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">long</span>&gt;</td>
+        <td><p>Estimated count.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountEstimate_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountEstimate_System_Byte___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate(System.Byte[])">HllCountEstimate(byte[])</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/reference-sql/functions-reference/numeric/hll-count-estimate">HLL_COUNT_ESTIMATE</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;HLL_COUNT_ESTIMATE({data})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static long HllCountEstimate(this byte[] data)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">byte</span>[]</td>
+        <td><span class="parametername">data</span></td>
+        <td><p>Collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">long</span></td>
+        <td><p>Estimated count.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountMerge_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountMerge_LinqToDB_Sql_ISqlExtension_System_Byte___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge(LinqToDB.Sql.ISqlExtension,System.Byte[])">HllCountMerge(ISqlExtension?, byte[])</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/hll-count-merge.html">HLL_COUNT_MERGE</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;HLL_COUNT_MERGE({column})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;byte[]&gt; HllCountMerge(this Sql.ISqlExtension? dummy, byte[] column)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p>dummy.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">byte</span>[]</td>
+        <td><span class="parametername">column</span></td>
+        <td><p>Column.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;<span class="xref">byte</span>[]&gt;</td>
+        <td><p>Merged builds.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountMerge_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountMerge__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Byte_____" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Byte[]}})">HllCountMerge&lt;T&gt;(IEnumerable&lt;T&gt;, Expression&lt;Func&lt;T, byte[]&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/hll-count-merge.html">HLL_COUNT_MERGE</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;HLL_COUNT_MERGE({colSelector})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static byte[] HllCountMerge&lt;T&gt;(this IEnumerable&lt;T&gt; data, Expression&lt;Func&lt;T, byte[]&gt;&gt; colSelector)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">data</span></td>
+        <td><p>Collection.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;T, <span class="xref">byte</span>[]&gt;&gt;</td>
+        <td><span class="parametername">colSelector</span></td>
+        <td><p>Column.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">byte</span>[]</td>
+        <td><p>Merged builds.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>Entity type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_MaxBy_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.MaxBy*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_MaxBy__2_LinqToDB_Sql_ISqlExtension___0___1_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.MaxBy``2(LinqToDB.Sql.ISqlExtension,``0,``1)">MaxBy&lt;TR, TV&gt;(ISqlExtension?, TR, TV)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/max-by.html">MAX_BY</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Extension(&quot;Firebolt.v2&quot;, &quot;MAX_BY({result}, {compare})&quot;, TokenName = &quot;function&quot;, ChainPrecedence = 1, IsWindowFunction = true, IsAggregate = true)]
+public static AnalyticFunctions.IAggregateFunctionSelfContained&lt;TR&gt; MaxBy&lt;TR, TV&gt;(this Sql.ISqlExtension? dummy, TR result, TV compare)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sql</span>.<span class="xref">ISqlExtension</span></td>
+        <td><span class="parametername">dummy</span></td>
+        <td><p><span class="xref">LinqToDB.Sql.ISqlExtension</span> dummy anchor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TR</span></td>
+        <td><span class="parametername">result</span></td>
+        <td><p>expression to extract target (resulting) value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">compare</span></td>
+        <td><p>expression to extract value for comparison.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AnalyticFunctions</span>.<span class="xref">IAggregateFunctionSelfContained</span>&lt;TR&gt;</td>
+        <td><p><span class="xref">LinqToDB.AnalyticFunctions.IAggregateFunctionSelfContained&lt;TR&gt;</span>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TR</span></td>
+        <td><p>target value's type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TV</span></td>
+        <td><p>compare value's type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_MaxBy_" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.MaxBy*"></a>
+  <h4 id="Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_MaxBy__4_System_Linq_IGrouping___1___0__System_Linq_Expressions_Expression_System_Func___0___2___System_Linq_Expressions_Expression_System_Func___0___3___" data-uid="Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.MaxBy``4(System.Linq.IGrouping{``1,``0},System.Linq.Expressions.Expression{System.Func{``0,``2}},System.Linq.Expressions.Expression{System.Func{``0,``3}})">MaxBy&lt;TEntity, TK, TR, TV&gt;(IGrouping&lt;TK, TEntity&gt;, Expression&lt;Func&lt;TEntity, TR&gt;&gt;, Expression&lt;Func&lt;TEntity, TV&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Implementation for <a href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/max-by.html">MAX_BY</a> Firebolt method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Sql.Expression(&quot;Firebolt.v2&quot;, &quot;MAX_BY({1}, {2})&quot;, PreferServerSide = true, IsAggregate = true)]
+public static TR MaxBy&lt;TEntity, TK, TR, TV&gt;(this IGrouping&lt;TK, TEntity&gt; group, Expression&lt;Func&lt;TEntity, TR&gt;&gt; resultExpression, Expression&lt;Func&lt;TEntity, TV&gt;&gt; compareExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IGrouping</span>&lt;TK, TEntity&gt;</td>
+        <td><span class="parametername">group</span></td>
+        <td><p>Group on which should be performed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, TR&gt;&gt;</td>
+        <td><span class="parametername">resultExpression</span></td>
+        <td><p>expression to extract target (resulting) value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Expression</span>&lt;<span class="xref">Func</span>&lt;TEntity, TV&gt;&gt;</td>
+        <td><span class="parametername">compareExpression</span></td>
+        <td><p>expression to extract value for comparison.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TR</span></td>
+        <td><p>Value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>group item type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td><p>group key type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TR</span></td>
+        <td><p>target value's type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TV</span></td>
+        <td><p>compare value's type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

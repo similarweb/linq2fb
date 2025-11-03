@@ -24,3 +24,5 @@ coverage*.json
 lcov*.info
 
 *.local.json
+
+docs/

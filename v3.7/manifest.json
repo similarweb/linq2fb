@@ -1,0 +1,227 @@
+{
+  "source_base_path": "/Users/a.vishniakov/work/linq2fb/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.yml\" sourcestartlinenumber=\"1\">Implementation for <a href=\"https://docs.firebolt.io/sql_reference/functions-reference/aggregation/\">aggregation functions.</a> in Firebolt.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested-2.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested<T1, T2>",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested-2.yml\" sourcestartlinenumber=\"1\">Unnested table. Produced with <xref href=\"Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnest%60%602(LinqToDB.IDataContext%2c%60%600%5b%5d%2c%60%601%5b%5d)\" data-throw-if-not-resolved=\"false\"></xref> SQL extension method.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested-3.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested-3.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested<T1, T2, T3>",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested-3.yml\" sourcestartlinenumber=\"1\">Unnested table. Produced with <xref href=\"Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnest%60%603(LinqToDB.IDataContext%2c%60%600%5b%5d%2c%60%601%5b%5d%2c%60%602%5b%5d)\" data-throw-if-not-resolved=\"false\"></xref> SQL extension method.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested-4.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested-4.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested<T1, T2, T3, T4>",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested-4.yml\" sourcestartlinenumber=\"1\">Unnested table. Produced with <xref href=\"Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnest%60%604(LinqToDB.IDataContext%2c%60%600%5b%5d%2c%60%601%5b%5d%2c%60%602%5b%5d%2c%60%603%5b%5d)\" data-throw-if-not-resolved=\"false\"></xref> SQL extension method.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.yml\" sourcestartlinenumber=\"1\">Implementation for <a href=\"https://docs.firebolt.io/sql_reference/functions-reference/array/\">array functions</a> in Firebolt.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.FireboltSpecificExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.FireboltSpecificExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions.FireboltSpecificExtensions",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Extensions.FireboltSpecificExtensions.yml\" sourcestartlinenumber=\"1\">General Firebolt SQL extension methods.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.LinqExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.LinqExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions.LinqExtensions",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Extensions.LinqExtensions.yml\" sourcestartlinenumber=\"1\">Firebolt-specific LinqToDb extensions.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.StringMethods.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.StringMethods.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions.StringMethods",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Extensions.StringMethods.yml\" sourcestartlinenumber=\"1\">Implementation for <a href=\"https://docs.firebolt.io/sql_reference/functions-reference/string/\">string functions</a> in Firebolt.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.TableValuedMethods.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.TableValuedMethods.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions.TableValuedMethods",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Extensions.TableValuedMethods.yml\" sourcestartlinenumber=\"1\">Implementation for <a href=\"https://docs.firebolt.io/sql_reference/functions-reference/table-valued/\">table-valued functions</a> in Firebolt.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.VectorMethods.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.VectorMethods.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions.VectorMethods",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Extensions.VectorMethods.yml\" sourcestartlinenumber=\"1\">Implementation for <a href=\"https://docs.firebolt.io/sql_reference/functions-reference/vector/\">vector functions</a> in Firebolt.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Extensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Extensions",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.Registration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.Registration.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt.Registration",
+      "Summary": "<p sourcefile=\"api/Similarweb.LinqToDB.Firebolt.Registration.yml\" sourcestartlinenumber=\"1\"><a href=\"https://github.com/similarweb/linq2fb\">LinqToFirebolt</a> entry point. Your journey begins here.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Similarweb.LinqToDB.Firebolt.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Similarweb.LinqToDB.Firebolt.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Similarweb.LinqToDB.Firebolt",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
