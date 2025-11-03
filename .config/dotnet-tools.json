@@ -4,11 +4,24 @@
   "tools": {
     "dotnet-reportgenerator-globaltool": {
       "version": "5.4.17",
-      "commands": [ "reportgenerator" ]
+      "commands": [
+        "reportgenerator"
+      ],
+      "rollForward": false
     },
     "dotnet-format": {
       "version": "5.1.250801",
-      "commands": [ "dotnet-format" ]
+      "commands": [
+        "dotnet-format"
+      ],
+      "rollForward": false
+    },
+    "docfx": {
+      "version": "2.78.4",
+      "commands": [
+        "docfx"
+      ],
+      "rollForward": false
     }
   }
 }

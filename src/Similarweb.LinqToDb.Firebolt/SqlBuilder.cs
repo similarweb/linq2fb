@@ -7,6 +7,7 @@ using LinqExtensions = Similarweb.LinqToDB.Firebolt.Extensions.LinqExtensions;
 
 namespace Similarweb.LinqToDB.Firebolt;
 
+/// <inheritdoc/>
 internal class SqlBuilder(
     DataProvider? dataProvider,
     global::LinqToDB.Mapping.MappingSchema mappingSchema,
@@ -21,6 +22,12 @@ internal class SqlBuilder(
     private const char NativeParameterPrefix = '@';
     private const char FbNumericParameterPrefix = '$';
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SqlBuilder"/> class.
+    /// </summary>
+    /// <param name="mappingSchema">Mapping schema.</param>
+    /// <param name="sqlOptimizer">SQL optimizer instance.</param>
+    /// <param name="sqlProviderFlags">SQL flags.</param>
     public SqlBuilder(
         global::LinqToDB.Mapping.MappingSchema mappingSchema,
         ISqlOptimizer sqlOptimizer,
@@ -29,6 +36,9 @@ internal class SqlBuilder(
     {
     }
 
+    /// <summary>
+    /// Gets symbol used as parameter prefix.
+    /// </summary>
     public static char ParameterSymbol => NativeParameterPrefix;
 
     /// <inheritdoc/>

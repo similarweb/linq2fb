@@ -35,7 +35,7 @@ jobs:
               run: dotnet restore
 
             - name: Build (Release, all TFMs)
-              run: dotnet build -c Release -warnaserror
+              run: dotnet build -c Release -warnAsError
 
             - name: Pack (symbols)
               run: >

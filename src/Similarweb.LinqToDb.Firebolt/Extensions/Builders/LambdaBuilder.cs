@@ -8,7 +8,7 @@ namespace Similarweb.LinqToDB.Firebolt.Extensions.Builders;
 
 /// <summary>
 /// <para>Lambda builder for Array lambda methods.</para>
-/// <para>TODO: make it use ISqlExpression</para>
+/// <para>TODO: make it use ISqlExpression.</para>
 /// </summary>
 /// <param name="expectedResultType">expected Result type.</param>
 internal class LambdaBuilder(
@@ -27,6 +27,9 @@ internal class LambdaBuilder(
         }
     );
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LambdaBuilder"/> class.
+    /// </summary>
     public LambdaBuilder() : this(null)
     {
     }

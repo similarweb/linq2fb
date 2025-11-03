@@ -328,7 +328,7 @@ public class FireboltPoCTests(
     public async Task TestDate_Part_Year_Explicit()
     {
         var result = await northwind.Context.Orders
-            .Select(order => FBSql.DatePart(Sql.DateParts.Year, order.OrderDate))
+            .Select(order => FireboltSpecificExtensions.DatePart(Sql.DateParts.Year, order.OrderDate))
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
@@ -351,7 +351,7 @@ public class FireboltPoCTests(
                 SqlJoinType.Inner,
                 (order, firstOrder) => order.CustomerId == firstOrder.CustomerId,
                 (order, firstOrder) => new { order.OrderNumber, order.OrderDate, firstOrder.FirstOrderDate, })
-            .Select(join => new { join.OrderNumber, join.OrderDate, join.FirstOrderDate, Diff = FBSql.DateDiff(join.OrderDate, join.FirstOrderDate) })
+            .Select(join => new { join.OrderNumber, join.OrderDate, join.FirstOrderDate, Diff = FireboltSpecificExtensions.DateDiff(join.OrderDate, join.FirstOrderDate) })
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
@@ -390,7 +390,7 @@ public class FireboltPoCTests(
     public async Task TestCte_TwoCtesWithSameNameSelect()
     {
         var sameYearCte = northwind.Context.Orders
-            .GroupBy(order => FBSql.DatePart(Sql.DateParts.Year, order.OrderDate))
+            .GroupBy(order => FireboltSpecificExtensions.DatePart(Sql.DateParts.Year, order.OrderDate))
             .Select(group => new { OrderYear = group.Key, Count = group.Count() })
             .AsCte("duplicated");
         var sameYearMonthCte = northwind.Context.Orders
@@ -467,7 +467,7 @@ public class FireboltPoCTests(
     public async Task TestMaterializedCte_TwoNamedSelect()
     {
         var sameYearCte = northwind.Context.Orders
-            .GroupBy(order => FBSql.DatePart(Sql.DateParts.Year, order.OrderDate))
+            .GroupBy(order => FireboltSpecificExtensions.DatePart(Sql.DateParts.Year, order.OrderDate))
             .Select(group => new { OrderYear = group.Key, Count = group.Count() })
             .AsMaterializedCte("same_year");
         var sameYearMonthCte = northwind.Context.Orders
@@ -509,7 +509,7 @@ public class FireboltPoCTests(
     public async Task TestMaterializedCte_TwoNamedUsingConventionsSelect()
     {
         var sameYearCte = northwind.Context.Orders
-            .GroupBy(order => FBSql.DatePart(Sql.DateParts.Year, order.OrderDate))
+            .GroupBy(order => FireboltSpecificExtensions.DatePart(Sql.DateParts.Year, order.OrderDate))
             .Select(group => new { OrderYear = group.Key, Count = group.Count() })
             .AsCte("__mat__cte__same_year");
         var sameYearMonthCte = northwind.Context.Orders

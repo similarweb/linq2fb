@@ -11,6 +11,7 @@
     <UseAppHost>true</UseAppHost>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <NoWarn>$(NoWarn),SA0001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

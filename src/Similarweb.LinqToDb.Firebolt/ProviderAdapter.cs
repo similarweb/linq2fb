@@ -4,7 +4,10 @@ using LinqToDB.Expressions;
 
 namespace Similarweb.LinqToDB.Firebolt;
 
-/// <summary>Adapter for DataProvider. Holds all types required for work, plus wrappers (if needed).</summary>
+/// <summary>
+/// Adapter for DataProvider. Holds all types required for work, plus wrappers (if needed). Provides required
+/// communication between LinqToDb internals and ADO.NET types.
+/// </summary>
 internal partial class ProviderAdapter : IDynamicProviderAdapter
 {
     private const string SdkAssemblyName = "FireboltDotNetSdk";
@@ -12,6 +15,16 @@ internal partial class ProviderAdapter : IDynamicProviderAdapter
 
     private static ProviderAdapter? _adapterInstance;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ProviderAdapter"/> class.
+    /// </summary>
+    /// <param name="connectionType">Database connection type (see <see cref="ConnectionType"/>).</param>
+    /// <param name="dataReaderType">Database reader type (see <see cref="DataReaderType"/>).</param>
+    /// <param name="parameterType">Parameter type (see <see cref="ParameterType"/>).</param>
+    /// <param name="commandType">Database command type (see <see cref="CommandType"/>).</param>
+    /// <param name="transactionType">Transaction type (see <see cref="TransactionType"/>).</param>
+    /// <param name="mappingSchema">Mapping schema type (see <see cref="MappingSchema"/>).</param>
+    /// <param name="dbTypeGetter">Method for getting <see cref="DbType"/> for <see cref="IDbDataParameter"/> (see <see cref="GetDbType"/>).</param>
     protected ProviderAdapter(
         Type connectionType,
         Type dataReaderType,
@@ -46,10 +59,21 @@ internal partial class ProviderAdapter : IDynamicProviderAdapter
     /// <inheritdoc/>
     public Type TransactionType { get; }
 
+    /// <summary>
+    /// Gets adapter's <see cref="MappingSchema"/>.
+    /// </summary>
     public MappingSchema MappingSchema { get; }
 
+    /// <summary>
+    /// Gets method for retrieving <see cref="DbType"/> for <see cref="IDbDataParameter"/>.
+    /// </summary>
     public Func<IDbDataParameter, DbType> GetDbType { get; }
 
+    /// <summary>
+    /// Gets or creates new <see cref="ProviderAdapter"/> instance.
+    /// </summary>
+    /// <param name="name">Name.</param>
+    /// <returns><see cref="ProviderAdapter"/>.</returns>
     public static ProviderAdapter GetInstance(string name)
     {
         if (_adapterInstance == null)

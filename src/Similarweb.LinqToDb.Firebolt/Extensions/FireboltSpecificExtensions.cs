@@ -5,8 +5,18 @@ using LinqToDB.SqlQuery;
 
 namespace Similarweb.LinqToDB.Firebolt.Extensions;
 
-public static class FBSql
+/// <summary>
+/// General Firebolt SQL extension methods.
+/// </summary>
+public static class FireboltSpecificExtensions
 {
+    /// <summary>
+    /// Get date part extension method.
+    /// </summary>
+    /// <param name="part">What date part should be extracted.</param>
+    /// <param name="date">Date.</param>
+    /// <returns>Value.</returns>
+    /// <exception cref="InvalidOperationException">Invalid or unsupported date part.</exception>
     [Sql.Extension(DataProvider.V2Id, "Extract({part} from {date})", ServerSideOnly = false, PreferServerSide = false, BuilderType = typeof(DatePartBuilder))]
     public static int? DatePart([SqlQueryDependent] Sql.DateParts part, [ExprParameter] DateTime? date)
     {
@@ -32,6 +42,12 @@ public static class FBSql
         };
     }
 
+    /// <summary>
+    /// Calculate date diff extension method.
+    /// </summary>
+    /// <param name="startDate">Start date.</param>
+    /// <param name="endDate">End date.</param>
+    /// <returns>Diff in days.</returns>
     [Sql.Extension(DataProvider.V2Id, "DateDiff", BuilderType = typeof(DateDiffBuilder))]
     public static int? DateDiff(DateTime? startDate, DateTime? endDate)
     {
@@ -43,6 +59,10 @@ public static class FBSql
         return (int)(endDate - startDate).Value.TotalDays;
     }
 
+    /// <summary>
+    /// Get current date and time.
+    /// </summary>
+    /// <returns><see cref="DateTime"/>.</returns>
     [Sql.Extension(DataProvider.V2Id, "CURRENT_DATE", ServerSideOnly = true)]
     public static DateTime CurrentDateTime()
     {

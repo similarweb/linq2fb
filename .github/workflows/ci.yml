@@ -76,6 +76,7 @@ jobs:
                   -c Release \
                   -p:TargetFramework=${{ matrix.tfm }} \
                   -p:FireboltSdkVersion=${{ matrix.fb }} \
+                  --warnAsError \
                   --no-restore
 
             - name: Check Firebolt Core version

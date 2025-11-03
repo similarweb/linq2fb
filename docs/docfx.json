@@ -1,0 +1,54 @@
+{
+    "metadata": [
+        {
+            "src": [
+                {
+                    "src": "../",
+                    "files": [ "src/**.csproj" ]
+                }
+            ],
+            "dest": "api",
+            "filter": "filterConfig.yml"
+        }
+    ],
+    "build": {
+        "content": [
+            {
+                "files": [ "index.md" ]
+            },
+            {
+                "src": "..",
+                "files": [ "articles/**.md", "articles/toc.yml" ],
+                "dest": "articles"
+            },
+            {
+                "files": [ "api/**.yml", "toc.yml" ]
+            }
+        ],
+        "resource": [
+            {
+                "src": "..",
+                "files": [ "images/**" ]
+            }
+        ],
+        "overwrite": [
+            {
+                "files": [ "api/**.overwrite.md" ]
+            }
+        ],
+        "globalMetadata": {
+            "_appTitle": "LinqToFirebolt",
+            "_appName": "Similarweb.LinqToFirebolt",
+            "_enableSearch": false,
+            "_disableContribution": true,
+            "_appFaviconPath": "images/favicon32.ico",
+            "_appLogoPath": "images/Logo_h40.png"
+        },
+        "template": [
+            "default"
+        ],
+        "dest": "_site",
+        "markdownEngineName": "markdig",
+        "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ]
+    }
+}

@@ -8,11 +8,11 @@ namespace Similarweb.LinqToDB.Firebolt.Extensions;
 public static class StringMethods
 {
     /// <summary>
-    /// Implementation for <see href="https://firebolt-vector-search-index.mintlify.app/reference-sql/functions-reference/string/regexp-like-any">REGEXP_LIKE_ANY</see> Firebolt method
+    /// Implementation for <see href="https://firebolt-vector-search-index.mintlify.app/reference-sql/functions-reference/string/regexp-like-any">REGEXP_LIKE_ANY</see> Firebolt method.
     /// </summary>
-    /// <param name="value">Value to check for</param>
-    /// <param name="patterns">Array of regex to check</param>
-    /// <returns>True if the array contains the value, otherwise false</returns>
+    /// <param name="value">Value to check for.</param>
+    /// <param name="patterns">Array of regex to check.</param>
+    /// <returns>True if the array contains the value, otherwise false.</returns>
     [Sql.Extension(DataProvider.V2Id, "REGEXP_LIKE_ANY({value}, {patterns})", CanBeNull = false, IsPredicate = true, PreferServerSide = true)]
     public static bool RegexpLikeAny(
         [ExprParameter] this string value,

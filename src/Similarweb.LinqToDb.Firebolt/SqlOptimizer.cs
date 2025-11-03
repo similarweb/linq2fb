@@ -4,6 +4,7 @@ using LinqToDB.SqlQuery;
 
 namespace Similarweb.LinqToDB.Firebolt;
 
+/// <inheritdoc/>
 internal class SqlOptimizer(
     SqlProviderFlags sqlProviderFlags
 ) : BasicSqlOptimizer(sqlProviderFlags)
