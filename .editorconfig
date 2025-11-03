@@ -1,0 +1,36 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.cs]
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_qualification_for_event = false:suggestion
+dotnet_style_require_accessibility_modifiers = always:error
+csharp_new_line_before_open_brace = all
+csharp_indent_case_contents = true
+dotnet_diagnostic.CA1062.severity = warning
+dotnet_analyzer_diagnostic.category-Style.severity = warning
+
+# StyleCop
+dotnet_diagnostic.SA1009.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1009.md
+dotnet_diagnostic.SA1010.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1010.md
+
+dotnet_diagnostic.SA1101.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1101.md
+dotnet_diagnostic.SA1111.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1111.md
+dotnet_diagnostic.SA1124.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1124.md
+dotnet_diagnostic.SA1128.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1128.md
+
+dotnet_diagnostic.SA1200.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1200.md
+
+dotnet_diagnostic.SA1309.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1309.md
+
+dotnet_diagnostic.SA1601.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1601.md
+dotnet_diagnostic.SA1633.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1633.md

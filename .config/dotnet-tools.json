@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "dotnet-reportgenerator-globaltool": {
+      "version": "5.4.17",
+      "commands": [ "reportgenerator" ]
+    },
+    "dotnet-format": {
+      "version": "5.1.250801",
+      "commands": [ "dotnet-format" ]
+    }
+  }
+}
