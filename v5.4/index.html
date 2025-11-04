@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Firebolt LinqToDB driver | LinqToFirebolt </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Firebolt LinqToDB driver | LinqToFirebolt ">
+    
+    
+      <link rel="shortcut icon" href="images/favicon32.ico">
+      <link rel="stylesheet" href="styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="styles/docfx.css">
+      <link rel="stylesheet" href="styles/main.css">
+      <meta property="docfx:navrel" content="toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/Logo_h40.png" alt="Similarweb.LinqToFirebolt">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="firebolt-linqtodb-driver">Firebolt LinqToDB driver</h1>
+
+<h2 id="version">Version</h2>
+<p>This is documentation for outdated LinqToDb <a href="https://github.com/linq2db/linq2db/tree/v5.4.1">v5.4.1</a>-based version. Please feel free exploring our <a href="https://github.com/similarweb/linq2fb">code</a>!</p>
+<h2 id="target-platforms">Target platforms</h2>
+<ul>
+<li><a href="https://dotnet.microsoft.com/en-us/download/dotnet/8.0">NET8</a> (8.0.414) — backporting</li>
+<li><a href="https://dotnet.microsoft.com/en-us/download/dotnet/9.0">NET9</a> (9.0.305) — mainstream</li>
+</ul>
+<h2 id="dogfooding">Dogfooding</h2>
+<p>We in <a href="https://developers.similarweb.com/docs/similarweb-web-traffic-api">Similarweb</a> use this package to fetch data from <a href="https://firebolt.io">Firebolt V2</a>, so constantly improving it.</p>
+<h3 id="supported-versions">Supported versions</h3>
+<ul>
+<li>Firebolt: I tested <a href="https://firebolt.io">Firebolt</a> only for v2 since v1 is deprecated. V1 is not tested and you my try to use it without any warranties.
+<ul>
+<li>You will need <a href="https://github.com/firebolt-db/firebolt-net-sdk">FireboltNetSDK</a> v.1.9.1 and above for using this package.</li>
+</ul>
+</li>
+<li>LinqToDB:
+<ul>
+<li><a href="https://github.com/linq2db/linq2db/tree/v3.7.0">v3.7.0</a> — <em>deprecated</em>, not being updated;</li>
+<li><a href="https://github.com/linq2db/linq2db/tree/v5.4.1">v5.4.1</a> — check <a href="https://similarweb.github.com/linq2fb">documentation</a> about this package;</li>
+</ul>
+</li>
+</ul>
+<h2 id="how-to-use">How to use</h2>
+<ol>
+<li><p>Install this package (see <a href="#installing-package">how to install</a>)</p>
+</li>
+<li><p>Add <a href="https://github.com/firebolt-db/firebolt-net-sdk">FireboltNetSDK</a> package since this implementation uses same way of loading ADO.NET classes, as LinqToDB;</p>
+</li>
+<li><p>In your code add following:</p>
+<pre><code class="lang-csharp">Registration.AddDataProvider(); // this will register Firebolt provider
+var options = new LinqToDbConnectionOptionsBuilder()
+    .UseConnectionString(Registration.DataProviderName, connectionString)
+    .Build();
+var db = new DataConnection(options);
+// here you may use `db` as usual LinqToDB connection
+</code></pre>
+</li>
+<li><p>In case you want real LinqToDB features, you should use <code>db.GetTable&lt;T&gt;()</code> method to get table as LinqToDB table. For example:</p>
+<pre><code class="lang-csharp">var table = db.GetTable&lt;YourEntity&gt;();
+var result = table.Where(x =&gt; x.Id == 1).ToList();
+</code></pre>
+</li>
+</ol>
+<h2 id="installing-package">Installing package</h2>
+<h3 id="using-net-cli">Using .NET CLI</h3>
+<pre><code class="lang-shell">dotnet add package Similarweb.LinqToFirebolt
+</code></pre>
+<h3 id="using-visual-studio-ui">Using Visual Studio UI</h3>
+<p><code>Tools &gt; NuGet Package Manager &gt; Manage NuGet Packages for Solution</code> and search for <code>Similarweb.LinqToFirebolt</code></p>
+<h3 id="using-rider-ui">Using Rider UI</h3>
+<p><code>Tools &gt; NuGet &gt; Manage NuGet packages for &lt;solution name&gt;</code> and search for <code>SimilarWeb.LinqToFirebolt</code></p>
+<h3 id="using-package-manager-console">Using Package Manager Console:</h3>
+<pre><code class="lang-shell">Install-Package SimilarWeb.LinqToFirebolt
+</code></pre>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>
