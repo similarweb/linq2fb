@@ -1,0 +1,22 @@
+<Project>
+  <PropertyGroup>
+    <PackageId>Similarweb.LinqToFirebolt</PackageId>
+    <Description>Linq2DB driver for Firebolt v2. Developed in Similarweb for Similarweb, but feel free to use it.</Description>
+    <Authors>Alexey Vishniakov / @norritt</Authors>
+    <Company>Similarweb LTD</Company>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/similarweb/linq2fb</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/orgs/similarweb/projects/2</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>firebolt;linq2db;linq2fb;similarweb</PackageTags>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../Readme.md" Pack="true" PackagePath="/" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>

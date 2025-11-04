@@ -1,0 +1,9 @@
+apiRules:
+    - exclude:
+          uidRegex: ^System
+    - exclude:
+          hasAttribute:
+              uid: System.ObsoleteAttribute
+    - exclude:
+          type: Namespace
+          uidRegex: ^Similarweb\.LinqToDB\.Firebolt\.Internal

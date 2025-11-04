@@ -16,5 +16,46 @@ dotnet_style_qualification_for_event = false:suggestion
 dotnet_style_require_accessibility_modifiers = always:error
 csharp_new_line_before_open_brace = all
 csharp_indent_case_contents = true
-dotnet_diagnostic.CA1062.severity = warning
-dotnet_analyzer_diagnostic.category-Style.severity = warning
+
+# dotnet_diagnostic.CA1062.severity = warning
+# dotnet_analyzer_diagnostic.category-Style.severity = warning
+
+# StyleCop
+# `stylecop.json` could not be loaded
+#   disabled since it has really limited capabilities
+dotnet_diagnostic.SA0002.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA0002.md
+
+# A closing parenthesis should never be preceded by whitespace
+#   disabled since for multiline (3+ lines) code it is nicer to have closing parenthesis on separate line  
+dotnet_diagnostic.SA1009.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1009.md
+# An opening square bracket should never be preceded by whitespace
+#   disabled since now we have [] collection declaring syntax  
+dotnet_diagnostic.SA1010.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1010.md
+
+# A call to an instance member of the local class or a base class is not prefixed with 'this.'
+#   disabled because of verbosity
+dotnet_diagnostic.SA1101.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1101.md
+# The closing parenthesis or bracket in a call to a C# method or indexer, or the declaration of a method or indexer, is not placed on the same line as the last parameter.
+#   disabled since for multiline (3+ lines) code it is nicer to have closing parenthesis on separate line (see SA1009)  
+dotnet_diagnostic.SA1111.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1111.md
+# The C# code contains a region.
+#   disabled: probably good rule but not in this case
+dotnet_diagnostic.SA1124.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1124.md
+# A constructor initializer is on the same line as the constructor declaration, within a C# code file.
+#   disabled since in that case we may see multi-level indentations, and we are not in Python
+dotnet_diagnostic.SA1128.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1128.md
+
+# A C# using directive is placed outside of a namespace element.
+#   disabled because of file-scoped namespaces (no file contain more than one namespace)
+dotnet_diagnostic.SA1200.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1200.md
+
+# A field name in C# begins with an underscore.
+#   disabled because `this` rule (SA1101) also disabled
+dotnet_diagnostic.SA1309.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1309.md
+
+# A C# partial element is missing a documentation header.
+#   disabled since comments in that case is merging not in clear way (+ partials are used for .net version specifics) 
+dotnet_diagnostic.SA1601.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1601.md
+# A C# code file is missing a standard file header.
+#   disabled because of verbosity
+dotnet_diagnostic.SA1633.severity = none # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1633.md

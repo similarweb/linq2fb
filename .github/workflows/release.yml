@@ -1,0 +1,60 @@
+name: release
+
+on:
+    push:
+        tags:
+            - 'v*.*.*'   # MinVer-friendly tag pattern (v1.2.3)
+
+jobs:
+    pack-and-publish:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write   # to create GitHub Release
+            packages: write   # for GitHub Packages if you use it later
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0  # required for MinVer to read tags
+
+            - name: Setup .NET SDKs (8 & 9)
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: |
+                      8.0.x
+                      9.0.x
+                  cache: true
+
+            - name: Pin SDK
+              run: |
+                  cat > global.json <<'JSON'
+                  { "sdk": { "version": "9.0.305", "rollForward": "latestFeature", "allowPrerelease": false } }
+                  JSON
+                  dotnet --info
+
+            - name: Restore
+              run: dotnet restore
+
+            - name: Build (Release, all TFMs)
+              run: dotnet build -c Release -warnAsError
+
+            - name: Pack (symbols)
+              run: >
+                  dotnet pack src/Similarweb.LinqToDB.Firebolt/Similarweb.LinqToDB.Firebolt.csproj
+                  -c Release
+                  -o ./artifacts
+                  /p:ContinuousIntegrationBuild=true
+                  /p:IncludeSymbols=true
+                  /p:SymbolPackageFormat=snupkg
+
+            - name: Push to NuGet
+              env:
+                  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+              run: dotnet nuget push "artifacts/*.nupkg" -k "$NUGET_API_KEY" -s https://api.nuget.org/v3/index.json --skip-duplicate
+
+            - name: Create GitHub Release (attach nupkg + snupkg)
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: |
+                      artifacts/*.nupkg
+                      artifacts/*.snupkg
+                  generate_release_notes: true

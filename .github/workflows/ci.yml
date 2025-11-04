@@ -1,0 +1,147 @@
+name: ci
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+    build-test:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                tfm: [net8.0, net9.0]
+                fb: ["1.9.1"]
+        steps:
+            - uses: actions/checkout@v4
+              with: { fetch-depth: 0 }
+            - name: Select SDK version for this TFM
+              id: pick-sdk
+              run: |
+                  case "${{ matrix.tfm }}" in
+                    net8.0)
+                      SDK_VER="8.0.414";;
+                    net9.0)
+                      SDK_VER="9.0.305";;
+                    *)
+                      echo "Unknown TFM ${{ matrix.tfm }}" >&2
+                      exit 1;;
+                  esac
+                  {
+                    echo "### SDK"
+                    echo ""
+                    echo "**.NET**: \`${{ matrix.tfm }}\`"
+                    echo "**SDK version**: \`$SDK_VER\`"
+                  }  >> $GITHUB_STEP_SUMMARY
+
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: ${{ steps.pick-sdk.outputs.sdk_version }}
+                  cache: true
+                  cache-dependency-path: |
+                      **/packages.lock.json
+                      **/Directory.Packages.props
+                      **/global.json
+
+            - name: Pin SDK for this lane
+              run: |
+                  cat > global.json <<JSON
+                  {
+                    "sdk": { "version": "${{ steps.pick-sdk.outputs.sdk_version }}", "rollForward": "disable", "allowPrerelease": false }
+                  }
+                  JSON
+                  dotnet --info
+
+            - name: Start Firebolt (Docker Compose)
+              run: |
+                  docker compose version
+                  docker compose -f ./docker-compose.yml up -d --quiet-pull
+                  docker ps -a
+
+            - name: Restore tools
+              run: dotnet tool restore
+
+            - name: Restore (${{ matrix.tfm }}, Firebolt ${{ matrix.fb }})
+              run: |
+                dotnet restore \
+                  -p:TargetFramework=${{ matrix.tfm }} \
+                  -p:FireboltSdkVersion=${{ matrix.fb }}
+
+            - name: Build (${{ matrix.tfm }}, Firebolt ${{ matrix.fb }})
+              run: |
+                dotnet build \
+                  -c Release \
+                  -p:TargetFramework=${{ matrix.tfm }} \
+                  -p:FireboltSdkVersion=${{ matrix.fb }} \
+                  --warnAsError \
+                  --no-restore
+
+            - name: Check Firebolt Core version
+              run: |
+                # Run the command and capture output
+                RAW_OUTPUT=$(docker exec firebolt-core fbcli --format JSONLines_Compact -- "SELECT VERSION()")
+
+                # Extract the line with message_type=="DATA", then grab the version field from .data[0][0]
+                VERSION=$(echo "$RAW_OUTPUT" \
+                  | grep '^{\"message_type\":\"DATA\"' \
+                  | jq -r '.data[0][0]')
+
+                echo "Firebolt version: $VERSION"
+
+                # Make it available to later steps as an output
+                echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+                # Add it to the GitHub Actions summary (nice human-readable bit in the UI)
+                {
+                  echo "### Firebolt Core"
+                  echo ""
+                  echo "**Version:** \`$VERSION\`"
+                } >> $GITHUB_STEP_SUMMARY
+
+            - name: Seed Database with Northwind data
+              run: |
+                  ./scripts/seed_db.py \
+                    --file=./sql/northwind.sql \
+                    --container=firebolt-core \
+                    --smoke="SELECT COUNT(*) FROM northwind.public.\"Customers\";" \
+                    --smoke="SELECT COUNT(*) FROM northwind.public.products;"
+
+            - name: Test (${{ matrix.tfm }}, Firebolt ${{ matrix.fb }})
+              run: |
+                  dotnet test \
+                    -c Release \
+                    --collect:"XPlat Code Coverage" \
+                    --results-directory ./coverage \
+                    -f ${{ matrix.tfm }} \
+                    -p:FireboltSdkVersion=${{ matrix.fb }} \
+                    --no-build \
+                    -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+
+            - name: Report coverage
+              run: |
+                dotnet reportgenerator \
+                  -reports:coverage/*/coverage.cobertura.xml \
+                  -targetdir:coverage/report \
+                  -reporttypes:Html
+
+                dotnet reportgenerator \
+                  -reports:coverage/*/coverage.cobertura.xml \
+                  -targetdir:coverage/text \
+                  -reporttypes:TextSummary
+
+                {
+                  echo "### Code Coverage"
+                  echo ""
+                  echo '```'
+                  cat coverage/text/Summary.txt
+                  echo '```'
+                } >> $GITHUB_STEP_SUMMARY
+
+            - name: Upload coverage report
+              uses: actions/upload-artifact@v4
+              with:
+                name: coverage_${{ matrix.tfm }}_${{ matrix.fb }}
+                path: coverage/report
