@@ -4,11 +4,11 @@ using LinqToDB.Data;
 
 namespace Similarweb.LinqToDB.Firebolt.Tests.Northwind;
 
-public class NorthwindContext(LinqToDbConnectionOptions connectionOptions) : DataConnection(connectionOptions)
+public class NorthwindContext(DataOptions dataOptions) : DataConnection(dataOptions)
 {
-    public ITable<Customer> Customers => GetTable<Customer>();
-    public ITable<Order> Orders => GetTable<Order>();
-    public ITable<OrderItem> OrderItems => GetTable<OrderItem>();
-    public ITable<Product> Products => GetTable<Product>();
-    public ITable<Supplier> Suppliers => GetTable<Supplier>();
+    public ITable<Customer> Customers => this.GetTable<Customer>();
+    public ITable<Order> Orders => this.GetTable<Order>();
+    public ITable<OrderItem> OrderItems => this.GetTable<OrderItem>();
+    public ITable<Product> Products => this.GetTable<Product>();
+    public ITable<Supplier> Suppliers => this.GetTable<Supplier>();
 }

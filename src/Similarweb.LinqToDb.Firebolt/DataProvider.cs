@@ -1,4 +1,5 @@
 using System.Data;
+using System.Data.Common;
 using LinqToDB;
 using LinqToDB.Common;
 using LinqToDB.Data;
@@ -56,14 +57,20 @@ internal class DataProvider : DynamicDataProviderBase<ProviderAdapter>
     public override ISchemaProvider GetSchemaProvider() => new SchemaProvider();
 
     /// <inheritdoc />
-    public override ISqlBuilder CreateSqlBuilder(MappingSchemaBase mappingSchema) =>
-        new SqlBuilder(this, mappingSchema, GetSqlOptimizer(), SqlProviderFlags);
+    public override ISqlBuilder CreateSqlBuilder(MappingSchemaBase mappingSchema, DataOptions dataOptions) =>
+        new SqlBuilder(this, mappingSchema, dataOptions, GetSqlOptimizer(dataOptions), SqlProviderFlags);
 
     /// <inheritdoc />
-    public override ISqlOptimizer GetSqlOptimizer() => _sqlOptimizer;
+    public override ISqlOptimizer GetSqlOptimizer(DataOptions dataOptions) => _sqlOptimizer;
 
     /// <inheritdoc />
-    public override void SetParameter(DataConnection dataConnection, IDbDataParameter parameter, string name, DbDataType dataType, object? value)
+    public override void SetParameter(
+        DataConnection dataConnection,
+        DbParameter parameter,
+        string name,
+        DbDataType dataType,
+        object? value
+    )
     {
         var newName = name.StartsWith(SqlBuilder.ParameterSymbol)
             ? name
@@ -72,7 +79,11 @@ internal class DataProvider : DynamicDataProviderBase<ProviderAdapter>
     }
 
     /// <inheritdoc />
-    protected override void SetParameterType(DataConnection dataConnection, IDbDataParameter parameter, DbDataType dataType)
+    protected override void SetParameterType(
+        DataConnection dataConnection,
+        DbParameter parameter,
+        DbDataType dataType
+    )
     {
         if (ArrayTypes.Contains(dataType.SystemType))
         {

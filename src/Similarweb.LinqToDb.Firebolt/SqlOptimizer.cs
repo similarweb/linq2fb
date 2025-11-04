@@ -1,3 +1,4 @@
+using LinqToDB;
 using LinqToDB.Extensions;
 using LinqToDB.SqlProvider;
 using LinqToDB.SqlQuery;
@@ -9,12 +10,16 @@ internal class SqlOptimizer(
     SqlProviderFlags sqlProviderFlags
 ) : BasicSqlOptimizer(sqlProviderFlags)
 {
+    private const bool CompareNullsAsValues = false;
+
     /// <inheritdoc/>
     public override bool LikeIsEscapeSupported => false;
 
     /// <inheritdoc/>
     public override ISqlExpression ConvertExpressionImpl(ISqlExpression expression, ConvertVisitor<RunOptimizationContext> visitor)
     {
+        // we know if our db allows this or not
+        var options = new DataOptions().WithOptions<LinqOptions>(opt => opt.WithCompareNullsAsValues(CompareNullsAsValues));
         expression = base.ConvertExpressionImpl(expression, visitor);
 
         return expression switch
@@ -36,7 +41,7 @@ internal class SqlOptimizer(
             SqlFunction func => func.Name switch
             {
                 "Convert" when func.SystemType.ToUnderlying() == typeof(bool) =>
-                    AlternativeConvertToBoolean(func, 1) ??
+                    AlternativeConvertToBoolean(func, options, 1) ??
                     new SqlExpression(func.SystemType, "Cast({0} as {1})", Precedence.Primary, FloorBeforeConvert(func), func.Parameters[0]),
                 "Convert" => new SqlExpression(func.SystemType, "Cast({0} as {1})", Precedence.Primary, FloorBeforeConvert(func), func.Parameters[0]),
                 "CharIndex" => func.Parameters.Length == 2
