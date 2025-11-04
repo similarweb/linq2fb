@@ -4,11 +4,53 @@
   "files": [
     {
       "type": "Resource",
+      "source_relative_path": "../images/LogoLarge.png",
       "output": {
         "resource": {
-          "relative_path": "index.json"
+          "relative_path": "images/LogoLarge.png"
         }
-      }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "../images/Logo_h40.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/Logo_h40.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "../images/favicon128.ico",
+      "output": {
+        "resource": {
+          "relative_path": "images/favicon128.ico"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "../images/favicon32.ico",
+      "output": {
+        "resource": {
+          "relative_path": "images/favicon32.ico"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "../images/favicon64.ico",
+      "output": {
+        "resource": {
+          "relative_path": "images/favicon64.ico"
+        }
+      },
+      "version": ""
     },
     {
       "type": "ManagedReference",
@@ -201,6 +243,16 @@
         },
         ".json": {
           "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
         }
       },
       "version": ""
