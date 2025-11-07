@@ -316,81 +316,6 @@ references:
   fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HashAgg(Of TEntity)(System.Collections.Generic.IEnumerable(Of TEntity), ParamArray System.Linq.Expressions.Expression(Of System.Func(Of TEntity, Object))())
   nameWithType: AggregationMethods.HashAgg<TEntity>(IEnumerable<TEntity>, params Expression<Func<TEntity, object?>>[])
   nameWithType.vb: AggregationMethods.HashAgg(Of TEntity)(IEnumerable(Of TEntity), ParamArray Expression(Of Func(Of TEntity, Object))())
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild*
-  name: HllCountBuild
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountBuild_
-  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild
-  isSpec: "True"
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild
-  nameWithType: AggregationMethods.HllCountBuild
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild``1(LinqToDB.Sql.ISqlExtension,``0)
-  name: HllCountBuild<TR>(ISqlExtension?, TR)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountBuild__1_LinqToDB_Sql_ISqlExtension___0_
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild``1(LinqToDB.Sql.ISqlExtension,``0)
-  name.vb: HllCountBuild(Of TR)(ISqlExtension, TR)
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild<TR>(LinqToDB.Sql.ISqlExtension?, TR)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild(Of TR)(LinqToDB.Sql.ISqlExtension, TR)
-  nameWithType: AggregationMethods.HllCountBuild<TR>(Sql.ISqlExtension?, TR)
-  nameWithType.vb: AggregationMethods.HllCountBuild(Of TR)(Sql.ISqlExtension, TR)
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild``2(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})
-  name: HllCountBuild<T, TR>(IEnumerable<T>, Expression<Func<T, TR>>)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountBuild__2_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0___1___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild``2(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})
-  name.vb: HllCountBuild(Of T, TR)(IEnumerable(Of T), Expression(Of Func(Of T, TR)))
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild<T, TR>(System.Collections.Generic.IEnumerable<T>, System.Linq.Expressions.Expression<System.Func<T, TR>>)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountBuild(Of T, TR)(System.Collections.Generic.IEnumerable(Of T), System.Linq.Expressions.Expression(Of System.Func(Of T, TR)))
-  nameWithType: AggregationMethods.HllCountBuild<T, TR>(IEnumerable<T>, Expression<Func<T, TR>>)
-  nameWithType.vb: AggregationMethods.HllCountBuild(Of T, TR)(IEnumerable(Of T), Expression(Of Func(Of T, TR)))
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate(LinqToDB.Sql.ISqlExtension,System.Byte[])
-  name: HllCountEstimate(ISqlExtension?, byte[])
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountEstimate_LinqToDB_Sql_ISqlExtension_System_Byte___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate(LinqToDB.Sql.ISqlExtension,System.Byte[])
-  name.vb: HllCountEstimate(ISqlExtension, Byte())
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate(LinqToDB.Sql.ISqlExtension?, byte[])
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate(LinqToDB.Sql.ISqlExtension, Byte())
-  nameWithType: AggregationMethods.HllCountEstimate(Sql.ISqlExtension?, byte[])
-  nameWithType.vb: AggregationMethods.HllCountEstimate(Sql.ISqlExtension, Byte())
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate(System.Byte[])
-  name: HllCountEstimate(byte[])
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountEstimate_System_Byte___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate(System.Byte[])
-  name.vb: HllCountEstimate(Byte())
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate(byte[])
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate(Byte())
-  nameWithType: AggregationMethods.HllCountEstimate(byte[])
-  nameWithType.vb: AggregationMethods.HllCountEstimate(Byte())
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate*
-  name: HllCountEstimate
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountEstimate_
-  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate
-  isSpec: "True"
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountEstimate
-  nameWithType: AggregationMethods.HllCountEstimate
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge(LinqToDB.Sql.ISqlExtension,System.Byte[])
-  name: HllCountMerge(ISqlExtension?, byte[])
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountMerge_LinqToDB_Sql_ISqlExtension_System_Byte___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge(LinqToDB.Sql.ISqlExtension,System.Byte[])
-  name.vb: HllCountMerge(ISqlExtension, Byte())
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge(LinqToDB.Sql.ISqlExtension?, byte[])
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge(LinqToDB.Sql.ISqlExtension, Byte())
-  nameWithType: AggregationMethods.HllCountMerge(Sql.ISqlExtension?, byte[])
-  nameWithType.vb: AggregationMethods.HllCountMerge(Sql.ISqlExtension, Byte())
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge*
-  name: HllCountMerge
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountMerge_
-  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge
-  isSpec: "True"
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge
-  nameWithType: AggregationMethods.HllCountMerge
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Byte[]}})
-  name: HllCountMerge<T>(IEnumerable<T>, Expression<Func<T, byte[]>>)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_HllCountMerge__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Byte_____
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Byte[]}})
-  name.vb: HllCountMerge(Of T)(IEnumerable(Of T), Expression(Of Func(Of T, Byte())))
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge<T>(System.Collections.Generic.IEnumerable<T>, System.Linq.Expressions.Expression<System.Func<T, byte[]>>)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.HllCountMerge(Of T)(System.Collections.Generic.IEnumerable(Of T), System.Linq.Expressions.Expression(Of System.Func(Of T, Byte())))
-  nameWithType: AggregationMethods.HllCountMerge<T>(IEnumerable<T>, Expression<Func<T, byte[]>>)
-  nameWithType.vb: AggregationMethods.HllCountMerge(Of T)(IEnumerable(Of T), Expression(Of Func(Of T, Byte())))
 - uid: Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.MaxBy*
   name: MaxBy
   href: api/Similarweb.LinqToDB.Firebolt.Extensions.AggregationMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_AggregationMethods_MaxBy_
@@ -465,31 +390,6 @@ references:
   fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAggregate(Of TEntity, TV)(System.Linq.IQueryable(Of TEntity), System.Linq.Expressions.Expression(Of System.Func(Of TEntity, TV)))
   nameWithType: ArrayMethods.ArrayAggregate<TEntity, TV>(IQueryable<TEntity>, Expression<Func<TEntity, TV>>)
   nameWithType.vb: ArrayMethods.ArrayAggregate(Of TEntity, TV)(IQueryable(Of TEntity), Expression(Of Func(Of TEntity, TV)))
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch*
-  name: ArrayAnyMatch
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayAnyMatch_
-  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch
-  isSpec: "True"
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch
-  nameWithType: ArrayMethods.ArrayAnyMatch
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
-  name: ArrayAnyMatch<T>(T[], Expression<Func<T, bool>>)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayAnyMatch__1___0___System_Linq_Expressions_Expression_System_Func___0_System_Boolean___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
-  name.vb: ArrayAnyMatch(Of T)(T(), Expression(Of Func(Of T, Boolean)))
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch<T>(T[], System.Linq.Expressions.Expression<System.Func<T, bool>>)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch(Of T)(T(), System.Linq.Expressions.Expression(Of System.Func(Of T, Boolean)))
-  nameWithType: ArrayMethods.ArrayAnyMatch<T>(T[], Expression<Func<T, bool>>)
-  nameWithType.vb: ArrayMethods.ArrayAnyMatch(Of T)(T(), Expression(Of Func(Of T, Boolean)))
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch``2(``0[],``1[],System.Linq.Expressions.Expression{System.Func{``0,``1,System.Boolean}})
-  name: ArrayAnyMatch<T1, T2>(T1[], T2[], Expression<Func<T1, T2, bool>>)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayAnyMatch__2___0_____1___System_Linq_Expressions_Expression_System_Func___0___1_System_Boolean___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch``2(``0[],``1[],System.Linq.Expressions.Expression{System.Func{``0,``1,System.Boolean}})
-  name.vb: ArrayAnyMatch(Of T1, T2)(T1(), T2(), Expression(Of Func(Of T1, T2, Boolean)))
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch<T1, T2>(T1[], T2[], System.Linq.Expressions.Expression<System.Func<T1, T2, bool>>)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayAnyMatch(Of T1, T2)(T1(), T2(), System.Linq.Expressions.Expression(Of System.Func(Of T1, T2, Boolean)))
-  nameWithType: ArrayMethods.ArrayAnyMatch<T1, T2>(T1[], T2[], Expression<Func<T1, T2, bool>>)
-  nameWithType.vb: ArrayMethods.ArrayAnyMatch(Of T1, T2)(T1(), T2(), Expression(Of Func(Of T1, T2, Boolean)))
 - uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayContains*
   name: ArrayContains
   href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayContains_
@@ -522,15 +422,6 @@ references:
   isSpec: "True"
   fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayCount
   nameWithType: ArrayMethods.ArrayCount
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayCount``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
-  name: ArrayCount<T>(T[], Expression<Func<T, bool>>)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayCount__1___0___System_Linq_Expressions_Expression_System_Func___0_System_Boolean___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayCount``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
-  name.vb: ArrayCount(Of T)(T(), Expression(Of Func(Of T, Boolean)))
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayCount<T>(T[], System.Linq.Expressions.Expression<System.Func<T, bool>>)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayCount(Of T)(T(), System.Linq.Expressions.Expression(Of System.Func(Of T, Boolean)))
-  nameWithType: ArrayMethods.ArrayCount<T>(T[], Expression<Func<T, bool>>)
-  nameWithType.vb: ArrayMethods.ArrayCount(Of T)(T(), Expression(Of Func(Of T, Boolean)))
 - uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayDistinct*
   name: ArrayDistinct
   href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayDistinct_
@@ -547,31 +438,6 @@ references:
   fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayDistinct(Of T)(T())
   nameWithType: ArrayMethods.ArrayDistinct<T>(T[])
   nameWithType.vb: ArrayMethods.ArrayDistinct(Of T)(T())
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter*
-  name: ArrayFilter
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayFilter_
-  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter
-  isSpec: "True"
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter
-  nameWithType: ArrayMethods.ArrayFilter
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
-  name: ArrayFilter<T>(T[], Expression<Func<T, bool>>)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayFilter__1___0___System_Linq_Expressions_Expression_System_Func___0_System_Boolean___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
-  name.vb: ArrayFilter(Of T)(T(), Expression(Of Func(Of T, Boolean)))
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter<T>(T[], System.Linq.Expressions.Expression<System.Func<T, bool>>)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter(Of T)(T(), System.Linq.Expressions.Expression(Of System.Func(Of T, Boolean)))
-  nameWithType: ArrayMethods.ArrayFilter<T>(T[], Expression<Func<T, bool>>)
-  nameWithType.vb: ArrayMethods.ArrayFilter(Of T)(T(), Expression(Of Func(Of T, Boolean)))
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter``2(``0[],``1[],System.Linq.Expressions.Expression{System.Func{``0,``1,System.Boolean}})
-  name: ArrayFilter<T, TF>(T[], TF[], Expression<Func<T, TF, bool>>)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayFilter__2___0_____1___System_Linq_Expressions_Expression_System_Func___0___1_System_Boolean___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter``2(``0[],``1[],System.Linq.Expressions.Expression{System.Func{``0,``1,System.Boolean}})
-  name.vb: ArrayFilter(Of T, TF)(T(), TF(), Expression(Of Func(Of T, TF, Boolean)))
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter<T, TF>(T[], TF[], System.Linq.Expressions.Expression<System.Func<T, TF, bool>>)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFilter(Of T, TF)(T(), TF(), System.Linq.Expressions.Expression(Of System.Func(Of T, TF, Boolean)))
-  nameWithType: ArrayMethods.ArrayFilter<T, TF>(T[], TF[], Expression<Func<T, TF, bool>>)
-  nameWithType.vb: ArrayMethods.ArrayFilter(Of T, TF)(T(), TF(), Expression(Of Func(Of T, TF, Boolean)))
 - uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayFlatten*
   name: ArrayFlatten
   href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayFlatten_
@@ -675,15 +541,6 @@ references:
   fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayReverseSort(Of T)(T())
   nameWithType: ArrayMethods.ArrayReverseSort<T>(T[])
   nameWithType.vb: ArrayMethods.ArrayReverseSort(Of T)(T())
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayReverseSort``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
-  name: ArrayReverseSort<TItem, TSort>(TItem[], Expression<Func<TItem, TSort>>)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayReverseSort__2___0___System_Linq_Expressions_Expression_System_Func___0___1___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayReverseSort``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
-  name.vb: ArrayReverseSort(Of TItem, TSort)(TItem(), Expression(Of Func(Of TItem, TSort)))
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayReverseSort<TItem, TSort>(TItem[], System.Linq.Expressions.Expression<System.Func<TItem, TSort>>)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayReverseSort(Of TItem, TSort)(TItem(), System.Linq.Expressions.Expression(Of System.Func(Of TItem, TSort)))
-  nameWithType: ArrayMethods.ArrayReverseSort<TItem, TSort>(TItem[], Expression<Func<TItem, TSort>>)
-  nameWithType.vb: ArrayMethods.ArrayReverseSort(Of TItem, TSort)(TItem(), Expression(Of Func(Of TItem, TSort)))
 - uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayReverse``1(``0[])
   name: ArrayReverse<T>(T[])
   href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayReverse__1___0___
@@ -734,15 +591,6 @@ references:
   fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArraySort(Of T)(T())
   nameWithType: ArrayMethods.ArraySort<T>(T[])
   nameWithType.vb: ArrayMethods.ArraySort(Of T)(T())
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArraySort``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
-  name: ArraySort<TItem, TSort>(TItem[], Expression<Func<TItem, TSort>>)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArraySort__2___0___System_Linq_Expressions_Expression_System_Func___0___1___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArraySort``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
-  name.vb: ArraySort(Of TItem, TSort)(TItem(), Expression(Of Func(Of TItem, TSort)))
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArraySort<TItem, TSort>(TItem[], System.Linq.Expressions.Expression<System.Func<TItem, TSort>>)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArraySort(Of TItem, TSort)(TItem(), System.Linq.Expressions.Expression(Of System.Func(Of TItem, TSort)))
-  nameWithType: ArrayMethods.ArraySort<TItem, TSort>(TItem[], Expression<Func<TItem, TSort>>)
-  nameWithType.vb: ArrayMethods.ArraySort(Of TItem, TSort)(TItem(), Expression(Of Func(Of TItem, TSort)))
 - uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArraySum(System.Double[])
   name: ArraySum(double[])
   href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArraySum_System_Double___
@@ -820,22 +668,6 @@ references:
   fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayToString(Of T)(T()(), String)
   nameWithType: ArrayMethods.ArrayToString<T>(T[][], string)
   nameWithType.vb: ArrayMethods.ArrayToString(Of T)(T()(), String)
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayTransform*
-  name: ArrayTransform
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayTransform_
-  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayTransform
-  isSpec: "True"
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayTransform
-  nameWithType: ArrayMethods.ArrayTransform
-- uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayTransform``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
-  name: ArrayTransform<TItem, TResult>(TItem[], Expression<Func<TItem, TResult>>)
-  href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArrayTransform__2___0___System_Linq_Expressions_Expression_System_Func___0___1___
-  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayTransform``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
-  name.vb: ArrayTransform(Of TItem, TResult)(TItem(), Expression(Of Func(Of TItem, TResult)))
-  fullName: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayTransform<TItem, TResult>(TItem[], System.Linq.Expressions.Expression<System.Func<TItem, TResult>>)
-  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArrayTransform(Of TItem, TResult)(TItem(), System.Linq.Expressions.Expression(Of System.Func(Of TItem, TResult)))
-  nameWithType: ArrayMethods.ArrayTransform<TItem, TResult>(TItem[], Expression<Func<TItem, TResult>>)
-  nameWithType.vb: ArrayMethods.ArrayTransform(Of TItem, TResult)(TItem(), Expression(Of Func(Of TItem, TResult)))
 - uid: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.ArraysOverlap*
   name: ArraysOverlap
   href: api/Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_ArrayMethods_ArraysOverlap_
@@ -1084,6 +916,138 @@ references:
   fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.ArrayMethods.Unnested(Of T1, T2, T3, T4).Third
   nameWithType: ArrayMethods.Unnested<T1, T2, T3, T4>.Third
   nameWithType.vb: ArrayMethods.Unnested(Of T1, T2, T3, T4).Third
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods
+  name: DataSketchesMethods
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.html
+  commentId: T:Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods
+  nameWithType: DataSketchesMethods
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild*
+  name: HllCountBuild
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DataSketchesMethods_HllCountBuild_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild
+  nameWithType: DataSketchesMethods.HllCountBuild
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild``1(LinqToDB.Sql.ISqlExtension,``0)
+  name: HllCountBuild<TR>(ISqlExtension?, TR)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DataSketchesMethods_HllCountBuild__1_LinqToDB_Sql_ISqlExtension___0_
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild``1(LinqToDB.Sql.ISqlExtension,``0)
+  name.vb: HllCountBuild(Of TR)(ISqlExtension, TR)
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild<TR>(LinqToDB.Sql.ISqlExtension?, TR)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild(Of TR)(LinqToDB.Sql.ISqlExtension, TR)
+  nameWithType: DataSketchesMethods.HllCountBuild<TR>(Sql.ISqlExtension?, TR)
+  nameWithType.vb: DataSketchesMethods.HllCountBuild(Of TR)(Sql.ISqlExtension, TR)
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild``2(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})
+  name: HllCountBuild<T, TR>(IEnumerable<T>, Expression<Func<T, TR>>)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DataSketchesMethods_HllCountBuild__2_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0___1___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild``2(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})
+  name.vb: HllCountBuild(Of T, TR)(IEnumerable(Of T), Expression(Of Func(Of T, TR)))
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild<T, TR>(System.Collections.Generic.IEnumerable<T>, System.Linq.Expressions.Expression<System.Func<T, TR>>)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountBuild(Of T, TR)(System.Collections.Generic.IEnumerable(Of T), System.Linq.Expressions.Expression(Of System.Func(Of T, TR)))
+  nameWithType: DataSketchesMethods.HllCountBuild<T, TR>(IEnumerable<T>, Expression<Func<T, TR>>)
+  nameWithType.vb: DataSketchesMethods.HllCountBuild(Of T, TR)(IEnumerable(Of T), Expression(Of Func(Of T, TR)))
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate(LinqToDB.Sql.ISqlExtension,System.Byte[])
+  name: HllCountEstimate(ISqlExtension?, byte[])
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DataSketchesMethods_HllCountEstimate_LinqToDB_Sql_ISqlExtension_System_Byte___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate(LinqToDB.Sql.ISqlExtension,System.Byte[])
+  name.vb: HllCountEstimate(ISqlExtension, Byte())
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate(LinqToDB.Sql.ISqlExtension?, byte[])
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate(LinqToDB.Sql.ISqlExtension, Byte())
+  nameWithType: DataSketchesMethods.HllCountEstimate(Sql.ISqlExtension?, byte[])
+  nameWithType.vb: DataSketchesMethods.HllCountEstimate(Sql.ISqlExtension, Byte())
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate(System.Byte[])
+  name: HllCountEstimate(byte[])
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DataSketchesMethods_HllCountEstimate_System_Byte___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate(System.Byte[])
+  name.vb: HllCountEstimate(Byte())
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate(byte[])
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate(Byte())
+  nameWithType: DataSketchesMethods.HllCountEstimate(byte[])
+  nameWithType.vb: DataSketchesMethods.HllCountEstimate(Byte())
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate*
+  name: HllCountEstimate
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DataSketchesMethods_HllCountEstimate_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountEstimate
+  nameWithType: DataSketchesMethods.HllCountEstimate
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge(LinqToDB.Sql.ISqlExtension,System.Byte[])
+  name: HllCountMerge(ISqlExtension?, byte[])
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DataSketchesMethods_HllCountMerge_LinqToDB_Sql_ISqlExtension_System_Byte___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge(LinqToDB.Sql.ISqlExtension,System.Byte[])
+  name.vb: HllCountMerge(ISqlExtension, Byte())
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge(LinqToDB.Sql.ISqlExtension?, byte[])
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge(LinqToDB.Sql.ISqlExtension, Byte())
+  nameWithType: DataSketchesMethods.HllCountMerge(Sql.ISqlExtension?, byte[])
+  nameWithType.vb: DataSketchesMethods.HllCountMerge(Sql.ISqlExtension, Byte())
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge*
+  name: HllCountMerge
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DataSketchesMethods_HllCountMerge_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge
+  nameWithType: DataSketchesMethods.HllCountMerge
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Byte[]}})
+  name: HllCountMerge<T>(IEnumerable<T>, Expression<Func<T, byte[]>>)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DataSketchesMethods_HllCountMerge__1_System_Collections_Generic_IEnumerable___0__System_Linq_Expressions_Expression_System_Func___0_System_Byte_____
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Byte[]}})
+  name.vb: HllCountMerge(Of T)(IEnumerable(Of T), Expression(Of Func(Of T, Byte())))
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge<T>(System.Collections.Generic.IEnumerable<T>, System.Linq.Expressions.Expression<System.Func<T, byte[]>>)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.DataSketchesMethods.HllCountMerge(Of T)(System.Collections.Generic.IEnumerable(Of T), System.Linq.Expressions.Expression(Of System.Func(Of T, Byte())))
+  nameWithType: DataSketchesMethods.HllCountMerge<T>(IEnumerable<T>, Expression<Func<T, byte[]>>)
+  nameWithType.vb: DataSketchesMethods.HllCountMerge(Of T)(IEnumerable(Of T), Expression(Of Func(Of T, Byte())))
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods
+  name: DateTimeMethods
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.html
+  commentId: T:Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods
+  nameWithType: DateTimeMethods
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.CurrentDateTime
+  name: CurrentDateTime()
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DateTimeMethods_CurrentDateTime
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.CurrentDateTime
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.CurrentDateTime()
+  nameWithType: DateTimeMethods.CurrentDateTime()
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.CurrentDateTime*
+  name: CurrentDateTime
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DateTimeMethods_CurrentDateTime_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.CurrentDateTime
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.CurrentDateTime
+  nameWithType: DateTimeMethods.CurrentDateTime
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DateDiff(System.Nullable{System.DateTime},System.Nullable{System.DateTime})
+  name: DateDiff(DateTime?, DateTime?)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DateTimeMethods_DateDiff_System_Nullable_System_DateTime__System_Nullable_System_DateTime__
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DateDiff(System.Nullable{System.DateTime},System.Nullable{System.DateTime})
+  name.vb: DateDiff(Date?, Date?)
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DateDiff(System.DateTime?, System.DateTime?)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DateDiff(Date?, Date?)
+  nameWithType: DateTimeMethods.DateDiff(DateTime?, DateTime?)
+  nameWithType.vb: DateTimeMethods.DateDiff(Date?, Date?)
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DateDiff*
+  name: DateDiff
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DateTimeMethods_DateDiff_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DateDiff
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DateDiff
+  nameWithType: DateTimeMethods.DateDiff
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DatePart(LinqToDB.Sql.DateParts,System.Nullable{System.DateTime})
+  name: DatePart(DateParts, DateTime?)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DateTimeMethods_DatePart_LinqToDB_Sql_DateParts_System_Nullable_System_DateTime__
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DatePart(LinqToDB.Sql.DateParts,System.Nullable{System.DateTime})
+  name.vb: DatePart(DateParts, Date?)
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DatePart(LinqToDB.Sql.DateParts, System.DateTime?)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DatePart(LinqToDB.Sql.DateParts, Date?)
+  nameWithType: DateTimeMethods.DatePart(Sql.DateParts, DateTime?)
+  nameWithType.vb: DateTimeMethods.DatePart(Sql.DateParts, Date?)
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DatePart*
+  name: DatePart
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_DateTimeMethods_DatePart_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DatePart
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.DateTimeMethods.DatePart
+  nameWithType: DateTimeMethods.DatePart
 - uid: Similarweb.LinqToDB.Firebolt.Extensions.FireboltSpecificExtensions
   name: FireboltSpecificExtensions
   href: api/Similarweb.LinqToDB.Firebolt.Extensions.FireboltSpecificExtensions.html
@@ -1135,6 +1099,126 @@ references:
   isSpec: "True"
   fullName: Similarweb.LinqToDB.Firebolt.Extensions.FireboltSpecificExtensions.DatePart
   nameWithType: FireboltSpecificExtensions.DatePart
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods
+  name: LambdaMethods
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html
+  commentId: T:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods
+  nameWithType: LambdaMethods
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch*
+  name: ArrayAnyMatch
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayAnyMatch_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch
+  nameWithType: LambdaMethods.ArrayAnyMatch
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
+  name: ArrayAnyMatch<T>(T[], Expression<Func<T, bool>>)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayAnyMatch__1___0___System_Linq_Expressions_Expression_System_Func___0_System_Boolean___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
+  name.vb: ArrayAnyMatch(Of T)(T(), Expression(Of Func(Of T, Boolean)))
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch<T>(T[], System.Linq.Expressions.Expression<System.Func<T, bool>>)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch(Of T)(T(), System.Linq.Expressions.Expression(Of System.Func(Of T, Boolean)))
+  nameWithType: LambdaMethods.ArrayAnyMatch<T>(T[], Expression<Func<T, bool>>)
+  nameWithType.vb: LambdaMethods.ArrayAnyMatch(Of T)(T(), Expression(Of Func(Of T, Boolean)))
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch``2(``0[],``1[],System.Linq.Expressions.Expression{System.Func{``0,``1,System.Boolean}})
+  name: ArrayAnyMatch<T1, T2>(T1[], T2[], Expression<Func<T1, T2, bool>>)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayAnyMatch__2___0_____1___System_Linq_Expressions_Expression_System_Func___0___1_System_Boolean___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch``2(``0[],``1[],System.Linq.Expressions.Expression{System.Func{``0,``1,System.Boolean}})
+  name.vb: ArrayAnyMatch(Of T1, T2)(T1(), T2(), Expression(Of Func(Of T1, T2, Boolean)))
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch<T1, T2>(T1[], T2[], System.Linq.Expressions.Expression<System.Func<T1, T2, bool>>)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayAnyMatch(Of T1, T2)(T1(), T2(), System.Linq.Expressions.Expression(Of System.Func(Of T1, T2, Boolean)))
+  nameWithType: LambdaMethods.ArrayAnyMatch<T1, T2>(T1[], T2[], Expression<Func<T1, T2, bool>>)
+  nameWithType.vb: LambdaMethods.ArrayAnyMatch(Of T1, T2)(T1(), T2(), Expression(Of Func(Of T1, T2, Boolean)))
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayCount*
+  name: ArrayCount
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayCount_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayCount
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayCount
+  nameWithType: LambdaMethods.ArrayCount
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayCount``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
+  name: ArrayCount<T>(T[], Expression<Func<T, bool>>)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayCount__1___0___System_Linq_Expressions_Expression_System_Func___0_System_Boolean___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayCount``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
+  name.vb: ArrayCount(Of T)(T(), Expression(Of Func(Of T, Boolean)))
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayCount<T>(T[], System.Linq.Expressions.Expression<System.Func<T, bool>>)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayCount(Of T)(T(), System.Linq.Expressions.Expression(Of System.Func(Of T, Boolean)))
+  nameWithType: LambdaMethods.ArrayCount<T>(T[], Expression<Func<T, bool>>)
+  nameWithType.vb: LambdaMethods.ArrayCount(Of T)(T(), Expression(Of Func(Of T, Boolean)))
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter*
+  name: ArrayFilter
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayFilter_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter
+  nameWithType: LambdaMethods.ArrayFilter
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
+  name: ArrayFilter<T>(T[], Expression<Func<T, bool>>)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayFilter__1___0___System_Linq_Expressions_Expression_System_Func___0_System_Boolean___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter``1(``0[],System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})
+  name.vb: ArrayFilter(Of T)(T(), Expression(Of Func(Of T, Boolean)))
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter<T>(T[], System.Linq.Expressions.Expression<System.Func<T, bool>>)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter(Of T)(T(), System.Linq.Expressions.Expression(Of System.Func(Of T, Boolean)))
+  nameWithType: LambdaMethods.ArrayFilter<T>(T[], Expression<Func<T, bool>>)
+  nameWithType.vb: LambdaMethods.ArrayFilter(Of T)(T(), Expression(Of Func(Of T, Boolean)))
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter``2(``0[],``1[],System.Linq.Expressions.Expression{System.Func{``0,``1,System.Boolean}})
+  name: ArrayFilter<T, TF>(T[], TF[], Expression<Func<T, TF, bool>>)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayFilter__2___0_____1___System_Linq_Expressions_Expression_System_Func___0___1_System_Boolean___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter``2(``0[],``1[],System.Linq.Expressions.Expression{System.Func{``0,``1,System.Boolean}})
+  name.vb: ArrayFilter(Of T, TF)(T(), TF(), Expression(Of Func(Of T, TF, Boolean)))
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter<T, TF>(T[], TF[], System.Linq.Expressions.Expression<System.Func<T, TF, bool>>)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayFilter(Of T, TF)(T(), TF(), System.Linq.Expressions.Expression(Of System.Func(Of T, TF, Boolean)))
+  nameWithType: LambdaMethods.ArrayFilter<T, TF>(T[], TF[], Expression<Func<T, TF, bool>>)
+  nameWithType.vb: LambdaMethods.ArrayFilter(Of T, TF)(T(), TF(), Expression(Of Func(Of T, TF, Boolean)))
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayReverseSort*
+  name: ArrayReverseSort
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayReverseSort_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayReverseSort
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayReverseSort
+  nameWithType: LambdaMethods.ArrayReverseSort
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayReverseSort``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
+  name: ArrayReverseSort<TItem, TSort>(TItem[], Expression<Func<TItem, TSort>>)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayReverseSort__2___0___System_Linq_Expressions_Expression_System_Func___0___1___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayReverseSort``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
+  name.vb: ArrayReverseSort(Of TItem, TSort)(TItem(), Expression(Of Func(Of TItem, TSort)))
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayReverseSort<TItem, TSort>(TItem[], System.Linq.Expressions.Expression<System.Func<TItem, TSort>>)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayReverseSort(Of TItem, TSort)(TItem(), System.Linq.Expressions.Expression(Of System.Func(Of TItem, TSort)))
+  nameWithType: LambdaMethods.ArrayReverseSort<TItem, TSort>(TItem[], Expression<Func<TItem, TSort>>)
+  nameWithType.vb: LambdaMethods.ArrayReverseSort(Of TItem, TSort)(TItem(), Expression(Of Func(Of TItem, TSort)))
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArraySort*
+  name: ArraySort
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArraySort_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArraySort
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArraySort
+  nameWithType: LambdaMethods.ArraySort
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArraySort``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
+  name: ArraySort<TItem, TSort>(TItem[], Expression<Func<TItem, TSort>>)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArraySort__2___0___System_Linq_Expressions_Expression_System_Func___0___1___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArraySort``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
+  name.vb: ArraySort(Of TItem, TSort)(TItem(), Expression(Of Func(Of TItem, TSort)))
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArraySort<TItem, TSort>(TItem[], System.Linq.Expressions.Expression<System.Func<TItem, TSort>>)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArraySort(Of TItem, TSort)(TItem(), System.Linq.Expressions.Expression(Of System.Func(Of TItem, TSort)))
+  nameWithType: LambdaMethods.ArraySort<TItem, TSort>(TItem[], Expression<Func<TItem, TSort>>)
+  nameWithType.vb: LambdaMethods.ArraySort(Of TItem, TSort)(TItem(), Expression(Of Func(Of TItem, TSort)))
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayTransform*
+  name: ArrayTransform
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayTransform_
+  commentId: Overload:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayTransform
+  isSpec: "True"
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayTransform
+  nameWithType: LambdaMethods.ArrayTransform
+- uid: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayTransform``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
+  name: ArrayTransform<TItem, TResult>(TItem[], Expression<Func<TItem, TResult>>)
+  href: api/Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.html#Similarweb_LinqToDB_Firebolt_Extensions_LambdaMethods_ArrayTransform__2___0___System_Linq_Expressions_Expression_System_Func___0___1___
+  commentId: M:Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayTransform``2(``0[],System.Linq.Expressions.Expression{System.Func{``0,``1}})
+  name.vb: ArrayTransform(Of TItem, TResult)(TItem(), Expression(Of Func(Of TItem, TResult)))
+  fullName: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayTransform<TItem, TResult>(TItem[], System.Linq.Expressions.Expression<System.Func<TItem, TResult>>)
+  fullName.vb: Similarweb.LinqToDB.Firebolt.Extensions.LambdaMethods.ArrayTransform(Of TItem, TResult)(TItem(), System.Linq.Expressions.Expression(Of System.Func(Of TItem, TResult)))
+  nameWithType: LambdaMethods.ArrayTransform<TItem, TResult>(TItem[], Expression<Func<TItem, TResult>>)
+  nameWithType.vb: LambdaMethods.ArrayTransform(Of TItem, TResult)(TItem(), Expression(Of Func(Of TItem, TResult)))
 - uid: Similarweb.LinqToDB.Firebolt.Extensions.LinqExtensions
   name: LinqExtensions
   href: api/Similarweb.LinqToDB.Firebolt.Extensions.LinqExtensions.html
