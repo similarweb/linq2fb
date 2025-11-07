@@ -1,19 +1,20 @@
 # Firebolt LinqToDB driver
 ## Version
-This is documentation for outdated LinqToDb [v3.7.0](https://github.com/linq2db/linq2db/tree/v3.7.0)-based version. Please feel free exploring our [code](https://github.com/similarweb/linq2fb)!
+This is documentation for outdated LinqToDb [v5.4.1](https://github.com/linq2db/linq2db/tree/v5.4.1)-based version. Please feel free exploring our [code](https://github.com/similarweb/linq2fb)!
 
 ## Target platforms
 - [NET8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (8.0.414) — backporting
 - [NET9](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) (9.0.305) — mainstream
 
 ## Dogfooding
-We used this package but then moved to [v5.4.1](https://similarweb.github.io/linq2fb)-based version. So this one would not be updated further.
+We in [Similarweb](https://developers.similarweb.com/docs/similarweb-web-traffic-api) use this package to fetch data from [Firebolt V2](https://firebolt.io), so constantly improving it.
 
 ### Supported versions
 * Firebolt: I tested [Firebolt](https://firebolt.io) only for v2 since v1 is deprecated. V1 is not tested and you my try to use it without any warranties.
   * You will need [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) v.1.9.1 and above for using this package.
 * LinqToDB:
-  * [v3.7.0](https://github.com/linq2db/linq2db/tree/v3.7.0) — check [documentation](https://similarweb.github.com/linq2fb) about this package
+  * [v3.7.0](https://github.com/linq2db/linq2db/tree/v3.7.0) — _deprecated_, not being updated. You may find usages [on previous version page](https://similarweb.github.io/linq2fb/v3.7);
+  * [v5.4.1](https://github.com/linq2db/linq2db/tree/v5.4.1) — check this documentation;
 
 ## How to use
 1. Install this package (see [how to install](#installing-package))

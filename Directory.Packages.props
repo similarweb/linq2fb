@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <FireboltSdkVersion>1.9.1</FireboltSdkVersion>
-    <LinqToDbVersion>3.7.0</LinqToDbVersion>
+    <LinqToDbVersion>5.4.1</LinqToDbVersion>
   </PropertyGroup>
   <ItemGroup>
     <!-- Build / analyzers -->

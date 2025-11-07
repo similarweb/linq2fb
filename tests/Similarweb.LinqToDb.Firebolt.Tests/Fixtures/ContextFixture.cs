@@ -1,4 +1,4 @@
-using LinqToDB.Configuration;
+using LinqToDB;
 using LinqToDB.Data;
 using Microsoft.Extensions.Options;
 using Similarweb.LinqToDB.Firebolt.Tests.Common;
@@ -29,19 +29,15 @@ public class ContextFixture<TContext> : IDisposable, IAsyncDisposable
         _testOutputHelperAccessor = testOutputHelperAccessor;
 
         Registration.AddDataProvider();
-        var optionsBuilder = new LinqToDbConnectionOptionsBuilder();
         var connectionString = connectionStringsProvider?.Get(testSettings.CurrentValue.AccountName) ?? string.Empty;
         var dataProvider = DataConnection.GetDataProvider(Registration.DataProviderName, connectionString)
                            ?? throw new InvalidOperationException($"DataProvider not found for {connectionString}");
-        optionsBuilder.UseConnectionFactory(
-            dataProvider,
-            () => new FireboltCoreConnection(connectionString)
-        );
         var mappingSchema = new global::LinqToDB.Mapping.MappingSchema();
-        optionsBuilder.UseMappingSchema(mappingSchema);
-        var options = optionsBuilder.Build<TContext>();
+        var dataOptions = new DataOptions()
+            .UseConnectionFactory(dataProvider, connectionFactory: _ => new FireboltCoreConnection(connectionString))
+            .UseMappingSchema(mappingSchema);
 
-        Context = Activator.CreateInstance(typeof(TContext), options) as TContext ??
+        Context = Activator.CreateInstance(typeof(TContext), dataOptions) as TContext ??
                   throw new InvalidOperationException($"Cannot create instance of {typeof(TContext).Name}");
     }
 

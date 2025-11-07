@@ -455,11 +455,6 @@
         "resolved": "8.0.0",
         "contentHash": "AurL6Y5BA1WotzlEvVaIDpqzpIPvYnnldxru8oXJU2yFxFUy3+pNXjXd1ymO+RA0rq0+590Q8gaz2l3Sr7fmqg=="
       },
-      "System.ComponentModel.Annotations": {
-        "type": "Transitive",
-        "resolved": "4.7.0",
-        "contentHash": "0YFqjhp/mYkDGpU0Ye1GjE53HMp9UVfGN7seGpAMttAC0C40v5gw598jCgpbBLMmCo0E5YRLBv5Z2doypO49ZQ=="
-      },
       "System.Diagnostics.DiagnosticSource": {
         "type": "Transitive",
         "resolved": "9.0.0",
@@ -564,17 +559,14 @@
       "similarweb.linqtodb.firebolt": {
         "type": "Project",
         "dependencies": {
-          "linq2db": "[3.7.0, )"
+          "linq2db": "[5.4.1, )"
         }
       },
       "linq2db": {
         "type": "CentralTransitive",
-        "requested": "[3.7.0, )",
-        "resolved": "3.7.0",
-        "contentHash": "iDous2TbSchtALnTLNXQnprmNZF4GrXas0MBz6ZHWkSdilSJjcf26qFM7Qf98Mny0OXHEmNXG/jtIDhoVJ5KmQ==",
-        "dependencies": {
-          "System.ComponentModel.Annotations": "4.7.0"
-        }
+        "requested": "[5.4.1, )",
+        "resolved": "5.4.1",
+        "contentHash": "qyH32MbFK6T55KsEcQYTbPFfkOa1Mo65lY/Zo8SFVMy0pwkQBCTnA/RUxyG5+l3D/mgfPz85PH3upDrtklSMrw=="
       }
     },
     "net9.0": {
@@ -1031,11 +1023,6 @@
         "resolved": "8.0.0",
         "contentHash": "AurL6Y5BA1WotzlEvVaIDpqzpIPvYnnldxru8oXJU2yFxFUy3+pNXjXd1ymO+RA0rq0+590Q8gaz2l3Sr7fmqg=="
       },
-      "System.ComponentModel.Annotations": {
-        "type": "Transitive",
-        "resolved": "4.7.0",
-        "contentHash": "0YFqjhp/mYkDGpU0Ye1GjE53HMp9UVfGN7seGpAMttAC0C40v5gw598jCgpbBLMmCo0E5YRLBv5Z2doypO49ZQ=="
-      },
       "System.Diagnostics.DiagnosticSource": {
         "type": "Transitive",
         "resolved": "9.0.0",
@@ -1140,17 +1127,14 @@
       "similarweb.linqtodb.firebolt": {
         "type": "Project",
         "dependencies": {
-          "linq2db": "[3.7.0, )"
+          "linq2db": "[5.4.1, )"
         }
       },
       "linq2db": {
         "type": "CentralTransitive",
-        "requested": "[3.7.0, )",
-        "resolved": "3.7.0",
-        "contentHash": "iDous2TbSchtALnTLNXQnprmNZF4GrXas0MBz6ZHWkSdilSJjcf26qFM7Qf98Mny0OXHEmNXG/jtIDhoVJ5KmQ==",
-        "dependencies": {
-          "System.ComponentModel.Annotations": "4.7.0"
-        }
+        "requested": "[5.4.1, )",
+        "resolved": "5.4.1",
+        "contentHash": "qyH32MbFK6T55KsEcQYTbPFfkOa1Mo65lY/Zo8SFVMy0pwkQBCTnA/RUxyG5+l3D/mgfPz85PH3upDrtklSMrw=="
       }
     }
   }

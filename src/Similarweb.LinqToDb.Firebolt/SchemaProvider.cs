@@ -25,7 +25,7 @@ internal class SchemaProvider : SchemaProviderBase
     }
 
     /// <inheritdoc/>
-    protected override DataType GetDataType(string? dataType, string? columnType, long? length, int? prec, int? scale) => throw new NotImplementedException();
+    protected override DataType GetDataType(string? dataType, string? columnType, int? length, int? precision, int? scale) => throw new NotImplementedException();
 
     /// <inheritdoc/>
     protected override List<TableInfo> GetTables(DataConnection dataConnection, GetSchemaOptions options) => throw new NotImplementedException();

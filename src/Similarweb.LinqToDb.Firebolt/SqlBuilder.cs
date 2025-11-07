@@ -1,4 +1,4 @@
-using System.Data;
+using System.Data.Common;
 using System.Text;
 using LinqToDB;
 using LinqToDB.SqlProvider;
@@ -11,30 +11,19 @@ namespace Similarweb.LinqToDB.Firebolt;
 internal class SqlBuilder(
     DataProvider? dataProvider,
     global::LinqToDB.Mapping.MappingSchema mappingSchema,
+    DataOptions dataOptions,
     ISqlOptimizer sqlOptimizer,
     SqlProviderFlags sqlProviderFlags
 ) : BasicSqlBuilder(
+    dataProvider,
     mappingSchema,
+    dataOptions,
     sqlOptimizer,
     sqlProviderFlags
 )
 {
     private const char NativeParameterPrefix = '@';
     private const char FbNumericParameterPrefix = '$';
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SqlBuilder"/> class.
-    /// </summary>
-    /// <param name="mappingSchema">Mapping schema.</param>
-    /// <param name="sqlOptimizer">SQL optimizer instance.</param>
-    /// <param name="sqlProviderFlags">SQL flags.</param>
-    public SqlBuilder(
-        global::LinqToDB.Mapping.MappingSchema mappingSchema,
-        ISqlOptimizer sqlOptimizer,
-        SqlProviderFlags sqlProviderFlags
-    ) : this(null, mappingSchema, sqlOptimizer, sqlProviderFlags)
-    {
-    }
 
     /// <summary>
     /// Gets symbol used as parameter prefix.
@@ -61,7 +50,7 @@ internal class SqlBuilder(
     }
 
     /// <inheritdoc/>
-    protected override ISqlBuilder CreateSqlBuilder() => new SqlBuilder(MappingSchema, SqlOptimizer, SqlProviderFlags);
+    protected override ISqlBuilder CreateSqlBuilder() => new SqlBuilder(dataProvider, MappingSchema, DataOptions, SqlOptimizer, SqlProviderFlags);
 
     /// <inheritdoc/>
     protected override string LimitFormat(SelectQuery selectQuery) => "LIMIT {0}";
@@ -148,7 +137,7 @@ internal class SqlBuilder(
 
             var isMaterialized = cte.Name!.Contains(LinqExtensions.CteMaterializedEnding, StringComparison.Ordinal);
 
-            ConvertTableName(StringBuilder, null, null, null, cte.Name!, TableOptions.None);
+            BuildObjectName(StringBuilder, new(cte.Name), ConvertType.NameToQueryTable, true, TableOptions.None);
 
             if (cte.Fields!.Length > 3)
             {
@@ -223,7 +212,7 @@ internal class SqlBuilder(
     }
 
     /// <inheritdoc/>
-    protected override void PrintParameterName(StringBuilder sb, IDbDataParameter parameter)
+    protected override void PrintParameterName(StringBuilder sb, DbParameter parameter)
     {
         if (!parameter.ParameterName.StartsWith(ParameterSymbol))
         {
@@ -234,12 +223,12 @@ internal class SqlBuilder(
     }
 
     /// <inheritdoc/>
-    protected override string? GetProviderTypeName(IDbDataParameter parameter)
+    protected override string? GetProviderTypeName(IDataContext dataContext, DbParameter parameter)
     {
-        var param = dataProvider?.TryGetProviderParameter(parameter, MappingSchema);
+        var param = dataProvider?.TryGetProviderParameter(dataContext, parameter);
         return param != null
             ? dataProvider?.Adapter.GetDbType(param).ToString()
-            : base.GetProviderTypeName(parameter);
+            : base.GetProviderTypeName(dataContext, parameter);
     }
 
     private bool IsValidIdentifier(string value)

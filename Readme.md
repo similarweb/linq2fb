@@ -27,17 +27,16 @@ We in [Similarweb](https://similarweb.com) are using this package. This would en
 * Firebolt: I tested [Firebolt](https://firebolt.io) only for v2 since v1 is deprecated. V1 is not tested and you my try to use it without any warranties.
   * You will need [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) v.1.9.1 and above for using this package.
 * LinqToDB:
-  * [v3.7.0](https://github.com/linq2db/linq2db/tree/v3.7.0) — check [documentation](https://similarweb.github.com/linq2fb) about this package
+  * [v5.4.1](https://github.com/linq2db/linq2db/tree/v5.4.1) — check [documentation](https://similarweb.github.com/linq2fb) about this package
 
 ## How to use
 1. Install this package (see [how to install](#installing-package))
 2. Add [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) package since this implementation uses same way of loading ADO.NET classes, as LinqToDB;
-3. In your code add (v3.7.0)
+3. In your code add (v5.4.1)
    ```csharp
    Registration.AddDataProvider(); // this will register Firebolt provider
-   var options = new LinqToDbConnectionOptionsBuilder()
-       .UseConnectionString(Registration.DataProviderName, connectionString)
-       .Build();
+   var options = new DataOptions()
+       .UseConnectionString(Registration.DataProviderName, connectionString);
    var db = new DataConnection(options);
    // here you may use `db` as usual LinqToDB connection
    ```
