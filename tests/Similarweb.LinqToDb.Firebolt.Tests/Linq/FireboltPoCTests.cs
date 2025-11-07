@@ -299,77 +299,6 @@ public class FireboltPoCTests(
     }
     #endregion // SkipTake
 
-    #region Dates
-    [Fact]
-    public async Task TestDate_Part_Year()
-    {
-        var result = await northwind.Context.Orders
-            .Where(order => order.OrderDate.Year == 2012)
-            .ToListAsync(token: TestContext.Current.CancellationToken);
-
-        Assert.NotEmpty(result);
-        Assert.Equal(152, result.Count);
-        Assert.Equivalent(new[] { 2012 }, result.Select(order => order.OrderDate.Year).Distinct());
-    }
-
-    [Fact]
-    public async Task TestDate_Part_Month()
-    {
-        var result = await northwind.Context.Orders
-            .Select(order => order.OrderDate.Month)
-            .ToListAsync(token: TestContext.Current.CancellationToken);
-
-        Assert.NotEmpty(result);
-        Assert.Equal(830, result.Count);
-        Assert.Equal(12, result.Distinct().Count());
-    }
-
-    [Fact]
-    public async Task TestDate_Part_Year_Explicit()
-    {
-        var result = await northwind.Context.Orders
-            .Select(order => FireboltSpecificExtensions.DatePart(Sql.DateParts.Year, order.OrderDate))
-            .ToListAsync(token: TestContext.Current.CancellationToken);
-
-        Assert.NotEmpty(result);
-        Assert.Equal(830, result.Count);
-        Assert.Equivalent(new[] { 2012, 2013, 2014 }, result.Distinct());
-    }
-
-    [Fact]
-    public async Task TestDate_Diff()
-    {
-        var result = await northwind.Context.Orders
-            .Join(
-                northwind.Context.Orders
-                    .GroupBy(order => order.CustomerId)
-                    .Select(group => new
-                    {
-                        CustomerId = group.Key,
-                        FirstOrderDate = group.Min(x => x.OrderDate),
-                    }),
-                SqlJoinType.Inner,
-                (order, firstOrder) => order.CustomerId == firstOrder.CustomerId,
-                (order, firstOrder) => new { order.OrderNumber, order.OrderDate, firstOrder.FirstOrderDate, })
-            .Select(join => new { join.OrderNumber, join.OrderDate, join.FirstOrderDate, Diff = FireboltSpecificExtensions.DateDiff(join.OrderDate, join.FirstOrderDate) })
-            .ToListAsync(token: TestContext.Current.CancellationToken);
-
-        Assert.NotEmpty(result);
-        Assert.Equal(830, result.Count);
-        Assert.All(
-            result.Select(item => new
-            {
-                item.OrderNumber,
-                item.OrderDate,
-                item.FirstOrderDate,
-                item.Diff,
-                ClientDiff = (item.OrderDate - item.FirstOrderDate).Days,
-            }),
-            item => Assert.Equal(item.ClientDiff, item.Diff)
-        );
-    }
-    #endregion // Dates
-
     #region CTEs
     [Fact]
     public async Task TestCte_SimpleSelect()
@@ -390,7 +319,7 @@ public class FireboltPoCTests(
     public async Task TestCte_TwoCtesWithSameNameSelect()
     {
         var sameYearCte = northwind.Context.Orders
-            .GroupBy(order => FireboltSpecificExtensions.DatePart(Sql.DateParts.Year, order.OrderDate))
+            .GroupBy(order => DateTimeMethods.DatePart(Sql.DateParts.Year, order.OrderDate))
             .Select(group => new { OrderYear = group.Key, Count = group.Count() })
             .AsCte("duplicated");
         var sameYearMonthCte = northwind.Context.Orders
@@ -467,7 +396,7 @@ public class FireboltPoCTests(
     public async Task TestMaterializedCte_TwoNamedSelect()
     {
         var sameYearCte = northwind.Context.Orders
-            .GroupBy(order => FireboltSpecificExtensions.DatePart(Sql.DateParts.Year, order.OrderDate))
+            .GroupBy(order => DateTimeMethods.DatePart(Sql.DateParts.Year, order.OrderDate))
             .Select(group => new { OrderYear = group.Key, Count = group.Count() })
             .AsMaterializedCte("same_year");
         var sameYearMonthCte = northwind.Context.Orders
@@ -509,7 +438,7 @@ public class FireboltPoCTests(
     public async Task TestMaterializedCte_TwoNamedUsingConventionsSelect()
     {
         var sameYearCte = northwind.Context.Orders
-            .GroupBy(order => FireboltSpecificExtensions.DatePart(Sql.DateParts.Year, order.OrderDate))
+            .GroupBy(order => DateTimeMethods.DatePart(Sql.DateParts.Year, order.OrderDate))
             .Select(group => new { OrderYear = group.Key, Count = group.Count() })
             .AsCte("__mat__cte__same_year");
         var sameYearMonthCte = northwind.Context.Orders

@@ -91,31 +91,6 @@ public class AggregationTests(
 
     #endregion // ApproxCountDistinct
 
-    #region ArrayTransform
-
-    [Fact]
-    public async Task Test_ArrayTransform()
-    {
-        var result = await northwind.Context.Customers
-            .LeftJoin(northwind.Context.Orders, (customer, order) => customer.Id == order.CustomerId,
-                (customer, order) => new { customer.FirstName, customer.LastName, order.TotalAmount })
-            .GroupBy(customer => new { customer.FirstName, customer.LastName })
-            .Select(group => new
-            {
-                group.Key.FirstName,
-                group.Key.LastName,
-                Orders = group.ArrayAggregate(item => item.TotalAmount).ToValue(),
-                Filtered = group.ArrayAggregate(item => item.TotalAmount).ToValue()
-                    .ArrayTransform(amount => amount > 500m ? amount : null),
-            })
-            .ToListAsync(token: TestContext.Current.CancellationToken);
-
-        Assert.NotEmpty(result);
-        Assert.All(result, item => Assert.Equal(item.Orders.Select(x => x > 500m ? x : null), item.Filtered));
-    }
-
-    #endregion // ArrayTransform
-
     #region MaxBy
 
     [Fact]
@@ -1002,91 +977,6 @@ public class AggregationTests(
     }
 
     #endregion // HashAgg
-
-    #region HllCount
-
-    #region HllCountBuild
-
-    [Fact]
-    public async Task Test_HllCountBuild()
-    {
-        var dataToCount1 = northwind.Context.GenerateSeries(0, 1_000_000, 3).AsCte();
-        var dataToCount2 = northwind.Context.GenerateSeries(0, 1_000_000, 2).AsCte();
-        var sketch1 = dataToCount1
-            .GroupBy(x => 1)
-            .Select(group => new
-            {
-                Build = group.HllCountBuild(x => x),
-            });
-        var sketch2 = dataToCount2
-            .GroupBy(x => 1)
-            .Select(group => new
-            {
-                Build = group.HllCountBuild(x => x),
-            });
-        var aggregate = sketch1.Concat(sketch2)
-            .Select(group => new
-            {
-                Estimate = Sql.Ext.HllCountEstimate(group.Build).ToValue(),
-                group.Build,
-            });
-        var intermediate = aggregate
-            .GroupBy(x => 1)
-            .Select(group => new
-            {
-                Merged = group.HllCountMerge(x => x.Build),
-                Estimate2 = group.Sum(x => x.Estimate),
-            })
-            .AsCte();
-        var result = await intermediate
-            .Select(item => new
-            {
-                Estimate1 = Sql.Ext.HllCountEstimate(item.Merged).ToValue(),
-                item.Estimate2,
-            })
-            .ToListAsync(token: TestContext.Current.CancellationToken);
-
-        var item = Assert.Single(result);
-        Assert.NotEqual(0, item.Estimate1);
-        Assert.NotEqual(0, item.Estimate2);
-    }
-
-    [Fact]
-    public async Task Test_HllCountBuild_Extension()
-    {
-        var dataToCount1 = northwind.Context.GenerateSeries(0, 1_000_000, 3).AsCte();
-        var dataToCount2 = northwind.Context.GenerateSeries(0, 1_000_000, 2).AsCte();
-        var sketch1 = dataToCount1.Select(element => Sql.Ext.HllCountBuild(element).ToValue());
-        var sketch2 = dataToCount2.Select(element => Sql.Ext.HllCountBuild(element).ToValue());
-        var aggregate = sketch1.Concat(sketch2)
-            .Select(hash => new
-            {
-                Estimate = Sql.Ext.HllCountEstimate(hash).ToValue(),
-                Hash = hash,
-            });
-        var intermediate = aggregate
-            .Select(item => new
-            {
-                Merged = Sql.Ext.HllCountMerge(item.Hash).ToValue(),
-                Estimate2 = Sql.Ext.Sum(item.Estimate).ToValue(),
-            })
-            .AsCte();
-        var result = await intermediate
-            .Select(item => new
-            {
-                Estimate1 = Sql.Ext.HllCountEstimate(item.Merged).ToValue(),
-                item.Estimate2,
-            })
-            .ToListAsync(token: TestContext.Current.CancellationToken);
-
-        var item = Assert.Single(result);
-        Assert.NotEqual(0, item.Estimate1);
-        Assert.NotEqual(0, item.Estimate2);
-    }
-
-    #endregion // HllCountBuild
-
-    #endregion // HllCount
 
     #region Disposing
 
