@@ -131,5 +131,3 @@ public static class LambdaMethods
         Expression<Func<TItem, TSort>> lambda
     ) => throw new LinqToDBException("Not supported on client");
 }
-
-

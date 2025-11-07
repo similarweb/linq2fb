@@ -123,5 +123,3 @@ public static class DateTimeMethods
     }
     #endregion // Builders
 }
-
-

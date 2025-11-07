@@ -82,5 +82,3 @@ public static class DataSketchesMethods
         [ExprParameter] byte[] column
     ) => throw new LinqToDBException("Not supported");
 }
-
-
