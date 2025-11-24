@@ -44,6 +44,24 @@ public class PlainTests(
     }
 
     [Fact]
+    public async Task Test_In_Any()
+    {
+        await using var conn = new FireboltCoreConnection(stringsProvider.Get("core"));
+        await conn.OpenAsync(TestContext.Current.CancellationToken);
+        await using var cmd = new FireboltCommand(conn, "SELECT Count(*) FROM \"Orders\" WHERE \"OrderNumber\" = ANY(@orders)");
+        cmd.Parameters.Add(new FireboltParameter("@orders", new string[] { "543181", "543182", "666666" }));
+        var ex = await Assert.ThrowsAsync<AggregateException>(async () =>
+        {
+            await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+            await reader.ReadAsync(TestContext.Current.CancellationToken);
+            var count = reader.GetInt32(0);
+            Assert.Equal(2, count);
+        });
+        var inner = Assert.IsType<FireboltStructuredException>(ex.InnerException);
+        Assert.Contains("aggregate functions are not allowed", inner.Message);
+    }
+
+    [Fact]
     public async Task Test_Read_Decimal_Core()
     {
         var oldCulture = CultureInfo.CurrentCulture;

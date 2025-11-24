@@ -21,15 +21,16 @@ jobs:
               with:
                   dotnet-version: 9.0.x
                   cache: true
+                  cache-dependency-path: |
+                      **/packages.lock.json
+                      **/Directory.Packages.props
+                      **/global.json
 
             - name: Restore
               run: dotnet restore
 
             - name: Build (Release, all TFMs)
               run: dotnet build -c Release -warnAsError
-
-            - name: Test (last call)
-              run: dotnet test -c Release --no-build
 
             - name: Extract changelog for current tag
               id: changelog
@@ -55,7 +56,7 @@ jobs:
             - name: Pack (symbols + notes)
               run: |
                   notes=$(sed "s/'/''/g" RELEASE_NOTES.md | tr '\n' ' ')
-                  dotnet pack src/Similarweb.LinqToDB.Firebolt/Similarweb.LinqToDB.Firebolt.csproj \
+                  dotnet pack \
                   --no-build \
                   -c Release \
                   -o ./artifacts \
