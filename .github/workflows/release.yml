@@ -63,7 +63,7 @@ jobs:
 
             - name: Push to NuGet
               env:
-                  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+                  NUGET_API_KEY: ${{ secrets.NUGET_KEY }}
               run: >
                   dotnet nuget push "artifacts/*.nupkg"
                   -k "$NUGET_API_KEY"
@@ -72,7 +72,7 @@ jobs:
 
             - name: Push symbols to NuGet
               env:
-                  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+                  NUGET_API_KEY: ${{ secrets.NUGET_KEY }}
               run: >
                   dotnet nuget push "artifacts/*.snupkg"
                   -k "$NUGET_API_KEY"
