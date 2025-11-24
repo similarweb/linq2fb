@@ -1,0 +1,11 @@
+<Project>
+    <PropertyGroup>
+        <!-- Use tags like v1.2.3 -->
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+
+        <!-- Recommended default MinVer settings -->
+        <MinVerScheme>SemVer</MinVerScheme>
+        <MinVerMinimumMajorMinor>0.1</MinVerMinimumMajorMinor>
+        <MinVerAutoIncrement>minor</MinVerAutoIncrement>
+    </PropertyGroup>
+</Project>
