@@ -6,6 +6,9 @@ the format of [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [6.1.0] - 2026-06-15
+- Added `net10.0` target framework
+
 ## [6.0.0] - 2026-08-12
 - Migrate provider to LinqToDB 6.x (compatible with 6.0–6.4; NuGet package built against 6.0.0)
 - CI matrix: linq2db `{6.0.0–6.4.0}` × FireboltNetSDK `{1.9.1, 1.10.1}` × TFM `{net8.0, net9.0}`

@@ -484,6 +484,7 @@ public class FireboltPoCTests(
     {
         var mostPopularProducts = northwind.Context.Products
             .LoadWith(product => product.OrderItems)
+            .AsQueryable()
             .Select(product =>
                 new
                 {

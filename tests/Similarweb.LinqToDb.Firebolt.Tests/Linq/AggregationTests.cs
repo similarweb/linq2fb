@@ -542,6 +542,7 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
+            .AsQueryable()
             .Select(item => new
             {
                 item.Product.SupplierId,
@@ -579,6 +580,7 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
+            .AsQueryable()
             .Select(item => new
             {
                 item.ProductId,
@@ -664,6 +666,7 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
+            .AsQueryable()
             .Select(item => new
             {
                 item.Product.SupplierId,
@@ -698,6 +701,7 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
+            .AsQueryable()
             .Select(item => new
             {
                 item.ProductId,
@@ -743,6 +747,7 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
+            .AsQueryable()
             .Select(item => new
             {
                 item.Product.SupplierId,
@@ -784,6 +789,7 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
+            .AsQueryable()
             .Select(item => new
             {
                 item.ProductId,

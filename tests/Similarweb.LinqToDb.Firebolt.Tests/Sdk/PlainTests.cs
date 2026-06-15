@@ -1,3 +1,4 @@
+using System.Data;
 using System.Globalization;
 using FireboltDotNetSdk.Client;
 using FireboltNETSDK.Exception;
@@ -247,6 +248,35 @@ public class PlainTests(
             var id = reader.GetInt32(0);
             var name = reader.GetString(1);
         }
+    }
+
+    [Fact]
+    public async Task Test_SimilarNames()
+    {
+        string? capture = null;
+        await using var conn = new FireboltMockedConnection(stringsProvider.Get("mock"), new TestDataProvider(), sql => capture = sql);
+        await conn.OpenAsync(TestContext.Current.CancellationToken);
+        var cmdText =
+            """
+            SELECT
+            	product.id,
+            	product.product_name
+            FROM
+            	products product
+            WHERE
+            	id = @id OR id = @id_1 OR id = @id_2
+            """;
+        await using var cmd = new FireboltCommand(conn, cmdText);
+        cmd.Parameters.Add(new FireboltParameter("@id", DbType.Double, 12.3));
+        cmd.Parameters.Add(new FireboltParameter("@id_1", DbType.Double, 32.1));
+        cmd.Parameters.Add(new FireboltParameter("@id_2", DbType.Int32, 42));
+        await using var reader = await cmd.ExecuteReaderAsync(TestContext.Current.CancellationToken);
+        await reader.ReadAsync(TestContext.Current.CancellationToken);
+
+        // Similar parameter names (@id, @id_1, @id_2) must each be substituted as a
+        // whole token; @id must not clobber the @id_1 / @id_2 occurrences.
+        Assert.NotNull(capture);
+        Assert.Contains("id = 12.3 OR id = 32.1 OR id = 42", capture);
     }
 
     internal class TestDataProvider : IClientDataProvider

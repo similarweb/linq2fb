@@ -6,7 +6,7 @@
       CI overrides via -p:LinqToDbVersion / -p:FireboltSdkVersion.
       Materialized CTE is compiled only when LinqToDbVersion >= 6.3.0 (see Directory.Build.Props).
     -->
-    <FireboltSdkVersion Condition="'$(FireboltSdkVersion)' == ''">1.9.1</FireboltSdkVersion>
+    <FireboltSdkVersion Condition="'$(FireboltSdkVersion)' == ''">1.10.1</FireboltSdkVersion>
     <LinqToDbVersion Condition="'$(LinqToDbVersion)' == ''">6.0.0</LinqToDbVersion>
   </PropertyGroup>
   <ItemGroup>
