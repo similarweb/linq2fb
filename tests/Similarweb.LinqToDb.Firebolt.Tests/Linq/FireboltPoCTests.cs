@@ -2,6 +2,7 @@ using FireboltNETSDK.Exception;
 using LinqToDB;
 using LinqToDB.Async;
 using LinqToDB.Data;
+using LinqToDB.Tools;
 using Similarweb.LinqToDB.Firebolt.Extensions;
 using Similarweb.LinqToDB.Firebolt.Tests.Fixtures;
 using Similarweb.LinqToDB.Firebolt.Tests.Northwind;
@@ -16,6 +17,15 @@ public class FireboltPoCTests(
     ContextFixture<NorthwindContext> northwind
 ) : IClassFixture<ContextFixture<NorthwindContext>>, IDisposable, IAsyncDisposable
 {
+    // On net10.0 / C# 14, `array.Contains(column)` binds to MemoryExtensions.Contains(ReadOnlySpan<T>, T)
+    // instead of Enumerable.Contains(IEnumerable<T>, T). linq2db (major-5) only translates the latter, so
+    // such IN-clause queries throw "cannot be converted to SQL". The customer-friendly alternative that works
+    // on every language version is linq2db's own .In(...) extension (see the *_UsingInExtension counterparts).
+    // linq2db 6.x translates ReadOnlySpan<>.Contains() natively (PR #5151) - drop these Skips after upgrading.
+    private const string ContainsInClauseSkipReason =
+        "array.Contains(column) binds to MemoryExtensions.Contains(ReadOnlySpan<T>) on net10.0/C# 14, which "
+        + "linq2db major-5 cannot translate to SQL. Use the .In() variant; re-enable after upgrading to linq2db 6.x.";
+
     #region Selects
     [Fact]
     public async Task TestSelect_WithDefaultSettings()
@@ -35,7 +45,7 @@ public class FireboltPoCTests(
         Assert.Equal(78, result.Count);
     }
 
-    [Fact]
+    [Fact(Skip = ContainsInClauseSkipReason)]
     public async Task TestSelect_WithUnion()
     {
         var result = await northwind.Context.Customers
@@ -52,6 +62,22 @@ public class FireboltPoCTests(
     }
 
     [Fact]
+    public async Task TestSelect_WithUnion_UsingInExtension()
+    {
+        var result = await northwind.Context.Customers
+            .Where(customer => customer.Id.In(1, 2, 3))
+            .Select(customer => new { customer.Id, customer.FirstName, customer.LastName, })
+            .Union(northwind.Context.Customers
+                .Where(customer => customer.Id.In(3, 4, 5))
+                .Select(customer => new { customer.Id, customer.FirstName, customer.LastName, }))
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.Equal(5, result.Count);
+        Assert.Equivalent(new[] { 1, 2, 3, 4, 5 }, result.Select(x => x.Id));
+    }
+
+    [Fact(Skip = ContainsInClauseSkipReason)]
     public async Task TestSelect_WithUnionAll()
     {
         var result = await northwind.Context.Customers
@@ -59,6 +85,22 @@ public class FireboltPoCTests(
             .Select(customer => new { customer.Id, customer.FirstName, customer.LastName, })
             .Concat(northwind.Context.Customers
                 .Where(customer => new[] { 3, 4, 5 }.Contains(customer.Id))
+                .Select(customer => new { customer.Id, customer.FirstName, customer.LastName, }))
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.Equal(6, result.Count);
+        Assert.Equivalent(new[] { 1, 2, 3, 3, 4, 5 }, result.Select(x => x.Id));
+    }
+
+    [Fact]
+    public async Task TestSelect_WithUnionAll_UsingInExtension()
+    {
+        var result = await northwind.Context.Customers
+            .Where(customer => customer.Id.In(1, 2, 3))
+            .Select(customer => new { customer.Id, customer.FirstName, customer.LastName, })
+            .Concat(northwind.Context.Customers
+                .Where(customer => customer.Id.In(3, 4, 5))
                 .Select(customer => new { customer.Id, customer.FirstName, customer.LastName, }))
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
@@ -174,7 +216,7 @@ public class FireboltPoCTests(
         Assert.Equal(3, item.Id);
     }
 
-    [Fact]
+    [Fact(Skip = ContainsInClauseSkipReason)]
     public async Task TestFind_UsingInClause_ForInts()
     {
         var ids = new[] { 1, 2, 3, 123, };
@@ -187,6 +229,18 @@ public class FireboltPoCTests(
     }
 
     [Fact]
+    public async Task TestFind_UsingInClause_ForInts_UsingInExtension()
+    {
+        var ids = new[] { 1, 2, 3, 123, };
+        var query = from supplier in northwind.Context.Suppliers where supplier.Id.In(ids) select supplier;
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.Equal(3, result.Count);
+        Assert.Equivalent(new[] { 1, 2, 3 }, result.Select(x => x.Id));
+    }
+
+    [Fact(Skip = ContainsInClauseSkipReason)]
     public async Task TestFind_UsingInClause_ForGuids()
     {
         var ids = new[] { Guid.Parse("9C2D54C3-4B50-4E88-987A-4644E3DB40EA"), Guid.Parse("411974c9-adc2-42ff-b5a2-fca346929a8b"), Guid.NewGuid(), };
@@ -199,6 +253,18 @@ public class FireboltPoCTests(
     }
 
     [Fact]
+    public async Task TestFind_UsingInClause_ForGuids_UsingInExtension()
+    {
+        var ids = new[] { Guid.Parse("9C2D54C3-4B50-4E88-987A-4644E3DB40EA"), Guid.Parse("411974c9-adc2-42ff-b5a2-fca346929a8b"), Guid.NewGuid(), };
+        var query = from supplier in northwind.Context.Suppliers where supplier.PublicId.In(ids) select supplier;
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.Equal(2, result.Count);
+        Assert.Equivalent(new[] { 2, 22 }, result.Select(x => x.Id));
+    }
+
+    [Fact(Skip = ContainsInClauseSkipReason)]
     public async Task TestFind_UsingInClause_ForStrings()
     {
         var names = new[] { "Mayumi's", "G'day, Mate", "some_crap" };
@@ -211,6 +277,18 @@ public class FireboltPoCTests(
     }
 
     [Fact]
+    public async Task TestFind_UsingInClause_ForStrings_UsingInExtension()
+    {
+        var names = new[] { "Mayumi's", "G'day, Mate", "some_crap" };
+        var query = from supplier in northwind.Context.Suppliers where supplier.CompanyName.In(names) select supplier;
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.Equal(2, result.Count);
+        Assert.Equivalent(new[] { "Mayumi's", "G'day, Mate" }, result.Select(x => x.CompanyName));
+    }
+
+    [Fact(Skip = ContainsInClauseSkipReason)]
     public async Task TestFind_UsingInClause_ForStrings_WithLowercasing()
     {
         var names = new[] { "tunnbröd", "original frankfurter grüne soße" };
@@ -223,10 +301,32 @@ public class FireboltPoCTests(
     }
 
     [Fact]
+    public async Task TestFind_UsingInClause_ForStrings_WithLowercasing_UsingInExtension()
+    {
+        var names = new[] { "tunnbröd", "original frankfurter grüne soße" };
+        var query = from product in northwind.Context.Products where product.ProductName.ToLower().In(names) select product;
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.Equal(2, result.Count);
+        Assert.Equivalent(new[] { 23, 77 }, result.Select(x => x.Id));
+    }
+
+    [Fact(Skip = ContainsInClauseSkipReason)]
     public async Task TestFind_UsingInClause_ForStrings_WithInjections()
     {
         var names = new[] { "' OR 1 = 1; --" };
         var query = from product in northwind.Context.Products where names.Contains(product.ProductName) select product;
+        var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task TestFind_UsingInClause_ForStrings_WithInjections_UsingInExtension()
+    {
+        var names = new[] { "' OR 1 = 1; --" };
+        var query = from product in northwind.Context.Products where product.ProductName.In(names) select product;
         var result = await query.ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.Empty(result);
