@@ -584,6 +584,8 @@ public class FireboltPoCTests(
     {
         var mostPopularProducts = northwind.Context.Products
             .LoadWith(product => product.OrderItems)
+            // linq2db-5/net10 workaround (issue #5180): ILoadWithQueryable implements IAsyncEnumerable,
+            // so .Select() is ambiguous under net10. Drop .AsQueryable() after upgrading to linq2db 6.x (PR #5156).
             .AsQueryable()
             .Select(product =>
                 new
