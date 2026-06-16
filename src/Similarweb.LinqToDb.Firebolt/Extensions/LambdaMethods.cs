@@ -24,6 +24,51 @@ public static class LambdaMethods
     ) => throw new LinqToDBException("Not supported on client");
 
     /// <summary>
+    /// <para>Implementation for <see href="https://docs.firebolt.io/reference-sql/functions-reference/lambda/transform">ARRAY_TRANSFORM</see> Firebolt method over two arrays.</para>
+    /// <para>Applies <paramref name="lambda"/> element-wise to a pair of arrays (zipped by index).</para>
+    /// </summary>
+    /// <typeparam name="TItem">Type of the first array items.</typeparam>
+    /// <typeparam name="TSecond">Type of the second array items.</typeparam>
+    /// <typeparam name="TResult">Type of resulting item.</typeparam>
+    /// <param name="array">First array (provides the first lambda parameter).</param>
+    /// <param name="second">Second array (provides the second lambda parameter).</param>
+    /// <param name="lambda">Transformation applied to each <c>(first, second)</c> pair.</param>
+    /// <returns>A new array with transformed elements.</returns>
+    [Sql.Extension(DataProvider.V2Id, "ARRAY_TRANSFORM({lambda}, {array}, {second})", BuilderType = typeof(LambdaBuilder), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 10, IsAggregate = true, PreferServerSide = true)]
+    public static TResult[] ArrayTransform<TItem, TSecond, TResult>(
+        [ExprParameter] this TItem[] array,
+        [ExprParameter] TSecond[] second,
+        Expression<Func<TItem, TSecond, TResult>> lambda
+    ) => array
+        .Zip(second)
+        .Select(pair => lambda.Compile().Invoke(pair.First, pair.Second))
+        .ToArray();
+
+    /// <summary>
+    /// <para>Implementation for <see href="https://docs.firebolt.io/reference-sql/functions-reference/lambda/transform">ARRAY_TRANSFORM</see> Firebolt method over three arrays.</para>
+    /// <para>Applies <paramref name="lambda"/> element-wise to three arrays (zipped by index).</para>
+    /// </summary>
+    /// <typeparam name="TItem">Type of the first array items.</typeparam>
+    /// <typeparam name="TSecond">Type of the second array items.</typeparam>
+    /// <typeparam name="TThird">Type of the third array items.</typeparam>
+    /// <typeparam name="TResult">Type of resulting item.</typeparam>
+    /// <param name="array">First array (provides the first lambda parameter).</param>
+    /// <param name="second">Second array (provides the second lambda parameter).</param>
+    /// <param name="third">Third array (provides the third lambda parameter).</param>
+    /// <param name="lambda">Transformation applied to each <c>(first, second, third)</c> triple.</param>
+    /// <returns>A new array with transformed elements.</returns>
+    [Sql.Extension(DataProvider.V2Id, "ARRAY_TRANSFORM({lambda}, {array}, {second}, {third})", BuilderType = typeof(LambdaBuilder), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 10, IsAggregate = true, PreferServerSide = true)]
+    public static TResult[] ArrayTransform<TItem, TSecond, TThird, TResult>(
+        [ExprParameter] this TItem[] array,
+        [ExprParameter] TSecond[] second,
+        [ExprParameter] TThird[] third,
+        Expression<Func<TItem, TSecond, TThird, TResult>> lambda
+    ) => array
+        .Zip(second, (first, sec) => (first, sec))
+        .Zip(third, (pair, thi) => lambda.Compile().Invoke(pair.first, pair.sec, thi))
+        .ToArray();
+
+    /// <summary>
     /// <para>Implementation for <see href="https://docs.firebolt.io/sql_reference/functions-reference/array/array-count.html">ARRAY_COUNT</see> Firebolt method.</para>
     /// <para>Counts the number of elements in the array for which <c>lambda.</c> returns <c>TRUE</c>.</para>
     /// </summary>

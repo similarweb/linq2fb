@@ -285,6 +285,34 @@ public class LambdaTests(
         Assert.All(result, item => Assert.Equal(item.Orders.Select(x => x > 500m ? x : null), item.Filtered));
     }
 
+    [Fact]
+    public async Task Test_ArrayTransform_TwoArrays()
+    {
+        var result = await northwind.Context.OrderItems
+            .GroupBy(item => item.OrderId)
+            .Select(group => new
+            {
+                OrderId = group.Key,
+                Quantities = group.ArrayAggregate(item => item.Quantity).ToValue(),
+                ProductIds = group.ArrayAggregate(item => item.ProductId).ToValue(),
+            })
+            .Select(tuple => new
+            {
+                tuple.OrderId,
+                tuple.Quantities,
+                tuple.ProductIds,
+                Combined = tuple.ProductIds.ArrayTransform(tuple.Quantities, (productId, quantity) => productId * quantity),
+            })
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.All(
+            result,
+            item => Assert.Equal(
+                item.ProductIds.Zip(item.Quantities, (productId, quantity) => productId * quantity),
+                item.Combined));
+    }
+
     #endregion // ArrayTransform
 
     #region Disposing
