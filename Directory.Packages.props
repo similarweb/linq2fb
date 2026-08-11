@@ -17,6 +17,7 @@
     <PackageVersion Include="Xunit.DependencyInjection" Version="11.0.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="Testcontainers" Version="4.13.0" />
     <!-- LinqToDb -->
     <PackageVersion Include="linq2db" Version="$(LinqToDbVersion)" />
     <!-- Firebolt -->

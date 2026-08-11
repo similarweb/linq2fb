@@ -1,7 +1,9 @@
 using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Similarweb.LinqToDB.Firebolt.Tests.Common;
+using Similarweb.LinqToDB.Firebolt.Tests.Fixtures;
 using Similarweb.LinqToDB.Firebolt.Tests.Options;
 
 namespace Similarweb.LinqToDB.Firebolt.Tests;
@@ -31,7 +33,10 @@ public class Startup
 
         services
             .Configure<LinqToDbTestSettings>(configuration.GetSection(nameof(LinqToDbTestSettings)))
+            .Configure<FireboltCoreSettings>(configuration.GetSection("fireboltCore"))
             .Configure<Dictionary<string, Dictionary<string, string>>>(configuration.GetSection("accounts"))
+            .AddSingleton<FireboltCoreHost>()
+            .AddSingleton<IHostedService>(sp => sp.GetRequiredService<FireboltCoreHost>())
             .AddSingleton<ConnectionStringsProvider>();
     }
 }

@@ -55,12 +55,6 @@ jobs:
                   JSON
                   dotnet --info
 
-            - name: Start Firebolt (Docker Compose)
-              run: |
-                  docker compose version
-                  docker compose -f ./docker-compose.yml up -d --quiet-pull
-                  docker ps -a
-
             - name: Restore tools
               run: dotnet tool restore
 
@@ -79,38 +73,10 @@ jobs:
                   --warnAsError \
                   --no-restore
 
-            - name: Check Firebolt Core version
-              run: |
-                # Run the command and capture output
-                RAW_OUTPUT=$(docker exec firebolt-core fbcli --format JSONLines_Compact -- "SELECT VERSION()")
-
-                # Extract the line with message_type=="DATA", then grab the version field from .data[0][0]
-                VERSION=$(echo "$RAW_OUTPUT" \
-                  | grep '^{\"message_type\":\"DATA\"' \
-                  | jq -r '.data[0][0]')
-
-                echo "Firebolt version: $VERSION"
-
-                # Make it available to later steps as an output
-                echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-                # Add it to the GitHub Actions summary (nice human-readable bit in the UI)
-                {
-                  echo "### Firebolt Core"
-                  echo ""
-                  echo "**Version:** \`$VERSION\`"
-                } >> $GITHUB_STEP_SUMMARY
-
-            - name: Seed Database with Northwind data
-              run: |
-                  ./scripts/seed_db.py \
-                    --file=./sql/northwind.sql \
-                    --container=firebolt-core \
-                    --smoke="SELECT COUNT(*) FROM northwind.public.\"Customers\";" \
-                    --smoke="SELECT COUNT(*) FROM northwind.public.products;"
-
             - name: Test (${{ matrix.tfm }}, Firebolt ${{ matrix.fb }})
               run: |
+                  # Firebolt Core is started by Testcontainers inside the test host
+                  # (see FireboltCoreHost). Docker must be available on the runner.
                   dotnet test \
                     -c Release \
                     --collect:"XPlat Code Coverage" \
@@ -119,7 +85,6 @@ jobs:
                     -p:FireboltSdkVersion=${{ matrix.fb }} \
                     --no-build \
                     -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
-
             - name: Report coverage
               run: |
                 dotnet reportgenerator \
