@@ -1,5 +1,6 @@
 using LinqToDB;
 using LinqToDB.Data;
+using LinqToDB.Internal.SchemaProvider;
 using LinqToDB.SchemaProvider;
 
 namespace Similarweb.LinqToDB.Firebolt;
@@ -40,5 +41,5 @@ internal class SchemaProvider : SchemaProviderBase
     protected override IReadOnlyCollection<ForeignKeyInfo> GetForeignKeys(DataConnection dataConnection, IEnumerable<TableSchema> tables, GetSchemaOptions options) => throw new NotImplementedException();
 
     /// <inheritdoc/>
-    protected override string? GetProviderSpecificTypeNamespace() => throw new NotImplementedException();
+    protected override string GetProviderSpecificTypeNamespace() => throw new NotImplementedException();
 }

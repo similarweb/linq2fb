@@ -35,7 +35,7 @@ internal class LambdaBuilder(
     }
 
     /// <inheritdoc/>
-    public void Build(Sql.ISqExtensionBuilder builder)
+    public void Build(Sql.ISqlExtensionBuilder builder)
     {
         var lambda = builder.GetValue<Expression>(ExpectedLambdaName);
         while (lambda.CanReduce)
@@ -60,7 +60,7 @@ internal class LambdaBuilder(
         }
 
         RecursiveParse(validLambda.Body, sqlExpr.Append(' ').Append(LambdaSign).Append(' '));
-        builder.AddExpression(ExpectedLambdaName, sqlExpr.ToString());
+        builder.AddFragment(ExpectedLambdaName, sqlExpr.ToString());
         return;
 
         string GetOperator(BinaryExpression expr) =>

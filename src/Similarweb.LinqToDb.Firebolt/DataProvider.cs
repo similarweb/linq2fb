@@ -1,11 +1,11 @@
 using System.Data;
 using System.Data.Common;
 using LinqToDB;
-using LinqToDB.Common;
 using LinqToDB.Data;
-using LinqToDB.DataProvider;
+using LinqToDB.Internal.DataProvider;
+using LinqToDB.Internal.SqlProvider;
+using LinqToDB.Linq.Translation;
 using LinqToDB.SchemaProvider;
-using LinqToDB.SqlProvider;
 using MappingSchemaBase = LinqToDB.Mapping.MappingSchema;
 
 namespace Similarweb.LinqToDB.Firebolt;
@@ -45,7 +45,6 @@ internal class DataProvider : DynamicDataProviderBase<ProviderAdapter>
     {
         SqlProviderFlags.IsCommonTableExpressionsSupported = true;
         SqlProviderFlags.IsSkipSupported = true;
-        SqlProviderFlags.IsTakeSupported = true;
 
         _sqlOptimizer = new SqlOptimizer(SqlProviderFlags);
     }
@@ -100,6 +99,9 @@ internal class DataProvider : DynamicDataProviderBase<ProviderAdapter>
 
         base.SetParameterType(dataConnection, parameter, dataType);
     }
+
+    /// <inheritdoc/>
+    protected override IMemberTranslator CreateMemberTranslator() => new MemberTranslator();
 
     private static MappingSchemaBase GetMappingSchema(string name, MappingSchemaBase? providerSchema)
     {

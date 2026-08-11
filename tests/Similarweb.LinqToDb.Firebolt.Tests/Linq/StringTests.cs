@@ -1,4 +1,4 @@
-using LinqToDB;
+using LinqToDB.Async;
 using Similarweb.LinqToDB.Firebolt.Extensions;
 using Similarweb.LinqToDB.Firebolt.Tests.Fixtures;
 using Similarweb.LinqToDB.Firebolt.Tests.Northwind;

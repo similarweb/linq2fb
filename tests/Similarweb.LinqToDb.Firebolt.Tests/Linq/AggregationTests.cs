@@ -1,4 +1,5 @@
 using LinqToDB;
+using LinqToDB.Async;
 using Similarweb.LinqToDB.Firebolt.Extensions;
 using Similarweb.LinqToDB.Firebolt.Tests.Fixtures;
 using Similarweb.LinqToDB.Firebolt.Tests.Northwind;
@@ -567,8 +568,14 @@ public class AggregationTests(
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
-        Assert.All(result,
-            item => Assert.Equal((double)item.Corr, Correlation(item.Prices, item.Quantities), Tolerance));
+        Assert.All(
+            result,
+            item =>
+            {
+                var val = Assert.NotNull(item.Corr);
+                Assert.Equal((double)val, Correlation(item.Prices, item.Quantities), Tolerance);
+            }
+        );
     }
 
     [Fact]
@@ -761,13 +768,18 @@ public class AggregationTests(
                 SupplierId = group.Key,
                 Prices = group.ArrayAggregate(it => it.UnitPrice).ToValue(),
                 Quantities = group.ArrayAggregate(it => it.Quantity).ToValue(),
-                CovarSamp = (double)group.CovarSamp(it => it.UnitPrice, it => it.Quantity),
+                CovarSamp = (double?)group.CovarSamp(it => it.UnitPrice, it => it.Quantity),
             })
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
-        Assert.All(result,
-            item => Assert.Equal(item.CovarSamp, CovarianceSample(item.Prices, item.Quantities), Tolerance));
+        Assert.All(
+            result,
+            item =>
+            {
+                var covarSamp = Assert.NotNull(item.CovarSamp);
+                Assert.Equal(covarSamp, CovarianceSample(item.Prices, item.Quantities), Tolerance);
+            });
     }
 
     [Fact]
@@ -813,7 +825,7 @@ public class AggregationTests(
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
             .GroupBy(item => Sql.GroupBy.GroupingSets(
-                () => new
+                new
                 {
                     Set1 = new { item.Product.SupplierId, item.ProductId },
                     Set2 = new { item.Product.SupplierId },
@@ -850,7 +862,7 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
-            .GroupBy(item => Sql.GroupBy.Rollup(() => new { item.Product.SupplierId, item.ProductId, }))
+            .GroupBy(item => Sql.GroupBy.Rollup(new { item.Product.SupplierId, item.ProductId, }))
             .Select(group => new
             {
                 Grouping = Sql.Grouping(group.Key.SupplierId, group.Key.ProductId),
@@ -887,7 +899,7 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
-            .GroupBy(item => Sql.GroupBy.Cube(() => new { item.Product.SupplierId, item.ProductId, }))
+            .GroupBy(item => Sql.GroupBy.Cube(new { item.Product.SupplierId, item.ProductId, }))
             .Select(group => new
             {
                 Grouping = Sql.Grouping(group.Key.SupplierId, group.Key.ProductId),

@@ -1,5 +1,6 @@
 using FireboltNETSDK.Exception;
 using LinqToDB;
+using LinqToDB.Async;
 using LinqToDB.Data;
 using Similarweb.LinqToDB.Firebolt.Extensions;
 using Similarweb.LinqToDB.Firebolt.Tests.Fixtures;

@@ -1,8 +1,8 @@
 using System.Data.Common;
 using System.Text;
 using LinqToDB;
-using LinqToDB.SqlProvider;
-using LinqToDB.SqlQuery;
+using LinqToDB.Internal.SqlProvider;
+using LinqToDB.Internal.SqlQuery;
 using LinqExtensions = Similarweb.LinqToDB.Firebolt.Extensions.LinqExtensions;
 
 namespace Similarweb.LinqToDB.Firebolt;
@@ -100,115 +100,6 @@ internal class SqlBuilder(
         }
 
         return StringBuilder;
-    }
-
-    /// <summary>
-    /// Copied as is from <c>LinqToDB.SqlProvider.SqlBuilder.BuildWithClause</c> because it does not support injection of <c>MATERIALIZED</c> keyword.
-    /// </summary>
-    /// <param name="with"><see cref="SqlWithClause"/> clause.</param>
-    protected override void BuildWithClause(SqlWithClause? with)
-    {
-        if (with == null || with.Clauses.Count == 0)
-        {
-            return;
-        }
-
-        var first = true;
-
-        foreach (var cte in with.Clauses)
-        {
-            if (first)
-            {
-                AppendIndent();
-                StringBuilder.Append("WITH ");
-
-                if (IsRecursiveCteKeywordRequired && with.Clauses.Any(c => c.IsRecursive))
-                {
-                    StringBuilder.Append("RECURSIVE ");
-                }
-
-                first = false;
-            }
-            else
-            {
-                StringBuilder.AppendLine(Comma);
-                AppendIndent();
-            }
-
-            var isMaterialized = cte.Name!.Contains(LinqExtensions.CteMaterializedEnding, StringComparison.Ordinal);
-
-            BuildObjectName(StringBuilder, new(cte.Name), ConvertType.NameToQueryTable, true, TableOptions.None);
-
-            if (cte.Fields!.Length > 3)
-            {
-                StringBuilder.AppendLine();
-                AppendIndent();
-                StringBuilder.AppendLine(OpenParens);
-                ++Indent;
-
-                var firstField = true;
-                foreach (var field in cte.Fields)
-                {
-                    if (!firstField)
-                    {
-                        StringBuilder.AppendLine(Comma);
-                    }
-
-                    firstField = false;
-                    AppendIndent();
-                    Convert(StringBuilder, field.PhysicalName, ConvertType.NameToQueryField);
-                }
-
-                --Indent;
-                StringBuilder.AppendLine();
-                AppendIndent();
-                StringBuilder.AppendLine(")");
-            }
-            else if (cte.Fields.Length > 0)
-            {
-                StringBuilder.Append(" (");
-
-                var firstField = true;
-                foreach (var field in cte.Fields)
-                {
-                    if (!firstField)
-                    {
-                        StringBuilder.Append(InlineComma);
-                    }
-
-                    firstField = false;
-                    Convert(StringBuilder, field.PhysicalName, ConvertType.NameToQueryField);
-                }
-
-                StringBuilder.AppendLine(")");
-            }
-            else
-            {
-                StringBuilder.Append(' ');
-            }
-
-            AppendIndent();
-            StringBuilder.AppendLine("AS");
-            AppendIndent();
-            if (isMaterialized)
-            {
-                StringBuilder.Append("MATERIALIZED ");
-                AppendIndent();
-            }
-
-            StringBuilder.AppendLine(OpenParens);
-
-            Indent++;
-
-            BuildCteBody(cte.Body!);
-
-            Indent--;
-
-            AppendIndent();
-            StringBuilder.Append(')');
-        }
-
-        StringBuilder.AppendLine();
     }
 
     /// <inheritdoc/>

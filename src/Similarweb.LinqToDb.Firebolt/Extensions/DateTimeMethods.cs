@@ -1,6 +1,7 @@
 using System.Globalization;
 using LinqToDB;
-using LinqToDB.Expressions;
+using LinqToDB.Internal.SqlQuery;
+using LinqToDB.Mapping;
 using LinqToDB.SqlQuery;
 
 namespace Similarweb.LinqToDB.Firebolt.Extensions;
@@ -60,7 +61,7 @@ public static class DateTimeMethods
     }
 
     /// <summary>
-    /// Get current date and time.
+    /// Get the current date and time.
     /// </summary>
     /// <returns><see cref="DateTime"/>.</returns>
     [Sql.Extension(DataProvider.V2Id, "CURRENT_DATE", ServerSideOnly = true)]
@@ -72,21 +73,27 @@ public static class DateTimeMethods
     #region Builders
     private class DatePartBuilder : Sql.IExtensionCallBuilder
     {
-        public void Build(Sql.ISqExtensionBuilder builder)
+        public void Build(Sql.ISqlExtensionBuilder builder)
         {
-            var part = builder.GetValue<Sql.DateParts>("part");
-            switch (part)
+            const string part = nameof(part);
+            var partValue = builder.GetValue<Sql.DateParts>(part);
+            switch (partValue)
             {
                 case Sql.DateParts.DayOfYear:
                     builder.Expression = "DayOfYear({date})";
                     break;
                 case Sql.DateParts.WeekDay:
                     builder.Expression = "WeekDay(Date_Add({date}, interval 1 day))";
-                    builder.ResultExpression = builder.Inc(builder.ConvertToSqlExpression(Precedence.Primary));
+                    if (builder.ConvertToSqlExpression(Precedence.Primary) is not { } expr)
+                    {
+                        throw new InvalidOperationException("Invalid expression for WeekDay");
+                    }
+
+                    builder.ResultExpression = builder.Inc(expr);
                     break;
                 default:
-                    var partStr = DatePartToStr(part);
-                    builder.AddExpression("part", partStr);
+                    var partStr = DatePartToStr(partValue);
+                    builder.AddFragment(part, partStr);
                     break;
             }
         }
@@ -113,12 +120,19 @@ public static class DateTimeMethods
 
     private class DateDiffBuilder : Sql.IExtensionCallBuilder
     {
-        public void Build(Sql.ISqExtensionBuilder builder)
+        public void Build(Sql.ISqlExtensionBuilder builder)
         {
-            var startDate = builder.GetExpression(0);
-            var endDate = builder.GetExpression(1);
+            if (builder.GetExpression(0) is not { } startDate)
+            {
+                throw new InvalidOperationException("Invalid expression for startDate");
+            }
 
-            builder.ResultExpression = new SqlFunction(typeof(int), builder.Expression, startDate, endDate);
+            if (builder.GetExpression(1) is not { } endDate)
+            {
+                throw new InvalidOperationException("Invalid expression for endDate");
+            }
+
+            builder.ResultExpression = new SqlFunction(new DbDataType(typeof(int)), builder.Expression, startDate, endDate);
         }
     }
     #endregion // Builders

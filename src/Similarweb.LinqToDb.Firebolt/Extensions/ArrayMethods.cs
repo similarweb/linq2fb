@@ -1,7 +1,6 @@
 using System.Linq.Expressions;
 using LinqToDB;
-using LinqToDB.Linq;
-using Similarweb.LinqToDB.Firebolt.Extensions.Builders;
+using LinqToDB.Internal.Linq;
 
 namespace Similarweb.LinqToDB.Firebolt.Extensions;
 
@@ -22,7 +21,7 @@ public static partial class ArrayMethods
     public static Sql.IAggregateFunctionNotOrdered<TEntity, TV[]> ArrayAggregate<TEntity, TV>(
         this IEnumerable<TEntity> collection,
         [ExprParameter] Expression<Func<TEntity, TV>> expr
-    ) => throw new LinqException("Not implemented on client side.");
+    ) => throw new LinqToDBException("Not implemented on client side.");
 
     /// <summary>
     /// Implementation for <see href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/array-agg.html">ARRAY_AGG</see> Firebolt method (nullable version).
@@ -38,7 +37,7 @@ public static partial class ArrayMethods
         [ExprParameter] Expression<Func<TEntity, TV?>> expr
     )
         where TV : struct
-        => throw new LinqException("Not implemented on client side.");
+        => throw new LinqToDBException("Not implemented on client side.");
 
     /// <summary>
     /// Implementation for <see href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/array-agg.html">ARRAY_AGG</see> Firebolt method.
