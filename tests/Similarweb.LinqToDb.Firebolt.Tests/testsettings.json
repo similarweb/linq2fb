@@ -2,18 +2,23 @@
     "linqToDbTestSettings": {
         "accountName": "core"
     },
+    "fireboltCore": {
+        "image": "ghcr.io/firebolt-db/firebolt-core:preview-rc",
+        "httpPort": 3473,
+        "secondaryPort": 8122
+    },
     "accounts": {
         "core": {
             "clientid": "id",
             "clientsecret": "cs",
             "database": "northwind",
-            "url": "http://localhost:3473/"
+            "url": "http://placeholder/"
         },
         "core_prepared": {
             "clientid": "id",
             "clientsecret": "cs",
             "database": "northwind",
-            "url": "http://localhost:3473/",
+            "url": "http://placeholder/",
             "PreparedStatementParamStyle": "FbNumeric"
         },
         "mock": {

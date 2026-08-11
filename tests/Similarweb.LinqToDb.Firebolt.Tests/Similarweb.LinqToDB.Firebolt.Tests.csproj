@@ -27,6 +27,7 @@
     <PackageReference Include="Xunit.DependencyInjection" />
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Testcontainers" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +37,9 @@
     <None Update="testsettings.local.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="../../sql/northwind.sql" Link="sql/northwind.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

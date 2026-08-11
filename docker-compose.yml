@@ -1,3 +1,7 @@
+# Optional: manual Firebolt Core for local debugging.
+# Integration tests start Core via Testcontainers by default (FireboltCoreHost).
+# To point tests at this compose instance instead, seed the DB yourself and set
+# fireboltCore.externalUrl (e.g. in testsettings.local.json) to http://localhost:3473/
 services:
   firebolt-core:
     image: ghcr.io/firebolt-db/firebolt-core:preview-rc
