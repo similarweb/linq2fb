@@ -70,7 +70,7 @@ jobs:
             - name: Pack (symbols + notes)
               run: |
                   notes=$(sed "s/'/''/g" RELEASE_NOTES.md | tr '\n' ' ')
-                  dotnet pack src/Similarweb.LinqToDB.Firebolt/Similarweb.LinqToDB.Firebolt.csproj \
+                  dotnet pack src/Similarweb.LinqToDb.Firebolt/Similarweb.LinqToDB.Firebolt.csproj \
                   --no-build \
                   -c Release \
                   -o ./artifacts \
