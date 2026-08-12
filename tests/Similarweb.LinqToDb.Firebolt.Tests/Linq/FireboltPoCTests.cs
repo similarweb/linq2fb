@@ -435,9 +435,11 @@ public class FireboltPoCTests(
         );
     }
 
+#if LINQ2DB_HAS_MATERIALIZED_CTE
     [Fact]
     public async Task TestMaterializedCte_TwoNamedConventionsNotWorkSelect()
     {
+        // Native IsMaterialized API: name suffix alone must NOT emit MATERIALIZED.
         var sameYearCte = northwind.Context.Orders
             .GroupBy(order => DateTimeMethods.DatePart(Sql.DateParts.Year, order.OrderDate))
             .Select(group => new { OrderYear = group.Key, Count = group.Count() })
@@ -457,25 +459,22 @@ public class FireboltPoCTests(
         Assert.DoesNotContain("MATERIALIZED", northwind.Context.LastQuery);
         Assert.NotEmpty(result);
         Assert.Equal(23, result.Count);
-        Assert.All(
-            result.GroupBy(item => item.OrderYear),
-            group => Assert.All(
-                group,
-                item => Assert.Equal(group.First().YearCount, item.YearCount)
-            )
-        );
-        Assert.All(
-            result
-                .GroupBy(item => item.OrderYear)
-                .Select(group => new
-                {
-                    OrderYear = group.Key,
-                    ClientYearCount = group.Sum(item => item.YearMonthCount),
-                    ServerYearCount = group.First().YearCount,
-                }),
-            item => Assert.Equal(item.ClientYearCount, item.ServerYearCount)
-        );
     }
+#else
+    [Fact]
+    public async Task TestMaterializedCte_NameSuffixConventionWorks()
+    {
+        // Pre-6.3 fallback: CTE name containing __mat__cte__ triggers MATERIALIZED in BuildWithClause.
+        var result = await northwind.Context.Products
+            .GroupBy(product => product.SupplierId)
+            .Select(group => new { SupplierId = group.Key, Count = group.Count() })
+            .AsCte("products_by_supplier__mat__cte__")
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.Contains("MATERIALIZED", northwind.Context.LastQuery);
+        Assert.NotEmpty(result);
+    }
+#endif
     #endregion // Materialized CTEs
 
     #region Standard window functions

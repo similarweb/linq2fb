@@ -30,8 +30,10 @@ internal class SqlBuilder(
     /// </summary>
     public static char ParameterSymbol => NativeParameterPrefix;
 
+#if LINQ2DB_HAS_MATERIALIZED_CTE
     /// <inheritdoc/>
     protected override bool SupportsMaterializedCteHint => true;
+#endif
 
     /// <inheritdoc/>
     public override StringBuilder Convert(StringBuilder sb, string value, ConvertType convertType)
@@ -104,6 +106,126 @@ internal class SqlBuilder(
 
         return StringBuilder;
     }
+
+#if !LINQ2DB_HAS_MATERIALIZED_CTE
+    /// <summary>
+    /// Copied from linq2db <c>BasicSqlBuilder.BuildWithClause</c> with Firebolt
+    /// <c>MATERIALIZED</c> injected when the CTE name contains
+    /// <see cref="LinqExtensions.CteMaterializedEnding"/> (linq2db &lt; 6.3 fallback).
+    /// </summary>
+    /// <param name="with"><see cref="SqlWithClause"/> clause.</param>
+    protected override void BuildWithClause(SqlWithClause? with)
+    {
+        if (with == null || with.Clauses.Count == 0)
+        {
+            return;
+        }
+
+        var first = true;
+
+        foreach (var cte in with.Clauses)
+        {
+            if (first)
+            {
+                AppendIndent();
+                StringBuilder.Append("WITH ");
+
+                if (IsRecursiveCteKeywordRequired && with.Clauses.Any(static c => c.IsRecursive))
+                {
+                    StringBuilder.Append("RECURSIVE ");
+                }
+
+                first = false;
+            }
+            else
+            {
+                StringBuilder.AppendLine(Comma);
+                AppendIndent();
+            }
+
+            var isMaterialized = cte.Name?.Contains(LinqExtensions.CteMaterializedEnding, StringComparison.Ordinal) == true;
+
+            BuildObjectName(StringBuilder, new(cte.Name!), ConvertType.NameToCteName, true, TableOptions.NotSet);
+
+            if (IsCteColumnListSupported)
+            {
+                if (cte.Fields.Count > 3)
+                {
+                    StringBuilder.AppendLine();
+                    AppendIndent();
+                    StringBuilder.AppendLine(OpenParens);
+                    ++Indent;
+
+                    var firstField = true;
+                    foreach (var field in cte.Fields)
+                    {
+                        if (!firstField)
+                        {
+                            StringBuilder.AppendLine(Comma);
+                        }
+
+                        firstField = false;
+                        AppendIndent();
+                        Convert(StringBuilder, field.PhysicalName, ConvertType.NameToQueryField);
+                    }
+
+                    --Indent;
+                    StringBuilder.AppendLine();
+                    AppendIndent();
+                    StringBuilder.AppendLine(")");
+                }
+                else if (cte.Fields.Count > 0)
+                {
+                    StringBuilder.Append(" (");
+
+                    var firstField = true;
+                    foreach (var field in cte.Fields)
+                    {
+                        if (!firstField)
+                        {
+                            StringBuilder.Append(InlineComma);
+                        }
+
+                        firstField = false;
+                        Convert(StringBuilder, field.PhysicalName, ConvertType.NameToQueryField);
+                    }
+
+                    StringBuilder.AppendLine(")");
+                }
+                else
+                {
+                    StringBuilder.Append(' ');
+                }
+            }
+            else
+            {
+                StringBuilder.Append(' ');
+            }
+
+            AppendIndent();
+            StringBuilder.AppendLine("AS");
+            AppendIndent();
+            if (isMaterialized)
+            {
+                StringBuilder.Append("MATERIALIZED ");
+                AppendIndent();
+            }
+
+            StringBuilder.AppendLine(OpenParens);
+
+            Indent++;
+
+            BuildCteBody(cte.Body!);
+
+            Indent--;
+
+            AppendIndent();
+            StringBuilder.Append(')');
+        }
+
+        StringBuilder.AppendLine();
+    }
+#endif
 
     /// <inheritdoc/>
     protected override void PrintParameterName(StringBuilder sb, DbParameter parameter)

@@ -4,9 +4,9 @@
     "net8.0": {
       "linq2db": {
         "type": "Direct",
-        "requested": "[6.3.0, )",
-        "resolved": "6.3.0",
-        "contentHash": "Ew/IWZc9tNBgAYWCME1xN6/QkiVUNp9f3ozHrrugqh4vY3ny7Y8LTqhX8thG0WFPmWer+Kf9lilbFMYu5hXKyw=="
+        "requested": "[6.0.0, )",
+        "resolved": "6.0.0",
+        "contentHash": "F/CQ6oD4Z13f0DVnpLL0KbVfomA4bWWcVxCEOiB5NX2GOtCgLEcFpp2o17fArr5U+mOAT8hBru5Xzcz2rYEsFQ=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
@@ -52,9 +52,9 @@
     "net9.0": {
       "linq2db": {
         "type": "Direct",
-        "requested": "[6.3.0, )",
-        "resolved": "6.3.0",
-        "contentHash": "Ew/IWZc9tNBgAYWCME1xN6/QkiVUNp9f3ozHrrugqh4vY3ny7Y8LTqhX8thG0WFPmWer+Kf9lilbFMYu5hXKyw=="
+        "requested": "[6.0.0, )",
+        "resolved": "6.0.0",
+        "contentHash": "F/CQ6oD4Z13f0DVnpLL0KbVfomA4bWWcVxCEOiB5NX2GOtCgLEcFpp2o17fArr5U+mOAT8hBru5Xzcz2rYEsFQ=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
