@@ -21,18 +21,31 @@ jobs:
               with:
                   dotnet-version: 9.0.x
                   cache: true
+                  cache-dependency-path: |
+                      **/Directory.Packages.props
+                      **/global.json
+
+            # Tag v6.0.0-rc.1 -> package/assembly version 6.0.0-rc.1.
+            # Pin explicitly so Linux never falls back to MinVer height (0.0.0-alpha.*) if
+            # Directory.Build.props / MinVerTagPrefix fails to load. Must be set at build time
+            # because pack uses --no-build.
+            - name: Resolve package version from tag
+              id: ver
+              run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
             # Pack against the lowest supported linq2db (6.0.0) so the nupkg dependency is >= 6.0.0.
             # Materialized CTE uses the pre-6.3 name-suffix fallback in that build; CI covers native API on 6.3+.
             - name: Restore (linq2db 6.0.0)
               run: |
                   dotnet restore \
+                    -p:Version=${{ steps.ver.outputs.version }} \
                     -p:LinqToDbVersion=6.0.0 \
                     -p:FireboltSdkVersion=1.9.1
 
             - name: Build (Release, all TFMs, linq2db 6.0.0)
               run: |
                   dotnet build -c Release -warnAsError \
+                    -p:Version=${{ steps.ver.outputs.version }} \
                     -p:LinqToDbVersion=6.0.0 \
                     -p:FireboltSdkVersion=1.9.1 \
                     --no-restore
@@ -66,13 +79,29 @@ jobs:
 
             - name: Pack (symbols + notes)
               run: |
-                  notes=$(sed "s/'/''/g" RELEASE_NOTES.md | tr '\n' ' ')
-                  dotnet pack src/Similarweb.LinqToDB.Firebolt/Similarweb.LinqToDB.Firebolt.csproj \
-                  --no-build \
-                  -c Release \
-                  -o ./artifacts \
-                  -p:LinqToDbVersion=6.0.0 \
-                  /p:PackageReleaseNotes="$notes"
+                  VERSION="${{ steps.ver.outputs.version }}"
+
+                  # Don't pass release notes via -p: — MSBuild treats `; $ () {}` as syntax.
+                  # Inject via a props file with CDATA instead.
+                  mkdir -p artifacts
+                  {
+                    echo '<Project>'
+                    echo '  <PropertyGroup>'
+                    echo '    <PackageReleaseNotes><![CDATA['
+                    cat RELEASE_NOTES.md
+                    echo ']]></PackageReleaseNotes>'
+                    echo '  </PropertyGroup>'
+                    echo '</Project>'
+                  } > artifacts/PackageReleaseNotes.props
+
+                  dotnet pack src/Similarweb.LinqToDb.Firebolt/Similarweb.LinqToDB.Firebolt.csproj \
+                    --no-build \
+                    -c Release \
+                    -o ./artifacts \
+                    -p:Version="$VERSION" \
+                    -p:PackageVersion="$VERSION" \
+                    -p:LinqToDbVersion=6.0.0 \
+                    -p:CustomBeforeDirectoryBuildProps="$PWD/artifacts/PackageReleaseNotes.props"
 
             - name: Push to NuGet
               env:

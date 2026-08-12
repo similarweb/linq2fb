@@ -1,35 +1,34 @@
 # Firebolt LinqToDB driver
 ## Version
-This is documentation for outdated LinqToDb [v5.4.1](https://github.com/linq2db/linq2db/tree/v5.4.1)-based version. Please feel free exploring our [code](https://github.com/similarweb/linq2fb)!
+Documentation for the LinqToDB **6.x**-based package ([`v6.0.0-rc.1`](https://www.nuget.org/packages/Similarweb.LinqToDB.Firebolt/6.0.0-rc.1)). Older docs: [v5.4](https://similarweb.github.io/linq2fb/v5.4/), [v3.7](https://similarweb.github.io/linq2fb/v3.7/). Source: [similarweb/linq2fb](https://github.com/similarweb/linq2fb).
 
 ## Target platforms
 - [NET8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (8.0.414) — backporting
 - [NET9](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) (9.0.305) — mainstream
 
 ## Dogfooding
-We in [Similarweb](https://developers.similarweb.com/docs/similarweb-web-traffic-api) use this package to fetch data from [Firebolt V2](https://firebolt.io), so constantly improving it.
+We in [Similarweb](https://similarweb.com) use this package to fetch data from [Firebolt V2](https://firebolt.io), so we keep improving it.
 
 ### Supported versions
-* Firebolt: I tested [Firebolt](https://firebolt.io) only for v2 since v1 is deprecated. V1 is not tested and you my try to use it without any warranties.
-  * You will need [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) v.1.9.1 and above for using this package.
-* LinqToDB:
-  * [v3.7.0](https://github.com/linq2db/linq2db/tree/v3.7.0) — _deprecated_, not being updated. You may find usages [on previous version page](https://similarweb.github.io/linq2fb/v3.7);
-  * [v5.4.1](https://github.com/linq2db/linq2db/tree/v5.4.1) — check this documentation;
+* Firebolt: tested on [Firebolt](https://firebolt.io) v2 only (v1 is deprecated / untested).
+  * Install [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) **1.9.1 or 1.10.x** yourself (peer dependency; not bundled).
+* LinqToDB: **6.0 – 6.4** (one nupkg; dependency `linq2db >= 6.0.0`).
+  * Materialized CTE (`AsMaterializedCte`): name-suffix + `BuildWithClause` fallback when built against &lt; 6.3; native `IsMaterialized` when built against ≥ 6.3. The published package is built against **6.0.0** (suffix fallback).
+  * CI matrix: linq2db `{6.0.0, 6.1.0, 6.2.0, 6.3.0, 6.4.0}` × FireboltNetSDK `{1.9.1, 1.10.1}` × TFM `{net8.0, net9.0}`.
 
 ## How to use
 1. Install this package (see [how to install](#installing-package))
-2. Add [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) package since this implementation uses same way of loading ADO.NET classes, as LinqToDB;
-3. In your code add following:
+2. Add [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) since this provider loads ADO.NET classes the same way LinqToDB does
+3. In your code add:
    ```csharp
-   Registration.AddDataProvider(); // this will register Firebolt provider
-   var options = new LinqToDbConnectionOptionsBuilder()
-       .UseConnectionString(Registration.DataProviderName, connectionString)
-       .Build();
+   Registration.AddDataProvider(); // registers the Firebolt provider
+   var options = new DataOptions()
+       .UseConnectionString(Registration.DataProviderName, connectionString);
    var db = new DataConnection(options);
-   // here you may use `db` as usual LinqToDB connection
+   // use `db` as a usual LinqToDB connection
    ```
 
-4. In case you want real LinqToDB features, you should use `db.GetTable<T>()` method to get table as LinqToDB table. For example:
+4. For LinqToDB table APIs, use `db.GetTable<T>()`:
    ```csharp
    var table = db.GetTable<YourEntity>();
    var result = table.Where(x => x.Id == 1).ToList();
@@ -38,16 +37,16 @@ We in [Similarweb](https://developers.similarweb.com/docs/similarweb-web-traffic
 ## Installing package
 ### Using .NET CLI
 ```shell
-dotnet add package Similarweb.LinqToFirebolt
+dotnet add package Similarweb.LinqToDB.Firebolt
 ```
 
 ### Using Visual Studio UI
-`Tools > NuGet Package Manager > Manage NuGet Packages for Solution` and search for `Similarweb.LinqToFirebolt`
+`Tools > NuGet Package Manager > Manage NuGet Packages for Solution` and search for `Similarweb.LinqToDB.Firebolt`
 
 ### Using Rider UI
-`Tools > NuGet > Manage NuGet packages for <solution name>` and search for `SimilarWeb.LinqToFirebolt`
+`Tools > NuGet > Manage NuGet packages for <solution name>` and search for `Similarweb.LinqToDB.Firebolt`
 
 ### Using Package Manager Console:
 ```shell
-Install-Package SimilarWeb.LinqToFirebolt
+Install-Package Similarweb.LinqToDB.Firebolt
 ```
