@@ -12,6 +12,8 @@ TestResults/
 # Packaging
 *.nupkg
 *.snupkg
+# Not used (no RestorePackagesWithLockFile); conflicts with CI version matrix.
+packages.lock.json
 
 # OS
 .DS_Store
