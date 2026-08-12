@@ -13,7 +13,7 @@ public class LinqNativeTests(
 {
     #region LinqStyle
 
-    [Fact(Skip = "Linq style is not implemented yet")]
+    [Fact(Skip = "SelectMany over a projected array column is not translated (needs provider-level array unnest-as-table). Use Context.Unnest on a parameter/local array instead.")]
     public async Task TestSelect_ArrayAgg_ThenMany()
     {
         var cte = northwind.Context.OrderItems
@@ -37,7 +37,7 @@ public class LinqNativeTests(
         Assert.NotNull(result);
     }
 
-    [Fact(Skip = "Linq style is not implemented yet")]
+    [Fact]
     public async Task Test_ToArray()
     {
         var result = await northwind.Context.OrderItems

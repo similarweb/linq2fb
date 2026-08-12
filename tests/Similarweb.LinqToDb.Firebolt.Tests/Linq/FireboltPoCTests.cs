@@ -242,12 +242,13 @@ public class FireboltPoCTests(
         Assert.Equal(3, result.Count);
     }
 
-    [Theory(Skip = "we're getting 2 errors here, main one is 'operator 'notLike' for input types (text, text) not found, try adding explicit casts'")]
-    [InlineData(new[] { "fres" }, new[] { "sec", "Zaan" })]
+    [Theory]
+    [InlineData(new[] { "Fres" }, new[] { "sec", "Zaan" })]
     public async Task TestFind_Using_Likes(string[] includes, string[] excludes)
     {
         var result = await northwind.Context.Customers
-            .Where(customer => includes.All(include => customer.FirstName.Contains(include)) && excludes.All(exclude => customer.FirstName.Contains(exclude)))
+            .Where(customer => includes.All(include => customer.LastName.Contains(include))
+                && excludes.All(exclude => !customer.LastName.Contains(exclude)))
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
         _ = Assert.Single(result);

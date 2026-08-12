@@ -1,7 +1,10 @@
+using System.Linq.Expressions;
 using LinqToDB;
 using LinqToDB.Internal.DataProvider.Translation;
+using LinqToDB.Internal.Expressions;
 using LinqToDB.Internal.SqlQuery;
 using LinqToDB.Linq.Translation;
+using LinqToDB.SqlQuery;
 
 namespace Similarweb.LinqToDB.Firebolt;
 
@@ -11,6 +14,77 @@ internal class MemberTranslator : ProviderMemberTranslatorDefault
     /// <inheritdoc/>
     protected override IMemberTranslator CreateDateMemberTranslator() =>
         new DateFunctionsTranslator();
+
+    /// <inheritdoc/>
+    protected override IMemberTranslator CreateAggregateFunctionsMemberTranslator() =>
+        new FireboltAggregateFunctionsMemberTranslator();
+
+    private class FireboltAggregateFunctionsMemberTranslator : AggregateFunctionsMemberTranslatorBase
+    {
+        public FireboltAggregateFunctionsMemberTranslator()
+        {
+            // Native group.Select(...).ToArray() → ARRAY_AGG (avoids client-side preambles / transactions).
+            Registration.RegisterMethod((IEnumerable<int> e) => e.ToArray(), TranslateToArray, isGenericTypeMatch: true);
+            Registration.RegisterMethod((IQueryable<int> e) => e.ToArray(), TranslateToArray, isGenericTypeMatch: true);
+        }
+
+        private static Expression? TranslateToArray(
+            ITranslationContext translationContext,
+            MethodCallExpression methodCall,
+#pragma warning disable SA1313
+            TranslationFlags _
+#pragma warning restore SA1313
+        )
+        {
+            return new AggregateFunctionBuilder()
+                .ConfigureAggregate(c => c
+                    .HasSequenceIndex(0)
+                    .HasValue(hasValue: false)
+                    .AllowFilter()
+                    .AllowDistinct()
+                    .OnBuildFunction(composer =>
+                    {
+                        var buildInfo = composer.BuildInfo;
+                        if (buildInfo.SelectQuery == null || buildInfo.ValueExpression == null)
+                        {
+                            return;
+                        }
+
+                        if (!composer.Translator.TranslateExpression(
+                                buildInfo.ValueExpression,
+                                out var sql,
+                                out SqlErrorExpression? error))
+                        {
+                            composer.SetError(error!);
+                            return;
+                        }
+
+                        var factory = buildInfo.Factory;
+                        var resultType = factory.GetDbDataType(methodCall.Method.ReturnType);
+
+                        var modifier = buildInfo.IsDistinct
+                            ? Sql.AggregateModifier.Distinct
+                            : Sql.AggregateModifier.None;
+
+                        var result = factory.Function(
+                            resultType,
+                            "ARRAY_AGG",
+                            [new SqlFunctionArgument(sql, modifier)],
+                            [true, true],
+                            canBeNull: true,
+                            withinGroup: null,
+                            partitionBy: null,
+                            orderBy: null,
+                            frameClause: null,
+                            filter: null,
+                            isAggregate: true,
+                            canBeAffectedByOrderBy: false);
+
+                        composer.SetResult(result);
+                    }))
+                .Build(translationContext, methodCall);
+        }
+    }
 
     private class DateFunctionsTranslator : DateFunctionsTranslatorBase
     {

@@ -11,9 +11,6 @@ namespace Similarweb.LinqToDB.Firebolt;
 internal class SqlBuilder : BasicSqlBuilder
 {
     private const char NativeParameterPrefix = '@';
-    private const char FbNumericParameterPrefix = '$';
-
-    private readonly DataProvider? _dataProvider;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SqlBuilder"/> class.
@@ -31,22 +28,18 @@ internal class SqlBuilder : BasicSqlBuilder
         SqlProviderFlags sqlProviderFlags
     ) : base(dataProvider, mappingSchema, dataOptions, sqlOptimizer, sqlProviderFlags)
     {
-        _dataProvider = dataProvider;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SqlBuilder"/> class.
     /// </summary>
     /// <remarks>
-    /// Nested-builder ctor: must inherit <see cref="BasicSqlBuilder.AliasesContext"/> from the
-    /// parent (linq2db 6.4+). Creating a fresh builder without this desyncs subquery <c>AS</c>
-    /// aliases from outer refs (e.g. <c>AS "Grouping"</c> vs <c>"Grouping_1"</c>).
+    /// Nested builder: copies parent <see cref="BasicSqlBuilder.AliasesContext"/> (required since linq2db 6.4).
     /// </remarks>
     /// <param name="parentBuilder">Parent SQL builder.</param>
-    protected SqlBuilder(SqlBuilder parentBuilder)
+    protected SqlBuilder(BasicSqlBuilder parentBuilder)
         : base(parentBuilder)
     {
-        _dataProvider = parentBuilder._dataProvider;
     }
 
     /// <summary>
@@ -88,6 +81,37 @@ internal class SqlBuilder : BasicSqlBuilder
 
     /// <inheritdoc/>
     protected override string OffsetFormat(SelectQuery selectQuery) => "OFFSET {0}";
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Firebolt has no <c>NOT LIKE</c> operator (it is parsed as unknown <c>notLike</c>).
+    /// Emit <c>NOT (expr LIKE pattern)</c> instead.
+    /// </remarks>
+    protected override void BuildLikePredicate(SqlPredicate.Like predicate)
+    {
+        if (!predicate.IsNot)
+        {
+            base.BuildLikePredicate(predicate);
+            return;
+        }
+
+        var precedence = GetPrecedence(predicate);
+        StringBuilder.Append("NOT (");
+        BuildExpression(precedence, predicate.Expr1);
+        StringBuilder
+            .Append(' ')
+            .Append(predicate.FunctionName ?? "LIKE")
+            .Append(' ');
+        BuildExpression(precedence, predicate.Expr2);
+
+        if (predicate.Escape != null)
+        {
+            StringBuilder.Append(" ESCAPE ");
+            BuildExpression(predicate.Escape);
+        }
+
+        StringBuilder.Append(')');
+    }
 
     /// <inheritdoc/>
     protected override void BuildExprExprPredicate(SqlPredicate.ExprExpr expr)
@@ -267,9 +291,14 @@ internal class SqlBuilder : BasicSqlBuilder
     /// <inheritdoc/>
     protected override string? GetProviderTypeName(IDataContext dataContext, DbParameter parameter)
     {
-        var param = _dataProvider?.TryGetProviderParameter(dataContext, parameter);
+        if (DataProvider is not DataProvider provider)
+        {
+            return base.GetProviderTypeName(dataContext, parameter);
+        }
+
+        var param = provider.TryGetProviderParameter(dataContext, parameter);
         return param != null
-            ? _dataProvider?.Adapter.GetDbType(param).ToString()
+            ? provider.Adapter.GetDbType(param).ToString()
             : base.GetProviderTypeName(dataContext, parameter);
     }
 

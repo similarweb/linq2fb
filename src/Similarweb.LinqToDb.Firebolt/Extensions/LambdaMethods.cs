@@ -17,8 +17,8 @@ public static class LambdaMethods
     /// <param name="array">The array to sort.</param>
     /// <param name="lambda">Lambda for sort method.</param>
     /// <returns>A new array with sorted elements.</returns>
-    // Not IsAggregate: scalar array op. IsAggregate=true makes linq2db hoist it into GROUP BY incorrectly.
-    // Chained after ArrayAggregate, IsAggregate still flows from ARRAY_AGG via ChainPrecedence.
+    // Scalar array ops: do not set IsAggregate — that makes linq2db emit HAVING / GROUP BY incorrectly.
+    // When chained after ArrayAggregate, IsAggregate still flows from ARRAY_AGG via ChainPrecedence.
     [Sql.Extension(DataProvider.V2Id, "ARRAY_TRANSFORM({lambda}, {array})", BuilderType = typeof(LambdaBuilder), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 10, PreferServerSide = true)]
     public static TResult[] ArrayTransform<TItem, TResult>(
         [ExprParameter] this TItem[] array,
@@ -33,6 +33,7 @@ public static class LambdaMethods
     /// <param name="lambda">Condition would be implemented to each element.</param>
     /// <typeparam name="T">Type of the array items.</typeparam>
     /// <returns>The number of elements in the array that match the condition specified by the lambda expression.</returns>
+    // See IsAggregate note on ArrayTransform.
     [Sql.Extension(DataProvider.V2Id, "ARRAY_COUNT({lambda}, {array})", BuilderType = typeof(LambdaBuilder<bool>), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 10, PreferServerSide = true)]
     public static int ArrayCount<T>(
         [ExprParameter("array")] this T[] array,
