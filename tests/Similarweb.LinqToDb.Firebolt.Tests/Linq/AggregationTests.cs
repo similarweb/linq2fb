@@ -122,6 +122,7 @@ public class AggregationTests(
                 SupplierId = group.Key,
                 MostExpensive = group.MaxBy(product => product.ProductName, product => product.UnitPrice),
             })
+            .AsSubQuery()
             .InnerJoin(
                 northwind.Context.Suppliers,
                 (pair, supplier) => pair.SupplierId == supplier.Id,
@@ -257,13 +258,15 @@ public class AggregationTests(
         var result = await northwind.Context.Unnest(arr1, arr2)
             .Select(it => new
             {
-                First = Sql.Ext.BitAnd(it.First).ToValue(),
-                Second = Sql.Ext.BitAnd(it.Second).ToValue(),
+                // Avoid projecting as First/Second: linq2db 6.4 desyncs reserved/duplicate
+                // aliases across subquery nesting (outer First_1 vs AS "First").
+                FirstBits = Sql.Ext.BitAnd(it.First).ToValue(),
+                SecondBits = Sql.Ext.BitAnd(it.Second).ToValue(),
             })
             .FirstAsync(token: TestContext.Current.CancellationToken);
 
-        Assert.Equal(4, result.First);
-        Assert.Equal(0, result.Second);
+        Assert.Equal(4, result.FirstBits);
+        Assert.Equal(0, result.SecondBits);
     }
 
     [Fact]
