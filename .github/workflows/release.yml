@@ -21,6 +21,9 @@ jobs:
               with:
                   dotnet-version: 9.0.x
                   cache: true
+                  cache-dependency-path: |
+                      **/Directory.Packages.props
+                      **/global.json
 
             # Pack against the lowest supported linq2db (6.0.0) so the nupkg dependency is >= 6.0.0.
             # Materialized CTE uses the pre-6.3 name-suffix fallback in that build; CI covers native API on 6.3+.
