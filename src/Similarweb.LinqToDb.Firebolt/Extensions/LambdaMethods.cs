@@ -33,7 +33,7 @@ public static class LambdaMethods
     /// <param name="lambda">Condition would be implemented to each element.</param>
     /// <typeparam name="T">Type of the array items.</typeparam>
     /// <returns>The number of elements in the array that match the condition specified by the lambda expression.</returns>
-    [Sql.Extension(DataProvider.V2Id, "ARRAY_COUNT({lambda}, {array})", BuilderType = typeof(LambdaBuilder<bool>), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 10, IsAggregate = true, PreferServerSide = true)]
+    [Sql.Extension(DataProvider.V2Id, "ARRAY_COUNT({lambda}, {array})", BuilderType = typeof(LambdaBuilder<bool>), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 10, PreferServerSide = true)]
     public static int ArrayCount<T>(
         [ExprParameter("array")] this T[] array,
         Expression<Func<T, bool>> lambda
