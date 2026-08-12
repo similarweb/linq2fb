@@ -69,13 +69,25 @@ jobs:
 
             - name: Pack (symbols + notes)
               run: |
-                  notes=$(sed "s/'/''/g" RELEASE_NOTES.md | tr '\n' ' ')
+                  # Don't pass release notes via -p: — MSBuild treats `; $ () {}` as syntax.
+                  # Inject via a props file with CDATA instead.
+                  mkdir -p artifacts
+                  {
+                    echo '<Project>'
+                    echo '  <PropertyGroup>'
+                    echo '    <PackageReleaseNotes><![CDATA['
+                    cat RELEASE_NOTES.md
+                    echo ']]></PackageReleaseNotes>'
+                    echo '  </PropertyGroup>'
+                    echo '</Project>'
+                  } > artifacts/PackageReleaseNotes.props
+
                   dotnet pack src/Similarweb.LinqToDb.Firebolt/Similarweb.LinqToDB.Firebolt.csproj \
-                  --no-build \
-                  -c Release \
-                  -o ./artifacts \
-                  -p:LinqToDbVersion=6.0.0 \
-                  /p:PackageReleaseNotes="$notes"
+                    --no-build \
+                    -c Release \
+                    -o ./artifacts \
+                    -p:LinqToDbVersion=6.0.0 \
+                    -p:CustomBeforeDirectoryBuildProps="$PWD/artifacts/PackageReleaseNotes.props"
 
             - name: Push to NuGet
               env:
