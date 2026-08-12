@@ -22,14 +22,26 @@ jobs:
                   dotnet-version: 9.0.x
                   cache: true
 
-            - name: Restore
-              run: dotnet restore
+            # Pack against the lowest supported linq2db (6.0.0) so the nupkg dependency is >= 6.0.0.
+            # Materialized CTE uses the pre-6.3 name-suffix fallback in that build; CI covers native API on 6.3+.
+            - name: Restore (linq2db 6.0.0)
+              run: |
+                  dotnet restore \
+                    -p:LinqToDbVersion=6.0.0 \
+                    -p:FireboltSdkVersion=1.9.1
 
-            - name: Build (Release, all TFMs)
-              run: dotnet build -c Release -warnAsError
+            - name: Build (Release, all TFMs, linq2db 6.0.0)
+              run: |
+                  dotnet build -c Release -warnAsError \
+                    -p:LinqToDbVersion=6.0.0 \
+                    -p:FireboltSdkVersion=1.9.1 \
+                    --no-restore
 
-            - name: Test (last call)
-              run: dotnet test -c Release --no-build
+            - name: Test smoke (linq2db 6.0.0)
+              run: |
+                  dotnet test -c Release --no-build \
+                    -p:LinqToDbVersion=6.0.0 \
+                    -p:FireboltSdkVersion=1.9.1
 
             - name: Extract changelog for current tag
               id: changelog
@@ -59,6 +71,7 @@ jobs:
                   --no-build \
                   -c Release \
                   -o ./artifacts \
+                  -p:LinqToDbVersion=6.0.0 \
                   /p:PackageReleaseNotes="$notes"
 
             - name: Push to NuGet

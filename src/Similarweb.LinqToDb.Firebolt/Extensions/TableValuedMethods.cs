@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using LinqToDB;
-using LinqToDB.Mapping;
 
 namespace Similarweb.LinqToDB.Firebolt.Extensions;
 
@@ -9,9 +8,6 @@ namespace Similarweb.LinqToDB.Firebolt.Extensions;
 /// </summary>
 public static class TableValuedMethods
 {
-    private static Func<IDataContext, int, int, IQueryable<int>>? _generateSeriesIntFunc;
-    private static Func<IDataContext, int, int, int, IQueryable<int>>? _generateSeriesIntStepFunc;
-
     /// <summary>
     /// <para>Implementation of <see href="https://docs.firebolt.io/reference-sql/functions-reference/table-valued/generate-series">GENERATE_SERIES</see> Firebolt method.</para>
     /// </summary>
@@ -24,10 +20,7 @@ public static class TableValuedMethods
         this IDataContext dc,
         [ExprParameter] int start,
         [ExprParameter] int stop
-    )
-    {
-        return (_generateSeriesIntFunc ??= GenerateSeriesIntImpl().Compile())(dc, start, stop);
-    }
+    ) => dc.QueryFromExpression(() => dc.GenerateSeries(start, stop));
 
     /// <summary>
     /// <para>Implementation of <see href="https://docs.firebolt.io/reference-sql/functions-reference/table-valued/generate-series">GENERATE_SERIES</see> Firebolt method.</para>
@@ -43,25 +36,11 @@ public static class TableValuedMethods
         [ExprParameter] int start,
         [ExprParameter] int stop,
         [ExprParameter] int step
-    )
-    {
-        return (_generateSeriesIntStepFunc ??= GenerateSeriesIntStepImpl().Compile())(dc, start, stop, step);
-    }
+    ) => dc.QueryFromExpression(() => dc.GenerateSeries(start, stop, step));
 
-    private static Expression<Func<IDataContext, int, int, IQueryable<int>>> GenerateSeriesIntImpl()
-    {
-        return (dc, start, stop) => dc.FromSqlScalar<Serie<int>>($"SELECT serie.\"Col\" FROM GENERATE_SERIES({start}, {stop}) serie(\"Col\")").Select(item => item.Col);
-    }
+    private static Expression<Func<IDataContext, int, int, IQueryable<int>>> GenerateSeriesIntImpl() =>
+        (dc, start, stop) => dc.FromSqlScalar<int>($"GENERATE_SERIES({start}, {stop})");
 
-    private static Expression<Func<IDataContext, int, int, int, IQueryable<int>>> GenerateSeriesIntStepImpl()
-    {
-        return (dc, start, stop, step) => dc
-            .FromSqlScalar<Serie<int>>($"SELECT serie.\"Col\" FROM GENERATE_SERIES({start}, {stop}, {step}) serie(\"Col\")")
-            .Select(item => item.Col);
-    }
-
-    private class Serie<T>
-    {
-        public required T Col { get; init; }
-    }
+    private static Expression<Func<IDataContext, int, int, int, IQueryable<int>>> GenerateSeriesIntStepImpl() =>
+        (dc, start, stop, step) => dc.FromSqlScalar<int>($"GENERATE_SERIES({start}, {stop}, {step})");
 }

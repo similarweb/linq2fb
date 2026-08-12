@@ -13,10 +13,13 @@ jobs:
             fail-fast: false
             matrix:
                 tfm: [net8.0, net9.0]
-                fb: ["1.9.1"]
+                # Materialized CTE is skipped when linq2db < 6.3.0 (see Directory.Build.Props).
+                linq2db: ["6.0.0", "6.1.0", "6.2.0", "6.3.0", "6.4.0"]
+                fb: ["1.9.1", "1.10.1"]
         steps:
             - uses: actions/checkout@v4
               with: { fetch-depth: 0 }
+
             - name: Select SDK version for this TFM
               id: pick-sdk
               run: |
@@ -29,20 +32,24 @@ jobs:
                       echo "Unknown TFM ${{ matrix.tfm }}" >&2
                       exit 1;;
                   esac
+                  echo "sdk_version=$SDK_VER" >> "$GITHUB_OUTPUT"
                   {
-                    echo "### SDK"
+                    echo "### Matrix lane"
                     echo ""
                     echo "**.NET**: \`${{ matrix.tfm }}\`"
-                    echo "**SDK version**: \`$SDK_VER\`"
-                  }  >> $GITHUB_STEP_SUMMARY
+                    echo "**SDK**: \`$SDK_VER\`"
+                    echo "**linq2db**: \`${{ matrix.linq2db }}\`"
+                    echo "**FireboltNetSDK**: \`${{ matrix.fb }}\`"
+                  } >> "$GITHUB_STEP_SUMMARY"
 
             - name: Setup .NET
               uses: actions/setup-dotnet@v4
               with:
-                  dotnet-version: ${{ steps.pick-sdk.outputs.sdk_version }}
+                  dotnet-version: |
+                      8.0.x
+                      9.0.x
                   cache: true
                   cache-dependency-path: |
-                      **/packages.lock.json
                       **/Directory.Packages.props
                       **/global.json
 
@@ -50,7 +57,7 @@ jobs:
               run: |
                   cat > global.json <<JSON
                   {
-                    "sdk": { "version": "${{ steps.pick-sdk.outputs.sdk_version }}", "rollForward": "disable", "allowPrerelease": false }
+                    "sdk": { "version": "${{ steps.pick-sdk.outputs.sdk_version }}", "rollForward": "latestFeature", "allowPrerelease": false }
                   }
                   JSON
                   dotnet --info
@@ -58,22 +65,24 @@ jobs:
             - name: Restore tools
               run: dotnet tool restore
 
-            - name: Restore (${{ matrix.tfm }}, Firebolt ${{ matrix.fb }})
+            - name: Restore (${{ matrix.tfm }}, linq2db ${{ matrix.linq2db }}, Firebolt ${{ matrix.fb }})
               run: |
                 dotnet restore \
                   -p:TargetFramework=${{ matrix.tfm }} \
+                  -p:LinqToDbVersion=${{ matrix.linq2db }} \
                   -p:FireboltSdkVersion=${{ matrix.fb }}
 
-            - name: Build (${{ matrix.tfm }}, Firebolt ${{ matrix.fb }})
+            - name: Build (${{ matrix.tfm }}, linq2db ${{ matrix.linq2db }}, Firebolt ${{ matrix.fb }})
               run: |
                 dotnet build \
                   -c Release \
                   -p:TargetFramework=${{ matrix.tfm }} \
+                  -p:LinqToDbVersion=${{ matrix.linq2db }} \
                   -p:FireboltSdkVersion=${{ matrix.fb }} \
                   --warnAsError \
                   --no-restore
 
-            - name: Test (${{ matrix.tfm }}, Firebolt ${{ matrix.fb }})
+            - name: Test (${{ matrix.tfm }}, linq2db ${{ matrix.linq2db }}, Firebolt ${{ matrix.fb }})
               run: |
                   # Firebolt Core is started by Testcontainers inside the test host
                   # (see FireboltCoreHost). Docker must be available on the runner.
@@ -82,10 +91,13 @@ jobs:
                     --collect:"XPlat Code Coverage" \
                     --results-directory ./coverage \
                     -f ${{ matrix.tfm }} \
+                    -p:LinqToDbVersion=${{ matrix.linq2db }} \
                     -p:FireboltSdkVersion=${{ matrix.fb }} \
                     --no-build \
                     -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+
             - name: Report coverage
+              if: matrix.linq2db == '6.0.0' && matrix.fb == '1.9.1'
               run: |
                 dotnet reportgenerator \
                   -reports:coverage/*/coverage.cobertura.xml \
@@ -103,10 +115,11 @@ jobs:
                   echo '```'
                   cat coverage/text/Summary.txt
                   echo '```'
-                } >> $GITHUB_STEP_SUMMARY
+                } >> "$GITHUB_STEP_SUMMARY"
 
             - name: Upload coverage report
+              if: matrix.linq2db == '6.0.0' && matrix.fb == '1.9.1'
               uses: actions/upload-artifact@v4
               with:
-                name: coverage_${{ matrix.tfm }}_${{ matrix.fb }}
+                name: coverage_${{ matrix.tfm }}
                 path: coverage/report

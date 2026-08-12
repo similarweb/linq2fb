@@ -1,7 +1,6 @@
 using System.Linq.Expressions;
 using LinqToDB;
-using LinqToDB.Linq;
-using Similarweb.LinqToDB.Firebolt.Extensions.Builders;
+using LinqToDB.Internal.Linq;
 
 namespace Similarweb.LinqToDB.Firebolt.Extensions;
 
@@ -22,7 +21,7 @@ public static partial class ArrayMethods
     public static Sql.IAggregateFunctionNotOrdered<TEntity, TV[]> ArrayAggregate<TEntity, TV>(
         this IEnumerable<TEntity> collection,
         [ExprParameter] Expression<Func<TEntity, TV>> expr
-    ) => throw new LinqException("Not implemented on client side.");
+    ) => throw new LinqToDBException("Not implemented on client side.");
 
     /// <summary>
     /// Implementation for <see href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/array-agg.html">ARRAY_AGG</see> Firebolt method (nullable version).
@@ -38,7 +37,7 @@ public static partial class ArrayMethods
         [ExprParameter] Expression<Func<TEntity, TV?>> expr
     )
         where TV : struct
-        => throw new LinqException("Not implemented on client side.");
+        => throw new LinqToDBException("Not implemented on client side.");
 
     /// <summary>
     /// Implementation for <see href="https://docs.firebolt.io/sql_reference/functions-reference/aggregation/array-agg.html">ARRAY_AGG</see> Firebolt method.
@@ -330,10 +329,8 @@ public static partial class ArrayMethods
     /// <typeparam name="T">array type.</typeparam>
     /// <returns>table to be queried.</returns>
     [ExpressionMethod(nameof(UnnestImpl))]
-    public static IQueryable<T> Unnest<T>(this IDataContext dc, T[] array)
-    {
-        return UnnestImpl<T>().Compile().Invoke(dc, array);
-    }
+    public static IQueryable<T> Unnest<T>(this IDataContext dc, T[] array) =>
+        dc.QueryFromExpression(() => dc.Unnest(array));
 
     /// <summary>
     /// Unnest array and use it as table.
@@ -345,10 +342,8 @@ public static partial class ArrayMethods
     /// <typeparam name="T2">2nd array type.</typeparam>
     /// <returns>table to be queried.</returns>
     [ExpressionMethod(nameof(UnnestImpl))]
-    public static IQueryable<Unnested<T1, T2>> Unnest<T1, T2>(this IDataContext dc, T1[] array1, T2[] array2)
-    {
-        return UnnestImpl<T1, T2>().Compile().Invoke(dc, array1, array2);
-    }
+    public static IQueryable<Unnested<T1, T2>> Unnest<T1, T2>(this IDataContext dc, T1[] array1, T2[] array2) =>
+        dc.QueryFromExpression(() => dc.Unnest(array1, array2));
 
     /// <summary>
     /// Unnest array and use it as table.
@@ -362,10 +357,8 @@ public static partial class ArrayMethods
     /// <typeparam name="T3">3rd array type.</typeparam>
     /// <returns>table to be queried.</returns>
     [ExpressionMethod(nameof(UnnestImpl))]
-    public static IQueryable<Unnested<T1, T2, T3>> Unnest<T1, T2, T3>(this IDataContext dc, T1[] array1, T2[] array2, T3[] array3)
-    {
-        return UnnestImpl<T1, T2, T3>().Compile().Invoke(dc, array1, array2, array3);
-    }
+    public static IQueryable<Unnested<T1, T2, T3>> Unnest<T1, T2, T3>(this IDataContext dc, T1[] array1, T2[] array2, T3[] array3) =>
+        dc.QueryFromExpression(() => dc.Unnest(array1, array2, array3));
 
     /// <summary>
     /// Unnest array and use it as table.
@@ -381,34 +374,27 @@ public static partial class ArrayMethods
     /// <typeparam name="T4">4th array type.</typeparam>
     /// <returns>table to be queried.</returns>
     [ExpressionMethod(nameof(UnnestImpl))]
-    public static IQueryable<Unnested<T1, T2, T3, T4>> Unnest<T1, T2, T3, T4>(this IDataContext dc, T1[] array1, T2[] array2, T3[] array3, T4[] array4)
-    {
-        return UnnestImpl<T1, T2, T3, T4>().Compile().Invoke(dc, array1, array2, array3, array4);
-    }
+    public static IQueryable<Unnested<T1, T2, T3, T4>> Unnest<T1, T2, T3, T4>(this IDataContext dc, T1[] array1, T2[] array2, T3[] array3, T4[] array4) =>
+        dc.QueryFromExpression(() => dc.Unnest(array1, array2, array3, array4));
 
     private static Expression<Func<IDataContext, T[], IQueryable<T>>> UnnestImpl<T>()
     {
         return (dc, array) => dc.FromSql<Unnested<T>>($"SELECT \"First\" FROM UNNEST({array}) t(\"First\")").Select(x => x.First);
     }
 
-    private static Expression<Func<IDataContext, T1[], T2[], IQueryable<Unnested<T1, T2>>>> UnnestImpl<T1, T2>()
-    {
-        return (dc, array1, array2) => dc.FromSql<Unnested<T1, T2>>($"SELECT \"First\", \"Second\" FROM UNNEST({array1}, {array2}) t(\"First\", \"Second\")");
-    }
+    private static Expression<Func<IDataContext, T1[], T2[], IQueryable<Unnested<T1, T2>>>> UnnestImpl<T1, T2>() =>
+        (dc, array1, array2) => dc.FromSql<Unnested<T1, T2>>(
+            $"SELECT \"First\", \"Second\" FROM UNNEST({array1}, {array2}) t(\"First\", \"Second\")");
 
-    private static Expression<Func<IDataContext, T1[], T2[], T3[], IQueryable<Unnested<T1, T2, T3>>>> UnnestImpl<T1, T2, T3>()
-    {
-        return (dc, array1, array2, array3) => dc.FromSql<Unnested<T1, T2, T3>>($"SELECT \"First\", \"Second\", \"Third\" FROM UNNEST({array1}, {array2}, {array3}) t(\"First\", \"Second\", \"Third\")");
-    }
+    private static Expression<Func<IDataContext, T1[], T2[], T3[], IQueryable<Unnested<T1, T2, T3>>>> UnnestImpl<T1, T2, T3>() =>
+        (dc, array1, array2, array3) => dc.FromSql<Unnested<T1, T2, T3>>(
+            $"SELECT \"First\", \"Second\", \"Third\" FROM UNNEST({array1}, {array2}, {array3}) t(\"First\", \"Second\", \"Third\")");
 
-    private static Expression<Func<IDataContext, T1[], T2[], T3[], T4[], IQueryable<Unnested<T1, T2, T3, T4>>>> UnnestImpl<T1, T2, T3, T4>()
-    {
-        return (dc, array1, array2, array3, array4) => dc.FromSql<Unnested<T1, T2, T3, T4>>(
+    private static Expression<Func<IDataContext, T1[], T2[], T3[], T4[], IQueryable<Unnested<T1, T2, T3, T4>>>> UnnestImpl<T1, T2, T3, T4>() =>
+        (dc, array1, array2, array3, array4) => dc.FromSql<Unnested<T1, T2, T3, T4>>(
             $"""
              SELECT "First", "Second", "Third", "Fourth"
              FROM UNNEST({array1}, {array2}, {array3}, {array4})
                  t("First", "Second", "Third", "Fourth")
-             """
-            );
-    }
+             """);
 }

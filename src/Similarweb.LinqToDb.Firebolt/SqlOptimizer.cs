@@ -1,6 +1,5 @@
-using LinqToDB;
-using LinqToDB.Extensions;
-using LinqToDB.SqlProvider;
+using LinqToDB.Internal.SqlProvider;
+using LinqToDB.Internal.SqlQuery;
 using LinqToDB.SqlQuery;
 
 namespace Similarweb.LinqToDB.Firebolt;
@@ -10,67 +9,44 @@ internal class SqlOptimizer(
     SqlProviderFlags sqlProviderFlags
 ) : BasicSqlOptimizer(sqlProviderFlags)
 {
-    private const bool CompareNullsAsValues = false;
-
     /// <inheritdoc/>
-    public override bool LikeIsEscapeSupported => false;
+    public override SqlExpressionConvertVisitor CreateConvertVisitor(bool allowModify) => new ConvertVisitor(allowModify);
 
-    /// <inheritdoc/>
-    public override ISqlExpression ConvertExpressionImpl(ISqlExpression expression, ConvertVisitor<RunOptimizationContext> visitor)
+    private class ConvertVisitor(bool allowModify) : SqlExpressionConvertVisitor(allowModify)
     {
-        // we know if our db allows this or not
-        var options = new DataOptions().WithOptions<LinqOptions>(opt => opt.WithCompareNullsAsValues(CompareNullsAsValues));
-        expression = base.ConvertExpressionImpl(expression, visitor);
+        public override bool LikeIsEscapeSupported => false;
 
-        return expression switch
+        /// <inheritdoc/>
+        /// <remarks>
+        /// Firebolt <c>LIKE</c> only accepts constant patterns. <c>string.Contains</c> over
+        /// a local collection expands to <c>LIKE</c> with a column pattern, which fails. Use
+        /// <c>STRPOS</c> instead (works for both constants and expressions).
+        /// </remarks>
+        public override ISqlPredicate ConvertSearchStringPredicate(SqlPredicate.SearchString predicate)
         {
-            SqlBinaryExpression be => be.Operation switch
+            if (predicate.Kind != SqlPredicate.SearchString.SearchKind.Contains)
             {
-                "%" => new SqlFunction(
-                    be.SystemType,
-                    "Mod",
-                    !be.Expr1.SystemType!.IsIntegerType() ? new SqlExpression(typeof(long), "{0}::BIGINT", Precedence.Primary, be.Expr1) : be.Expr1,
-                    be.Expr2
-                ),
-                "^" => new SqlBinaryExpression(be.SystemType, be.Expr1, "#", be.Expr2),
-                "+" => be.SystemType == typeof(string)
-                    ? new SqlBinaryExpression(be.SystemType, be.Expr1, "||", be.Expr2, be.Precedence)
-                    : expression,
-                _ => expression,
-            },
-            SqlFunction func => func.Name switch
+                return base.ConvertSearchStringPredicate(predicate);
+            }
+
+            var dataExpr = predicate.Expr1;
+            var searchExpr = predicate.Expr2;
+
+            if (predicate.CaseSensitive.EvaluateBoolExpression(EvaluationContext) == false)
             {
-                "Convert" when func.SystemType.ToUnderlying() == typeof(bool) =>
-                    AlternativeConvertToBoolean(func, options, 1) ??
-                    new SqlExpression(func.SystemType, "Cast({0} as {1})", Precedence.Primary, FloorBeforeConvert(func), func.Parameters[0]),
-                "Convert" => new SqlExpression(func.SystemType, "Cast({0} as {1})", Precedence.Primary, FloorBeforeConvert(func), func.Parameters[0]),
-                "CharIndex" => func.Parameters.Length == 2
-                    ? new SqlExpression(func.SystemType, "Position({0} in {1})", Precedence.Primary, func.Parameters[0], func.Parameters[1])
-                    : Add<int>(
-                        new SqlExpression(
-                            func.SystemType,
-                            "Position({0} in {1})",
-                            Precedence.Primary,
-                            func.Parameters[0],
-                            ConvertExpressionImpl(
-                                new SqlFunction(
-                                    typeof(string),
-                                    "Substring",
-                                    func.Parameters[1],
-                                    func.Parameters[2],
-                                    Sub<int>(
-                                        ConvertExpressionImpl(new SqlFunction(typeof(int), "Length", func.Parameters[1]), visitor),
-                                        func.Parameters[2]
-                                    )
-                                ),
-                                visitor
-                            )
-                        ),
-                        Sub(func.Parameters[2], 1)
-                    ),
-                _ => expression,
-            },
-            _ => expression,
-        };
+                dataExpr = PseudoFunctions.MakeToLower(dataExpr, MappingSchema);
+                searchExpr = PseudoFunctions.MakeToLower(searchExpr, MappingSchema);
+            }
+
+            var intType = MappingSchema.GetDbDataType(typeof(int));
+            var strPos = new SqlFunction(intType, "STRPOS", dataExpr, searchExpr);
+            ISqlPredicate match = new SqlPredicate.ExprExpr(
+                strPos,
+                SqlPredicate.Operator.Greater,
+                new SqlValue(0),
+                unknownAsValue: null);
+
+            return match.MakeNot(predicate.IsNot);
+        }
     }
 }

@@ -1,6 +1,6 @@
 using System.Globalization;
-using System.Text.RegularExpressions;
 using LinqToDB;
+using LinqToDB.Async;
 using Similarweb.LinqToDB.Firebolt.Extensions;
 using Similarweb.LinqToDB.Firebolt.Tests.Fixtures;
 using Similarweb.LinqToDB.Firebolt.Tests.Northwind;
@@ -20,8 +20,46 @@ public class ArrayTests(
     [Fact]
     public async Task Test_ArrayContains()
     {
+        // linq2db 6.x: ArrayContains in the same Select as ArrayAggregate(association)
+        // (or as a boolean projection over that aggregate) can lose the join.
+        // Project the array first, then filter with ARRAY_CONTAINS.
         var result = await northwind.Context.OrderItems
-            .LoadWith(item => item.Product)
+            .GroupBy(item => item.OrderId)
+            .Select(group => new
+            {
+                OrderId = group.Key,
+                Names = group.ArrayAggregate(item => item.Product.ProductName).ToValue(),
+            })
+            .Where(tuple => tuple.Names.ArrayContains("Pavlova"))
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.Equal(43, result.Count);
+    }
+
+    [Fact]
+    public async Task Test_ArrayContains_AsCte()
+    {
+        var result = await northwind.Context.OrderItems
+            .GroupBy(item => item.OrderId)
+            .Select(group => new
+            {
+                OrderId = group.Key,
+                ProductNames = group.ArrayAggregate(item => item.Product.ProductName).ToValue()
+            })
+            .AsCte()
+            .Select(row => new { row.OrderId, OrderHasPavlova = row.ProductNames.ArrayContains("Pavlova") })
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.Equal(43, result.Count(item => item.OrderHasPavlova));
+    }
+
+    [Fact]
+    public async Task Test_ArrayContains_ExplicitJoin()
+    {
+        var result = await northwind.Context.OrderItems
+            .Join(northwind.Context.Products, item => item.ProductId, product => product.Id, (item, product) => new { item.OrderId, Product = product })
             .GroupBy(item => item.OrderId)
             .Select(group => new
             {
@@ -69,14 +107,49 @@ public class ArrayTests(
     [Fact]
     public async Task Test_ArraySort()
     {
+        // linq2db 6.x: ArraySort chained onto ArrayAggregate(nested association) drops joins.
+        // Project the aggregate, AsSubQuery(), then sort.
         var result = await northwind.Context.OrderItems
-            .LoadWith(item => item.Order)
-            .ThenLoad(order => order.Customer)
             .GroupBy(item => item.ProductId)
             .Select(group => new
             {
                 ProductId = group.Key,
-                CustomerNames = group.ArrayAggregate(item => item.Order.Customer.FirstName).ToValue()
+                Names = group.ArrayAggregate(item => item.Order.Customer.FirstName).ToValue(),
+            })
+            .AsSubQuery()
+            .Select(tuple => new
+            {
+                tuple.ProductId,
+                CustomerNames = tuple.Names.ArraySort(),
+            })
+            .InnerJoin(
+                northwind.Context.Products.Where(product => product.ProductName == "Pavlova"),
+                (pair, product) => pair.ProductId == product.Id,
+                (pair, _) => pair.CustomerNames)
+            .FirstAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.Equal(43, result.Length);
+        Assert.Equal(
+        [
+            "Alexander", "Annette", "Carine", "Carlos", "Christina", "Dominique", "Felipe", "Felipe", "Georg", "Hari",
+            "Henriette", "Horst", "Janete", "Janete", "Jean", "Jean", "Jonas", "Jose", "Jose", "Jose", "Jytte", "Karl",
+            "Karl", "Laurence", "Laurence", "Laurence", "Lino", "Liz", "Matti", "Michael", "Patricia", "Paula", "Peter",
+            "Philip", "Pirkko", "Renate", "Rene", "Rene", "Rene", "Roland", "Roland", "Roland", "Sergio"
+        ], result);
+    }
+
+    [Fact]
+    public async Task Test_ArraySort_ExplicitJoin()
+    {
+        var result = await northwind.Context.OrderItems
+            .Join(northwind.Context.Orders, orderItem => orderItem.OrderId, order => order.Id, (orderItem, order) => new { Order = order, orderItem.ProductId, })
+            .Join(northwind.Context.Customers, orderProduct => orderProduct.Order.CustomerId, customer => customer.Id, (orderProduct, customer) => new { orderProduct.ProductId, CustomerFirstName = customer.FirstName })
+            .GroupBy(customerNameAndProduct => customerNameAndProduct.ProductId)
+            .Select(group => new
+            {
+                ProductId = group.Key,
+                CustomerNames = group.ArrayAggregate(customerNameAndProduct => customerNameAndProduct.CustomerFirstName).ToValue()
                     .ArraySort(),
             })
             .InnerJoin(
@@ -103,20 +176,55 @@ public class ArrayTests(
     [Fact]
     public async Task Test_ArrayReverseSort()
     {
+        // Same as Test_ArraySort: force a subquery boundary before ArrayReverseSort.
         var result = await northwind.Context.OrderItems
-            .LoadWith(item => item.Order)
-            .ThenLoad(order => order.Customer)
             .GroupBy(item => item.ProductId)
             .Select(group => new
             {
                 ProductId = group.Key,
-                CustomerNames = group.ArrayAggregate(item => item.Order.Customer.FirstName).ToValue()
-                    .ArrayReverseSort(),
+                Names = group.ArrayAggregate(item => item.Order.Customer.FirstName).ToValue(),
+            })
+            .AsSubQuery()
+            .Select(tuple => new
+            {
+                tuple.ProductId,
+                CustomerNames = tuple.Names.ArrayReverseSort(),
             })
             .InnerJoin(
                 northwind.Context.Products.Where(product => product.ProductName == "Pavlova"),
                 (pair, product) => pair.ProductId == product.Id,
                 (pair, _) => pair.CustomerNames)
+            .FirstAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.Equal(43, result.Length);
+        Assert.Equal(
+        [
+            "Sergio", "Roland", "Roland", "Roland", "Rene", "Rene", "Rene", "Renate", "Pirkko", "Philip", "Peter",
+            "Paula", "Patricia", "Michael", "Matti", "Liz", "Lino", "Laurence", "Laurence", "Laurence", "Karl", "Karl",
+            "Jytte", "Jose", "Jose", "Jose", "Jonas", "Jean", "Jean", "Janete", "Janete", "Horst", "Henriette", "Hari",
+            "Georg", "Felipe", "Felipe", "Dominique", "Christina", "Carlos", "Carine", "Annette", "Alexander"
+        ], result);
+    }
+
+    [Fact]
+    public async Task Test_ArrayReverseSort_ExplicitJoin()
+    {
+        var result = await northwind.Context.OrderItems
+            .Join(northwind.Context.Orders, orderItem => orderItem.OrderId, order => order.Id, (orderItem, order) => new { Order = order, orderItem.ProductId, })
+            .Join(northwind.Context.Customers, orderProduct => orderProduct.Order.CustomerId, customer => customer.Id, (orderProduct, customer) => new { orderProduct.ProductId, CustomerFirstName = customer.FirstName })
+            .GroupBy(customerNameAndProduct => customerNameAndProduct.ProductId)
+            .Select(group => new
+            {
+                ProductId = group.Key,
+                CustomerNames = group.ArrayAggregate(customerNameAndProduct => customerNameAndProduct.CustomerFirstName).ToValue()
+                    .ArrayReverseSort(),
+            })
+            .InnerJoin(
+                northwind.Context.Products.Where(product => product.ProductName == "Pavlova"),
+                (pair, product) => pair.ProductId == product.Id,
+                (pair, _) => pair.CustomerNames
+            )
             .FirstAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
@@ -138,7 +246,31 @@ public class ArrayTests(
     public async Task Test_ArrayCount()
     {
         var result = await northwind.Context.OrderItems
-            .LoadWith(item => item.Product)
+            .GroupBy(item => item.OrderId)
+            .Select(group => new
+            {
+                OrderId = group.Key,
+                Products = group.ArrayAggregate(item => item.Product.ProductName).ToValue(),
+            })
+            .AsCte()
+            .Select(row => new
+            {
+                row.OrderId,
+                Count = row.Products
+                    .ArrayTransform(item => item.Length < 10)
+                    .ArrayCount(),
+            })
+            .OrderBy(item => item.OrderId)
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+    }
+
+    [Fact]
+    public async Task Test_ArrayCount_ExplicitJoin()
+    {
+        var result = await northwind.Context.OrderItems
+            .Join(northwind.Context.Products, item => item.ProductId, product => product.Id, (item, product) => new { item.OrderId, Product = product })
             .GroupBy(item => item.OrderId)
             .Select(group => new
             {
@@ -378,14 +510,15 @@ public class ArrayTests(
             .Select(g => new
             {
                 OrderId = g.Key,
-                Arr = g.ArrayAggregate(i => i.ProductId).ToValue()
-                    .ArrayTransform(x => (long)x), // long[]
+                Arr = g.ArrayAggregate(i => i.ProductId).ToValue(), // long[]
             })
-            .Select(x => new
+            .Select(row => new
             {
-                x.OrderId,
-                x.Arr,
-                SumServer = x.Arr.ArraySum(), // long
+                row.OrderId,
+                row.Arr,
+                SumServer = row.Arr
+                    .ArrayTransform(x => (long)x)
+                    .ArraySum(), // long
             })
             .ToListAsync(token: TestContext.Current.CancellationToken);
 

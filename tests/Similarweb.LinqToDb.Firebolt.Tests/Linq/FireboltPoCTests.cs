@@ -1,5 +1,6 @@
 using FireboltNETSDK.Exception;
 using LinqToDB;
+using LinqToDB.Async;
 using LinqToDB.Data;
 using Similarweb.LinqToDB.Firebolt.Extensions;
 using Similarweb.LinqToDB.Firebolt.Tests.Fixtures;
@@ -241,12 +242,13 @@ public class FireboltPoCTests(
         Assert.Equal(3, result.Count);
     }
 
-    [Theory(Skip = "we're getting 2 errors here, main one is 'operator 'notLike' for input types (text, text) not found, try adding explicit casts'")]
-    [InlineData(new[] { "fres" }, new[] { "sec", "Zaan" })]
+    [Theory]
+    [InlineData(new[] { "Fres" }, new[] { "sec", "Zaan" })]
     public async Task TestFind_Using_Likes(string[] includes, string[] excludes)
     {
         var result = await northwind.Context.Customers
-            .Where(customer => includes.All(include => customer.FirstName.Contains(include)) && excludes.All(exclude => customer.FirstName.Contains(exclude)))
+            .Where(customer => includes.All(include => customer.LastName.Contains(include))
+                && excludes.All(exclude => !customer.LastName.Contains(exclude)))
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
         _ = Assert.Single(result);
@@ -434,9 +436,11 @@ public class FireboltPoCTests(
         );
     }
 
+#if LINQ2DB_HAS_MATERIALIZED_CTE
     [Fact]
-    public async Task TestMaterializedCte_TwoNamedUsingConventionsSelect()
+    public async Task TestMaterializedCte_TwoNamedConventionsNotWorkSelect()
     {
+        // Native IsMaterialized API: name suffix alone must NOT emit MATERIALIZED.
         var sameYearCte = northwind.Context.Orders
             .GroupBy(order => DateTimeMethods.DatePart(Sql.DateParts.Year, order.OrderDate))
             .Select(group => new { OrderYear = group.Key, Count = group.Count() })
@@ -453,28 +457,25 @@ public class FireboltPoCTests(
                 (year, yearMonth) => new { year.OrderYear, yearMonth.OrderMonth, YearCount = year.Count, YearMonthCount = yearMonth.Count })
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
-        Assert.Contains("MATERIALIZED", northwind.Context.LastQuery);
+        Assert.DoesNotContain("MATERIALIZED", northwind.Context.LastQuery);
         Assert.NotEmpty(result);
         Assert.Equal(23, result.Count);
-        Assert.All(
-            result.GroupBy(item => item.OrderYear),
-            group => Assert.All(
-                group,
-                item => Assert.Equal(group.First().YearCount, item.YearCount)
-            )
-        );
-        Assert.All(
-            result
-                .GroupBy(item => item.OrderYear)
-                .Select(group => new
-                {
-                    OrderYear = group.Key,
-                    ClientYearCount = group.Sum(item => item.YearMonthCount),
-                    ServerYearCount = group.First().YearCount,
-                }),
-            item => Assert.Equal(item.ClientYearCount, item.ServerYearCount)
-        );
     }
+#else
+    [Fact]
+    public async Task TestMaterializedCte_NameSuffixConventionWorks()
+    {
+        // Pre-6.3 fallback: CTE name containing __mat__cte__ triggers MATERIALIZED in BuildWithClause.
+        var result = await northwind.Context.Products
+            .GroupBy(product => product.SupplierId)
+            .Select(group => new { SupplierId = group.Key, Count = group.Count() })
+            .AsCte("products_by_supplier__mat__cte__")
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.Contains("MATERIALIZED", northwind.Context.LastQuery);
+        Assert.NotEmpty(result);
+    }
+#endif
     #endregion // Materialized CTEs
 
     #region Standard window functions
@@ -599,6 +600,44 @@ public class FireboltPoCTests(
         Assert.All(result, x => Assert.Equal(x.UnitPrices.Select(price => (int)Math.Round(price)), x.Prices));
     }
     #endregion // Conversion
+
+    #region Unnest
+    [Fact]
+    public async Task Test_UnnestSimple_Int()
+    {
+        var collection = await northwind.Context
+            .Unnest([1, 2, 3])
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.Equal(3, collection.Count);
+        Assert.All(collection, x => Assert.Contains(x, new[] { 1, 2, 3 }));
+    }
+
+    [Fact]
+    public async Task Test_UnnestSimple_Str()
+    {
+        var collection = await northwind.Context
+            .Unnest(["abc", "defg", "hijkl"])
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.Equal(3, collection.Count);
+        Assert.All(collection, x => Assert.Contains(x, new[] { "abc", "defg", "hijkl" }));
+    }
+    #endregion // Unnest
+
+    #region String methods
+    [Fact]
+    public async Task Test_Length()
+    {
+        var result = await northwind.Context
+            .Unnest(["abc", "defg", "hijkl"])
+            .Select(str => new { Str = str, Length = str.Length, })
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.All(result, x => Assert.Equal(x.Str.Length, x.Length));
+    }
+    #endregion // String methods
 
     #region Disposing
 

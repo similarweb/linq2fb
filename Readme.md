@@ -24,15 +24,16 @@ Currently, it is an MVP to narrow down the scope of the project.
 We in [Similarweb](https://similarweb.com) are using this package. This would encourage us to constantly improve it.
 
 ### Supported versions
-* Firebolt: I tested [Firebolt](https://firebolt.io) only for v2 since v1 is deprecated. V1 is not tested and you my try to use it without any warranties.
-  * You will need [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) v.1.9.1 and above for using this package.
-* LinqToDB:
-  * [v5.4.1](https://github.com/linq2db/linq2db/tree/v5.4.1) — check [documentation](https://similarweb.github.com/linq2fb) about this package
+* Firebolt: tested on [Firebolt](https://firebolt.io) v2 only (v1 is deprecated / untested).
+  * Install [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) **1.9.1 or 1.10.x** yourself (peer dependency; not bundled).
+* LinqToDB: **6.0 – 6.4** (one nupkg; dependency `linq2db >= 6.0.0`).
+  * Materialized CTE (`AsMaterializedCte`): name-suffix + `BuildWithClause` fallback when built against &lt; 6.3; native `IsMaterialized` when built against ≥ 6.3. The published package is built against **6.0.0** (suffix fallback).
+  * CI matrix: linq2db `{6.0.0, 6.1.0, 6.2.0, 6.3.0, 6.4.0}` × FireboltNetSDK `{1.9.1, 1.10.1}` × TFM `{net8.0, net9.0}`.
 
 ## How to use
 1. Install this package (see [how to install](#installing-package))
 2. Add [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) package since this implementation uses same way of loading ADO.NET classes, as LinqToDB;
-3. In your code add (v5.4.1)
+3. In your code add:
    ```csharp
    Registration.AddDataProvider(); // this will register Firebolt provider
    var options = new DataOptions()

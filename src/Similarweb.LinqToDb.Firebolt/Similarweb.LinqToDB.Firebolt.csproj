@@ -11,6 +11,13 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!--
+      Pack against the lowest supported linq2db (6.0.0). NuGet dependency becomes >= 6.0.0,
+      covering 6.0–6.4. Materialized CTE uses a name-suffix + BuildWithClause fallback on &lt; 6.3
+      and native IsMaterialized / SupportsMaterializedCteHint on ≥ 6.3. FireboltNetSDK is a peer dependency.
+    -->
+    <PackageTags>linq2db;firebolt;orm</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
