@@ -26,9 +26,9 @@ We in [Similarweb](https://similarweb.com) are using this package. This would en
 ### Supported versions
 * Firebolt: tested on [Firebolt](https://firebolt.io) v2 only (v1 is deprecated / untested).
   * Install [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) **1.9.1 or 1.10.x** yourself (peer dependency; not bundled).
-* LinqToDB: **6.0 – 6.3** tested (one nupkg; dependency `linq2db >= 6.0.0`). **6.4.0** is not in CI yet: upstream alias/GroupBy regressions (nested `AS` vs outer `*_1`, GroupBy key columns collapsing to `"Value"`).
+* LinqToDB: **6.0 – 6.4** (one nupkg; dependency `linq2db >= 6.0.0`).
   * Materialized CTE (`AsMaterializedCte`): name-suffix + `BuildWithClause` fallback when built against &lt; 6.3; native `IsMaterialized` when built against ≥ 6.3. The published package is built against **6.0.0** (suffix fallback).
-  * CI matrix: linq2db `{6.0.0, 6.1.0, 6.2.0, 6.3.0}` × FireboltNetSDK `{1.9.1, 1.10.1}` × TFM `{net8.0, net9.0}`.
+  * CI matrix: linq2db `{6.0.0, 6.1.0, 6.2.0, 6.3.0, 6.4.0}` × FireboltNetSDK `{1.9.1, 1.10.1}` × TFM `{net8.0, net9.0}`.
 
 ## How to use
 1. Install this package (see [how to install](#installing-package))

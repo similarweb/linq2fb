@@ -8,22 +8,46 @@ using LinqExtensions = Similarweb.LinqToDB.Firebolt.Extensions.LinqExtensions;
 namespace Similarweb.LinqToDB.Firebolt;
 
 /// <inheritdoc/>
-internal class SqlBuilder(
-    DataProvider? dataProvider,
-    global::LinqToDB.Mapping.MappingSchema mappingSchema,
-    DataOptions dataOptions,
-    ISqlOptimizer sqlOptimizer,
-    SqlProviderFlags sqlProviderFlags
-) : BasicSqlBuilder(
-    dataProvider,
-    mappingSchema,
-    dataOptions,
-    sqlOptimizer,
-    sqlProviderFlags
-)
+internal class SqlBuilder : BasicSqlBuilder
 {
     private const char NativeParameterPrefix = '@';
     private const char FbNumericParameterPrefix = '$';
+
+    private readonly DataProvider? _dataProvider;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SqlBuilder"/> class.
+    /// </summary>
+    /// <param name="dataProvider">Firebolt data provider.</param>
+    /// <param name="mappingSchema">Mapping schema.</param>
+    /// <param name="dataOptions">Data options.</param>
+    /// <param name="sqlOptimizer">SQL optimizer.</param>
+    /// <param name="sqlProviderFlags">Provider flags.</param>
+    internal SqlBuilder(
+        DataProvider? dataProvider,
+        global::LinqToDB.Mapping.MappingSchema mappingSchema,
+        DataOptions dataOptions,
+        ISqlOptimizer sqlOptimizer,
+        SqlProviderFlags sqlProviderFlags
+    ) : base(dataProvider, mappingSchema, dataOptions, sqlOptimizer, sqlProviderFlags)
+    {
+        _dataProvider = dataProvider;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SqlBuilder"/> class.
+    /// </summary>
+    /// <remarks>
+    /// Nested-builder ctor: must inherit <see cref="BasicSqlBuilder.AliasesContext"/> from the
+    /// parent (linq2db 6.4+). Creating a fresh builder without this desyncs subquery <c>AS</c>
+    /// aliases from outer refs (e.g. <c>AS "Grouping"</c> vs <c>"Grouping_1"</c>).
+    /// </remarks>
+    /// <param name="parentBuilder">Parent SQL builder.</param>
+    protected SqlBuilder(SqlBuilder parentBuilder)
+        : base(parentBuilder)
+    {
+        _dataProvider = parentBuilder._dataProvider;
+    }
 
     /// <summary>
     /// Gets symbol used as parameter prefix.
@@ -57,7 +81,7 @@ internal class SqlBuilder(
     }
 
     /// <inheritdoc/>
-    protected override ISqlBuilder CreateSqlBuilder() => new SqlBuilder(dataProvider, MappingSchema, DataOptions, SqlOptimizer, SqlProviderFlags);
+    protected override ISqlBuilder CreateSqlBuilder() => new SqlBuilder(this);
 
     /// <inheritdoc/>
     protected override string LimitFormat(SelectQuery selectQuery) => "LIMIT {0}";
@@ -243,9 +267,9 @@ internal class SqlBuilder(
     /// <inheritdoc/>
     protected override string? GetProviderTypeName(IDataContext dataContext, DbParameter parameter)
     {
-        var param = dataProvider?.TryGetProviderParameter(dataContext, parameter);
+        var param = _dataProvider?.TryGetProviderParameter(dataContext, parameter);
         return param != null
-            ? dataProvider?.Adapter.GetDbType(param).ToString()
+            ? _dataProvider?.Adapter.GetDbType(param).ToString()
             : base.GetProviderTypeName(dataContext, parameter);
     }
 

@@ -13,10 +13,8 @@ jobs:
             fail-fast: false
             matrix:
                 tfm: [net8.0, net9.0]
-                # 6.4.0 excluded: linq2db alias/GroupBy regressions (subquery AS vs outer *_1,
-                # anonymous GroupBy keys collapsing to "Value") — not fixable in the provider.
-                # Quoting NameToQueryTableAlias covers reserved aliases like `group`/`order` only.
-                linq2db: ["6.0.0", "6.1.0", "6.2.0", "6.3.0"]
+                # Materialized CTE is skipped when linq2db < 6.3.0 (see Directory.Build.Props).
+                linq2db: ["6.0.0", "6.1.0", "6.2.0", "6.3.0", "6.4.0"]
                 fb: ["1.9.1", "1.10.1"]
         steps:
             - uses: actions/checkout@v4
