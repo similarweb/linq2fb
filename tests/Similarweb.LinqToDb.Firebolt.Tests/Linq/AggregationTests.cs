@@ -542,9 +542,6 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
-            // linq2db-5/net10 workaround (issue #5180): ILoadWithQueryable implements IAsyncEnumerable,
-            // so .Select() is ambiguous under net10. Drop .AsQueryable() after upgrading to linq2db 6.x (PR #5156).
-            .AsQueryable()
             .Select(item => new
             {
                 item.Product.SupplierId,
@@ -582,9 +579,6 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
-            // linq2db-5/net10 workaround (issue #5180): ILoadWithQueryable implements IAsyncEnumerable,
-            // so .Select() is ambiguous under net10. Drop .AsQueryable() after upgrading to linq2db 6.x (PR #5156).
-            .AsQueryable()
             .Select(item => new
             {
                 item.ProductId,
@@ -670,9 +664,6 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
-            // linq2db-5/net10 workaround (issue #5180): ILoadWithQueryable implements IAsyncEnumerable,
-            // so .Select() is ambiguous under net10. Drop .AsQueryable() after upgrading to linq2db 6.x (PR #5156).
-            .AsQueryable()
             .Select(item => new
             {
                 item.Product.SupplierId,
@@ -707,9 +698,6 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
-            // linq2db-5/net10 workaround (issue #5180): ILoadWithQueryable implements IAsyncEnumerable,
-            // so .Select() is ambiguous under net10. Drop .AsQueryable() after upgrading to linq2db 6.x (PR #5156).
-            .AsQueryable()
             .Select(item => new
             {
                 item.ProductId,
@@ -755,9 +743,6 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
-            // linq2db-5/net10 workaround (issue #5180): ILoadWithQueryable implements IAsyncEnumerable,
-            // so .Select() is ambiguous under net10. Drop .AsQueryable() after upgrading to linq2db 6.x (PR #5156).
-            .AsQueryable()
             .Select(item => new
             {
                 item.Product.SupplierId,
@@ -799,9 +784,6 @@ public class AggregationTests(
     {
         var result = await northwind.Context.OrderItems
             .LoadWith(item => item.Product)
-            // linq2db-5/net10 workaround (issue #5180): ILoadWithQueryable implements IAsyncEnumerable,
-            // so .Select() is ambiguous under net10. Drop .AsQueryable() after upgrading to linq2db 6.x (PR #5156).
-            .AsQueryable()
             .Select(item => new
             {
                 item.ProductId,

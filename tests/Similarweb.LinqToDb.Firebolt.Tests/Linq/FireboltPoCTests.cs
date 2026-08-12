@@ -17,15 +17,6 @@ public class FireboltPoCTests(
     ContextFixture<NorthwindContext> northwind
 ) : IClassFixture<ContextFixture<NorthwindContext>>, IDisposable, IAsyncDisposable
 {
-    // On net10.0 / C# 14, `array.Contains(column)` binds to MemoryExtensions.Contains(ReadOnlySpan<T>, T)
-    // instead of Enumerable.Contains(IEnumerable<T>, T). linq2db (major-5) only translates the latter, so
-    // such IN-clause queries throw "cannot be converted to SQL". The customer-friendly alternative that works
-    // on every language version is linq2db's own .In(...) extension (see the *_UsingInExtension counterparts).
-    // linq2db 6.x translates ReadOnlySpan<>.Contains() natively (PR #5151) - drop these Skips after upgrading.
-    private const string ContainsInClauseSkipReason =
-        "array.Contains(column) binds to MemoryExtensions.Contains(ReadOnlySpan<T>) on net10.0/C# 14, which "
-        + "linq2db major-5 cannot translate to SQL. Use the .In() variant; re-enable after upgrading to linq2db 6.x.";
-
     #region Selects
     [Fact]
     public async Task TestSelect_WithDefaultSettings()
@@ -45,7 +36,7 @@ public class FireboltPoCTests(
         Assert.Equal(78, result.Count);
     }
 
-    [Fact(Skip = ContainsInClauseSkipReason)]
+    [Fact]
     public async Task TestSelect_WithUnion()
     {
         var result = await northwind.Context.Customers
@@ -77,7 +68,7 @@ public class FireboltPoCTests(
         Assert.Equivalent(new[] { 1, 2, 3, 4, 5 }, result.Select(x => x.Id));
     }
 
-    [Fact(Skip = ContainsInClauseSkipReason)]
+    [Fact]
     public async Task TestSelect_WithUnionAll()
     {
         var result = await northwind.Context.Customers
@@ -216,7 +207,7 @@ public class FireboltPoCTests(
         Assert.Equal(3, item.Id);
     }
 
-    [Fact(Skip = ContainsInClauseSkipReason)]
+    [Fact]
     public async Task TestFind_UsingInClause_ForInts()
     {
         var ids = new[] { 1, 2, 3, 123, };
@@ -240,7 +231,7 @@ public class FireboltPoCTests(
         Assert.Equivalent(new[] { 1, 2, 3 }, result.Select(x => x.Id));
     }
 
-    [Fact(Skip = ContainsInClauseSkipReason)]
+    [Fact]
     public async Task TestFind_UsingInClause_ForGuids()
     {
         var ids = new[] { Guid.Parse("9C2D54C3-4B50-4E88-987A-4644E3DB40EA"), Guid.Parse("411974c9-adc2-42ff-b5a2-fca346929a8b"), Guid.NewGuid(), };
@@ -264,7 +255,7 @@ public class FireboltPoCTests(
         Assert.Equivalent(new[] { 2, 22 }, result.Select(x => x.Id));
     }
 
-    [Fact(Skip = ContainsInClauseSkipReason)]
+    [Fact]
     public async Task TestFind_UsingInClause_ForStrings()
     {
         var names = new[] { "Mayumi's", "G'day, Mate", "some_crap" };
@@ -288,7 +279,7 @@ public class FireboltPoCTests(
         Assert.Equivalent(new[] { "Mayumi's", "G'day, Mate" }, result.Select(x => x.CompanyName));
     }
 
-    [Fact(Skip = ContainsInClauseSkipReason)]
+    [Fact]
     public async Task TestFind_UsingInClause_ForStrings_WithLowercasing()
     {
         var names = new[] { "tunnbröd", "original frankfurter grüne soße" };
@@ -312,7 +303,7 @@ public class FireboltPoCTests(
         Assert.Equivalent(new[] { 23, 77 }, result.Select(x => x.Id));
     }
 
-    [Fact(Skip = ContainsInClauseSkipReason)]
+    [Fact]
     public async Task TestFind_UsingInClause_ForStrings_WithInjections()
     {
         var names = new[] { "' OR 1 = 1; --" };
@@ -584,9 +575,6 @@ public class FireboltPoCTests(
     {
         var mostPopularProducts = northwind.Context.Products
             .LoadWith(product => product.OrderItems)
-            // linq2db-5/net10 workaround (issue #5180): ILoadWithQueryable implements IAsyncEnumerable,
-            // so .Select() is ambiguous under net10. Drop .AsQueryable() after upgrading to linq2db 6.x (PR #5156).
-            .AsQueryable()
             .Select(product =>
                 new
                 {
