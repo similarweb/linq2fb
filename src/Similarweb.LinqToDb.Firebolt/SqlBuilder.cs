@@ -44,6 +44,8 @@ internal class SqlBuilder(
             ConvertType.NameToQueryFieldAlias
                 or ConvertType.NameToQueryField
                 or ConvertType.NameToQueryTable
+                or ConvertType.NameToQueryTableAlias
+                or ConvertType.NameToCteName
                 or ConvertType.NameToServer
                 or ConvertType.SequenceName
                 or ConvertType.NameToSchema
