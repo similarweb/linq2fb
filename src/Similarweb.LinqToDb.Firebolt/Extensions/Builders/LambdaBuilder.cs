@@ -3,12 +3,21 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using LinqToDB;
+using LinqToDB.Expressions;
+using LinqToDB.Linq;
 
 namespace Similarweb.LinqToDB.Firebolt.Extensions.Builders;
 
 /// <summary>
 /// <para>Lambda builder for Array lambda methods.</para>
-/// <para>TODO: make it use ISqlExpression.</para>
+/// <para>
+/// Firebolt lambdas use <c>param -&gt; expr</c> syntax, so we hand-roll SQL from the
+/// expression tree. Normal LINQ uses <c>IMemberTranslator</c>;
+/// Extension builders do not. Before rendering we run <see cref="Expressions.ConvertMember"/>
+/// so MappingSchema MapMembers (e.g. <c>string.Length</c> → <c>Sql.Length</c>) apply the same
+/// way they did under linq2db v5.
+/// </para>
+/// <para>TODO: make it use ISqlExpression / ConvertExpressionToSql where binders allow.</para>
 /// </summary>
 /// <param name="expectedResultType">expected Result type.</param>
 internal class LambdaBuilder(
@@ -52,6 +61,9 @@ internal class LambdaBuilder(
             throw new LinqToDBException($"Invalid lambda expression type: {validLambda.Type}. Expected Func<T, bool>.");
         }
 
+        // Apply MappingSchema MapMembers (string.Length → Sql.Length, etc.) before hand-rolling.
+        var body = ExpandMembers(validLambda.Body, builder.Mapping);
+
         var sqlExpr = new StringBuilder(validLambda.Parameters[0].Name);
         for (var i = 1; i < validLambda.Parameters.Count; i++)
         {
@@ -59,7 +71,7 @@ internal class LambdaBuilder(
             sqlExpr.Append(validLambda.Parameters[i].Name);
         }
 
-        RecursiveParse(validLambda.Body, sqlExpr.Append(' ').Append(LambdaSign).Append(' '));
+        RecursiveParse(body, sqlExpr.Append(' ').Append(LambdaSign).Append(' '));
         builder.AddFragment(ExpectedLambdaName, sqlExpr.ToString());
         return;
 
@@ -97,6 +109,7 @@ internal class LambdaBuilder(
                             innerBuilder.Append('-').Append(unaryExpression.Operand);
                             break;
                         case ExpressionType.Convert:
+                        case ExpressionType.ConvertChecked:
                             RecursiveParse(unaryExpression.Operand, innerBuilder);
 
                             // usually we don't need to explicitly cast to nullables.
@@ -135,6 +148,26 @@ internal class LambdaBuilder(
 
                     break;
                 case MemberExpression memberExpr:
+                    // Nullable<T>.Value is an artifact of Sql.* returning T?; omit it.
+                    if (IsNullableValueAccess(memberExpr))
+                    {
+                        RecursiveParse(memberExpr.Expression!, innerBuilder);
+                        break;
+                    }
+
+                    if (MethodList.TryGetValue(memberExpr.Member.Name, out var memberSql) &&
+                        !string.IsNullOrEmpty(memberSql))
+                    {
+                        innerBuilder.Append(memberSql).Append('(');
+                        if (memberExpr.Expression != null)
+                        {
+                            RecursiveParse(memberExpr.Expression, innerBuilder);
+                        }
+
+                        innerBuilder.Append(')');
+                        break;
+                    }
+
                     innerBuilder.Append(memberExpr.Member.Name);
                     break;
                 case ParameterExpression parameterExpr:
@@ -168,14 +201,22 @@ internal class LambdaBuilder(
                         innerBuilder.Append(sqlMethodName).Append('(');
                     }
 
+                    var wroteArg = false;
+                    if (methodCallExpr.Object != null)
+                    {
+                        RecursiveParse(methodCallExpr.Object, innerBuilder);
+                        wroteArg = true;
+                    }
+
                     for (var i = 0; i < methodCallExpr.Arguments.Count; i++)
                     {
-                        if (i > 0)
+                        if (wroteArg || i > 0)
                         {
                             innerBuilder.Append(", ");
                         }
 
                         RecursiveParse(methodCallExpr.Arguments[i], innerBuilder);
+                        wroteArg = true;
                     }
 
                     if (!string.IsNullOrEmpty(sqlMethodName))
@@ -192,4 +233,114 @@ internal class LambdaBuilder(
             return innerBuilder;
         }
     }
+
+    /// <summary>
+    /// Applies <see cref="Expressions.ConvertMember"/> mappings from <see cref="MappingSchema"/>
+    /// so Extension-builder lambdas see the same rewrites as linq2db v5 (e.g. Length → Sql.Length).
+    /// </summary>
+    private static Expression ExpandMembers(Expression expression, global::LinqToDB.Mapping.MappingSchema mapping) =>
+        expression.Transform(mapping, static (ms, e) =>
+        {
+            switch (e)
+            {
+                case MemberExpression memberExpr:
+                {
+                    if (IsNullableValueAccess(memberExpr))
+                    {
+                        return memberExpr.Expression!;
+                    }
+
+                    var converted = Expressions.ConvertMember(ms, memberExpr.Expression?.Type, memberExpr.Member);
+                    if (converted != null)
+                    {
+                        return ApplyMemberMapping(converted, memberExpr.Expression, e.Type);
+                    }
+
+                    break;
+                }
+
+                case MethodCallExpression methodCall:
+                {
+                    var converted = Expressions.ConvertMember(ms, methodCall.Object?.Type, methodCall.Method);
+                    if (converted != null)
+                    {
+                        return ApplyMethodMapping(converted, methodCall, e.Type);
+                    }
+
+                    break;
+                }
+            }
+
+            return e;
+        });
+
+    private static Expression ApplyMemberMapping(LambdaExpression mapping, Expression? instance, Type targetType)
+    {
+        var body = UnwrapMappingBody(mapping);
+        var replaced = body.Transform(
+            (mapping.Parameters, instance),
+            static (ctx, node) =>
+            {
+                if (node is not ParameterExpression param)
+                {
+                    return node;
+                }
+
+                var index = ctx.Parameters.IndexOf(param);
+                if (index < 0)
+                {
+                    return node;
+                }
+
+                // First mapping parameter is the instance for member mappings.
+                return index == 0 && ctx.instance != null ? ctx.instance : node;
+            });
+
+        return replaced.Type == targetType ? replaced : Expression.Convert(replaced, targetType);
+    }
+
+    private static Expression ApplyMethodMapping(LambdaExpression mapping, MethodCallExpression call, Type targetType)
+    {
+        var body = UnwrapMappingBody(mapping);
+        var replaced = body.Transform(
+            (mapping.Parameters, call),
+            static (ctx, node) =>
+            {
+                if (node is not ParameterExpression param)
+                {
+                    return node;
+                }
+
+                var index = ctx.Parameters.IndexOf(param);
+                if (index < 0)
+                {
+                    return node;
+                }
+
+                if (!ctx.call.Method.IsStatic)
+                {
+                    return index == 0 ? ctx.call.Object! : ctx.call.Arguments[index - 1];
+                }
+
+                return ctx.call.Arguments[index];
+            });
+
+        return replaced.Type == targetType ? replaced : Expression.Convert(replaced, targetType);
+    }
+
+    private static Expression UnwrapMappingBody(LambdaExpression mapping)
+    {
+        var body = mapping.Body;
+        while (body is UnaryExpression { NodeType: ExpressionType.Quote } quote)
+        {
+            body = quote.Operand;
+        }
+
+        return body is LambdaExpression inner ? inner.Body : body;
+    }
+
+    private static bool IsNullableValueAccess(MemberExpression memberExpr) =>
+        memberExpr.Member.Name == nameof(Nullable<int>.Value) &&
+        memberExpr.Expression != null &&
+        Nullable.GetUnderlyingType(memberExpr.Expression.Type) != null;
 }

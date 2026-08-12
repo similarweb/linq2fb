@@ -563,18 +563,14 @@ public class AggregationTests(
                 SupplierId = group.Key,
                 Prices = group.ArrayAggregate(it => it.UnitPrice).ToValue(),
                 Quantities = group.ArrayAggregate(it => it.Quantity).ToValue(),
-                Corr = group.Corr(it => it.UnitPrice, it => it.Quantity),
+                Corr = group.Corr(it => it.UnitPrice, it => it.Quantity) ?? 0,
             })
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.All(
             result,
-            item =>
-            {
-                var val = Assert.NotNull(item.Corr);
-                Assert.Equal((double)val, Correlation(item.Prices, item.Quantities), Tolerance);
-            }
+            item => Assert.Equal((double)item.Corr, Correlation(item.Prices, item.Quantities), Tolerance)
         );
     }
 
@@ -768,7 +764,7 @@ public class AggregationTests(
                 SupplierId = group.Key,
                 Prices = group.ArrayAggregate(it => it.UnitPrice).ToValue(),
                 Quantities = group.ArrayAggregate(it => it.Quantity).ToValue(),
-                CovarSamp = (double?)group.CovarSamp(it => it.UnitPrice, it => it.Quantity),
+                CovarSamp = (double?)group.CovarSamp(it => it.UnitPrice, it => it.Quantity) ?? 0,
             })
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
@@ -777,8 +773,9 @@ public class AggregationTests(
             result,
             item =>
             {
-                var covarSamp = Assert.NotNull(item.CovarSamp);
-                Assert.Equal(covarSamp, CovarianceSample(item.Prices, item.Quantities), Tolerance);
+                var covarianceExpected = CovarianceSample(item.Prices, item.Quantities);
+                var covariance = item.CovarSamp;
+                Assert.Equal(covarianceExpected, covariance, Tolerance);
             });
     }
 

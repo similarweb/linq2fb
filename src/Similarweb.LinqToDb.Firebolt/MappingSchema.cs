@@ -41,13 +41,16 @@ internal class MappingSchema : global::LinqToDB.Mapping.MappingSchema
 
         Expressions.MapMember(DataProvider.V2Id, Expressions.M(() => DateTime.Now), () => DateTimeMethods.CurrentDateTime);
 
-        // NB: These converters are applied only for logs. Queries are built in FireboltCommand class.
-        //     Main idea is that we shouldn't be too concerned with possible issues here, see tests.
-        SetValueToSqlConverter(typeof(double[]), ArrayConverter<double>);
-        SetValueToSqlConverter(typeof(float[]), ArrayConverter<float>);
-        SetValueToSqlConverter(typeof(long[]), ArrayConverter<long>);
-        SetValueToSqlConverter(typeof(int[]), ArrayConverter<int>);
-        SetValueToSqlConverter(typeof(string[]), ArrayConverter<string>);
+        // linq2db v6 wraps FromSql FormattableString args as Sql.Parameter<T>(). Array types must be
+        // registered as scalars, otherwise translation fails with:
+        // "The LINQ expression '(object)Sql.Parameter<int[]>(...)' could not be converted to SQL."
+        RegisterArrayType<int>("ARRAY(INT)");
+        RegisterArrayType<bool>("ARRAY(BOOL)");
+        RegisterArrayType<long>("ARRAY(BIGINT)");
+        RegisterArrayType<double>("ARRAY(DOUBLE)");
+        RegisterArrayType<float>("ARRAY(FLOAT)");
+        RegisterArrayType<string>("ARRAY(TEXT)");
+
         SetValueToSqlConverter(typeof(bool), ConvertToSql);
         SetValueToSqlConverter(typeof(double), ConvertToSql);
         SetValueToSqlConverter(typeof(float), ConvertToSql);
@@ -59,6 +62,14 @@ internal class MappingSchema : global::LinqToDB.Mapping.MappingSchema
         AddScalarType(typeof(decimal), decimalDataType);
         AddScalarType(typeof(decimal?), decimalDataType);
         return;
+
+        void RegisterArrayType<T>(string dbTypeName)
+        {
+            var arrayType = typeof(T[]);
+            var sqlType = new SqlDataType(DataType.Text, arrayType, dbTypeName);
+            AddScalarType(arrayType, sqlType);
+            SetValueToSqlConverter(arrayType, ArrayConverter<T>);
+        }
 
         static void ArrayConverter<T>(StringBuilder sb, SqlDataType dataType, object arr)
         {

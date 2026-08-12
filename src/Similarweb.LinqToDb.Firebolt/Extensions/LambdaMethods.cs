@@ -17,7 +17,9 @@ public static class LambdaMethods
     /// <param name="array">The array to sort.</param>
     /// <param name="lambda">Lambda for sort method.</param>
     /// <returns>A new array with sorted elements.</returns>
-    [Sql.Extension(DataProvider.V2Id, "ARRAY_TRANSFORM({lambda}, {array})", BuilderType = typeof(LambdaBuilder), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 10, IsAggregate = true, PreferServerSide = true)]
+    // Not IsAggregate: scalar array op. IsAggregate=true makes linq2db hoist it into GROUP BY incorrectly.
+    // Chained after ArrayAggregate, IsAggregate still flows from ARRAY_AGG via ChainPrecedence.
+    [Sql.Extension(DataProvider.V2Id, "ARRAY_TRANSFORM({lambda}, {array})", BuilderType = typeof(LambdaBuilder), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 10, PreferServerSide = true)]
     public static TResult[] ArrayTransform<TItem, TResult>(
         [ExprParameter] this TItem[] array,
         Expression<Func<TItem, TResult>> lambda
@@ -80,7 +82,7 @@ public static class LambdaMethods
     /// <param name="lambda">Condition would be checked until any would found.</param>
     /// <typeparam name="T">Type of the array items.</typeparam>
     /// <returns><c>True.</c> if element found, <c>False.</c> otherwise.</returns>
-    [Sql.Extension(DataProvider.V2Id, "ARRAY_ANY_MATCH({lambda}, {array})", BuilderType = typeof(LambdaBuilder<bool>), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 5)]
+    [Sql.Extension(DataProvider.V2Id, "ARRAY_ANY_MATCH({lambda}, {array})", BuilderType = typeof(LambdaBuilder<bool>), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 5, PreferServerSide = true)]
     public static bool ArrayAnyMatch<T>(
         [ExprParameter("array")] this T[] array,
         Expression<Func<T, bool>> lambda
@@ -96,7 +98,7 @@ public static class LambdaMethods
     /// <typeparam name="T1">Type of first arrays' items.</typeparam>
     /// <typeparam name="T2">Type of second arrays' items.</typeparam>
     /// <returns><c>True.</c> if element found, <c>False.</c> otherwise.</returns>
-    [Sql.Extension(DataProvider.V2Id, "ARRAY_ANY_MATCH({lambda}, {array}, {otherArray})", BuilderType = typeof(LambdaBuilder<bool>), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 1)]
+    [Sql.Extension(DataProvider.V2Id, "ARRAY_ANY_MATCH({lambda}, {array}, {otherArray})", BuilderType = typeof(LambdaBuilder<bool>), TokenName = AnalyticFunctions.FunctionToken, ChainPrecedence = 1, PreferServerSide = true)]
     public static bool ArrayAnyMatch<T1, T2>(
         [ExprParameter("array")] this T1[] array,
         [ExprParameter("otherArray")] T2[] otherArray,

@@ -31,6 +31,9 @@ internal class SqlBuilder(
     public static char ParameterSymbol => NativeParameterPrefix;
 
     /// <inheritdoc/>
+    protected override bool SupportsMaterializedCteHint => true;
+
+    /// <inheritdoc/>
     public override StringBuilder Convert(StringBuilder sb, string value, ConvertType convertType)
     {
         return convertType switch

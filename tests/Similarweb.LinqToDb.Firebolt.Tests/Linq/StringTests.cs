@@ -14,7 +14,7 @@ public class StringTests(
     [Fact]
     public async Task Test_RegexLikeAny()
     {
-        var patterns = new[] { "^Pa", "ta", "al.*?o" }.ToArray();
+        var patterns = new[] { "^Pa", "ta", "al.*?o" };
         var result = await northwind.Context.Products
             .Where(product => product.ProductName.RegexpLikeAny(patterns))
             .Select(product => new { product.Id, product.ProductName, })
@@ -27,7 +27,7 @@ public class StringTests(
     [Fact]
     public async Task Test_RegexLikeAny_MoreComplex()
     {
-        var patterns = new[] { "va$", "^Lou", "al.*?o" }.ToArray();
+        var patterns = new[] { "va$", "^Lou", "al.*?o" };
         var result = await northwind.Context.Products
             .Where(product => product.ProductName.RegexpLikeAny(patterns))
             .Select(product => new { product.Id, product.ProductName, })

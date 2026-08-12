@@ -12,6 +12,7 @@ internal class SqlOptimizer(
 
     private class ConvertVisitor(bool allowModify) : SqlExpressionConvertVisitor(allowModify)
     {
+        public override bool LikeIsEscapeSupported => false;
     }
 
     // public override ISqlExpression ConvertExpressionImpl(ISqlExpression expression, ConvertVisitor<RunOptimizationContext> visitor)

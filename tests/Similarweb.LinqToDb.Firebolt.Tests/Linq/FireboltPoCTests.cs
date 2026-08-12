@@ -436,7 +436,7 @@ public class FireboltPoCTests(
     }
 
     [Fact]
-    public async Task TestMaterializedCte_TwoNamedUsingConventionsSelect()
+    public async Task TestMaterializedCte_TwoNamedConventionsNotWorkSelect()
     {
         var sameYearCte = northwind.Context.Orders
             .GroupBy(order => DateTimeMethods.DatePart(Sql.DateParts.Year, order.OrderDate))
@@ -454,7 +454,7 @@ public class FireboltPoCTests(
                 (year, yearMonth) => new { year.OrderYear, yearMonth.OrderMonth, YearCount = year.Count, YearMonthCount = yearMonth.Count })
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
-        Assert.Contains("MATERIALIZED", northwind.Context.LastQuery);
+        Assert.DoesNotContain("MATERIALIZED", northwind.Context.LastQuery);
         Assert.NotEmpty(result);
         Assert.Equal(23, result.Count);
         Assert.All(
@@ -600,6 +600,44 @@ public class FireboltPoCTests(
         Assert.All(result, x => Assert.Equal(x.UnitPrices.Select(price => (int)Math.Round(price)), x.Prices));
     }
     #endregion // Conversion
+
+    #region Unnest
+    [Fact]
+    public async Task Test_UnnestSimple_Int()
+    {
+        var collection = await northwind.Context
+            .Unnest([1, 2, 3])
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.Equal(3, collection.Count);
+        Assert.All(collection, x => Assert.Contains(x, new[] { 1, 2, 3 }));
+    }
+
+    [Fact]
+    public async Task Test_UnnestSimple_Str()
+    {
+        var collection = await northwind.Context
+            .Unnest(["abc", "defg", "hijkl"])
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.Equal(3, collection.Count);
+        Assert.All(collection, x => Assert.Contains(x, new[] { "abc", "defg", "hijkl" }));
+    }
+    #endregion // Unnest
+
+    #region String methods
+    [Fact]
+    public async Task Test_Length()
+    {
+        var result = await northwind.Context
+            .Unnest(["abc", "defg", "hijkl"])
+            .Select(str => new { Str = str, Length = str.Length, })
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(result);
+        Assert.All(result, x => Assert.Equal(x.Str.Length, x.Length));
+    }
+    #endregion // String methods
 
     #region Disposing
 

@@ -25,16 +25,17 @@ public class LambdaTests(
             .Select(group => new
             {
                 OrderId = group.Key,
-                CheapStuff = group.ArrayAggregate(item => item.UnitPrice).ToValue()
-                    .ArrayCount(price => price < 10),
+                CheapStuffList = group.ArrayAggregate(item => item.UnitPrice).ToValue(),
             })
-            .Where(pair => pair.CheapStuff > 0)
-            .OrderByDescending(pair => pair.CheapStuff)
+            .AsCte()
+            .Select(row => new { CheapStuffCount = row.CheapStuffList.ArrayCount(price => price < 10), })
+            .Where(pair => pair.CheapStuffCount > 0)
+            .OrderByDescending(pair => pair.CheapStuffCount)
             .ToListAsync(token: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(result);
         Assert.Equal(348, result.Count);
-        Assert.Equal(5, result.First().CheapStuff);
+        Assert.Equal(5, result.First().CheapStuffCount);
     }
 
     [Fact]
@@ -159,8 +160,26 @@ public class LambdaTests(
     [Fact]
     public async Task Test_ArrayAnyMatch()
     {
+        // Association + ArrayAnyMatch in the same Select as ArrayAggregate drops the join
+        // on linq2db 6.x. Project the array first, then filter.
         var result = await northwind.Context.OrderItems
-            .LoadWith(item => item.Product)
+            .GroupBy(item => item.OrderId)
+            .Select(group => new
+            {
+                OrderId = group.Key,
+                Names = group.ArrayAggregate(item => item.Product.ProductName).ToValue(),
+            })
+            .Where(tuple => tuple.Names.ArrayAnyMatch(name => (name ?? "unknown") == "Pavlova"))
+            .CountAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.Equal(43, result);
+    }
+
+    [Fact]
+    public async Task Test_ArrayAnyMatch_ExplicitJoin()
+    {
+        var result = await northwind.Context.OrderItems
+            .Join(northwind.Context.Products, item => item.ProductId, product => product.Id, (item, product) => new { item.OrderId, Product = product })
             .GroupBy(item => item.OrderId)
             .Select(group => new
             {
