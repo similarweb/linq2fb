@@ -51,16 +51,16 @@ We in [Similarweb](https://similarweb.com) are using this package. This would en
 ## Installing package
 ### Using .NET CLI
 ```shell
-dotnet add package Similarweb.LinqToFirebolt
+dotnet add package Similarweb.LinqToDB.Firebolt
 ```
 
 ### Using Visual Studio UI
-`Tools > NuGet Package Manager > Manage NuGet Packages for Solution` and search for `Similarweb.LinqToFirebolt`
+`Tools > NuGet Package Manager > Manage NuGet Packages for Solution` and search for `Similarweb.LinqToDB.Firebolt`
 
 ### Using Rider UI
-`Tools > NuGet > Manage NuGet packages for <solution name>` and search for `SimilarWeb.LinqToFirebolt`
+`Tools > NuGet > Manage NuGet packages for <solution name>` and search for `Similarweb.LinqToDB.Firebolt`
 
 ### Using Package Manager Console:
 ```shell
-Install-Package SimilarWeb.LinqToFirebolt
+Install-Package Similarweb.LinqToDB.Firebolt
 ```
