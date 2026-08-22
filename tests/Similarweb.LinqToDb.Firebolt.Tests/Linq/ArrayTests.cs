@@ -679,6 +679,38 @@ public class ArrayTests(
 
     #endregion
 
+    #region At (subscript)
+
+    [Fact]
+    public async Task Test_At_OneBasedSubscript()
+    {
+        var rows = await northwind.Context.OrderItems
+            .GroupBy(i => i.OrderId)
+            .Select(group => new
+            {
+                OrderId = group.Key,
+                Arr = group.ArrayAggregate(item => item.ProductId).ToValue(),
+            })
+            .Where(x => x.Arr.ArrayLength() > 0)
+            .Select(x => new
+            {
+                x.OrderId,
+                x.Arr,
+                FirstServer = x.Arr.At(1),
+                LastServer = x.Arr.At(x.Arr.ArrayLength()),
+            })
+            .ToListAsync(token: TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(rows);
+        foreach (var r in rows)
+        {
+            Assert.Equal(r.Arr[0], r.FirstServer);
+            Assert.Equal(r.Arr[^1], r.LastServer);
+        }
+    }
+
+    #endregion // At (subscript)
+
     #region Slice
 
     [Theory]

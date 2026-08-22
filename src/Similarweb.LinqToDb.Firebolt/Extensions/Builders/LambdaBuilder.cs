@@ -75,6 +75,14 @@ internal class LambdaBuilder(
         builder.AddFragment(ExpectedLambdaName, sqlExpr.ToString());
         return;
 
+        static bool IsNullConstant(Expression expr)
+        {
+            var unwrapped = expr is UnaryExpression { NodeType: ExpressionType.Convert } convert
+                ? convert.Operand
+                : expr;
+            return unwrapped is ConstantExpression { Value: null };
+        }
+
         string GetOperator(BinaryExpression expr) =>
             expr.NodeType switch
             {
@@ -85,6 +93,12 @@ internal class LambdaBuilder(
                 ExpressionType.Equal => "=",
                 ExpressionType.NotEqual => "!=",
                 ExpressionType.Modulo => "%",
+                ExpressionType.Add => "+",
+                ExpressionType.Subtract => "-",
+                ExpressionType.Multiply => "*",
+                ExpressionType.Divide => "/",
+                ExpressionType.AndAlso => "AND",
+                ExpressionType.OrElse => "OR",
                 _ => throw new LinqToDBException($"Invalid operator: {expr.NodeType}"),
             };
 
@@ -121,6 +135,16 @@ internal class LambdaBuilder(
                             break;
                     }
 
+                    break;
+                case BinaryExpression binaryExpr
+                    when binaryExpr.NodeType is ExpressionType.Equal or ExpressionType.NotEqual
+                         && (IsNullConstant(binaryExpr.Left) || IsNullConstant(binaryExpr.Right)):
+                    var operand = IsNullConstant(binaryExpr.Left) ? binaryExpr.Right : binaryExpr.Left;
+                    innerBuilder
+                        .Append('(')
+                        .Append(RecursiveParse(operand))
+                        .Append(binaryExpr.NodeType == ExpressionType.Equal ? " IS NULL" : " IS NOT NULL")
+                        .Append(')');
                     break;
                 case BinaryExpression binaryExpr:
                     var left = RecursiveParse(binaryExpr.Left);

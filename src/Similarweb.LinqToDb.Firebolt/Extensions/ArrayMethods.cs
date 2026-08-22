@@ -216,6 +216,32 @@ public static partial class ArrayMethods
     ) => throw new LinqToDBException("Not supported on client");
 
     /// <summary>
+    /// <para>Implementation for Firebolt <see href="https://docs.firebolt.io/sql_reference/data-types/array.html">array subscript</see> access (<c>arr[index]</c>).</para>
+    /// <para>Index is <b>1-based</b>, matching Firebolt semantics.</para>
+    /// </summary>
+    /// <typeparam name="T">Type of the array items.</typeparam>
+    /// <param name="array">The array.</param>
+    /// <param name="index">1-based element index.</param>
+    /// <returns>The element at the given 1-based index.</returns>
+    [Sql.Expression(DataProvider.V2Id, "{0}[{1}]", PreferServerSide = true)]
+    public static T At<T>(
+        this T[] array,
+        [ExprParameter] int index
+    ) => array[index - 1];
+
+    /// <summary>
+    /// <para>Builds a single-element Firebolt array literal (<c>[value]</c>) from a scalar.</para>
+    /// <para>Useful for composing array-lambda pipelines from scalar columns.</para>
+    /// </summary>
+    /// <typeparam name="T">Type of the element.</typeparam>
+    /// <param name="value">The element to wrap.</param>
+    /// <returns>A single-element array.</returns>
+    [Sql.Expression(DataProvider.V2Id, "[{0}]", PreferServerSide = true)]
+    public static T[] AsSqlArray<T>(
+        this T value
+    ) => [value];
+
+    /// <summary>
     /// Implements the <see href="https://docs.firebolt.io/sql_reference/functions-reference/array/array-slice.html">ARRAY_SLICE</see> Firebolt method.
     /// </summary>
     /// <typeparam name="T">Type of the array items.</typeparam>
