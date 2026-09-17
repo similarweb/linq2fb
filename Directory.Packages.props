@@ -9,13 +9,14 @@
     <FireboltSdkVersion Condition="'$(FireboltSdkVersion)' == ''">1.10.1</FireboltSdkVersion>
     <LinqToDbVersion Condition="'$(LinqToDbVersion)' == ''">6.0.0</LinqToDbVersion>
     <!--
-      Two nupkg lines (same package id):
-      * compiled against 6.0.0 → linq2db [6.0.0, 6.4.0)
-      * compiled against 6.4.0 → linq2db [6.4.0, )
-      Restore still uses the single LinqToDbVersion above; pack rewrites the nuspec range.
+      Compile pin is LinqToDbVersion. The nupkg dependency is assembled as:
+        MaxAllowedLinqVersion empty → MinLinqVersion (i.e. >= min)
+        otherwise → [MinLinqVersion, MaxAllowedLinqVersion)
+      CI only sets LinqToDbVersion. Release pack for 6.0.x also sets MaxAllowedLinqVersion=6.4.0.
     -->
-    <LinqToDbDependencyRange Condition="'$(LinqToDbDependencyRange)' == '' AND $([MSBuild]::VersionLessThan('$(LinqToDbVersion)', '6.4.0'))">[6.0.0, 6.4.0)</LinqToDbDependencyRange>
-    <LinqToDbDependencyRange Condition="'$(LinqToDbDependencyRange)' == ''">[6.4.0, )</LinqToDbDependencyRange>
+    <MinLinqVersion Condition="'$(MinLinqVersion)' == ''">$(LinqToDbVersion)</MinLinqVersion>
+    <LinqToDbPackageVersion Condition="'$(MaxAllowedLinqVersion)' != ''">[$(MinLinqVersion), $(MaxAllowedLinqVersion))</LinqToDbPackageVersion>
+    <LinqToDbPackageVersion Condition="'$(LinqToDbPackageVersion)' == ''">$(MinLinqVersion)</LinqToDbPackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <!-- Build / analyzers -->
@@ -32,7 +33,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Testcontainers" Version="4.13.0" />
     <!-- LinqToDb -->
-    <PackageVersion Include="linq2db" Version="$(LinqToDbVersion)" />
+    <PackageVersion Include="linq2db" Version="$(LinqToDbPackageVersion)" />
     <!-- Firebolt -->
     <PackageVersion Include="FireboltNetSDK" Version="$(FireboltSdkVersion)" />
   </ItemGroup>

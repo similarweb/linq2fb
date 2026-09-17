@@ -13,21 +13,18 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <!--
-      Two pack lines (see Directory.Packages.props LinqToDbDependencyRange):
-      * LinqToDbVersion 6.0.0 → nupkg for linq2db [6.0.0, 6.4.0); Materialized CTE via name suffix.
-      * LinqToDbVersion 6.4.0 → nupkg for linq2db [6.4.0, ); native IsMaterialized.
+      Two pack lines (tag v6.0.* vs v6.4.*):
+      * LinqToDbVersion 6.0.0, MaxAllowedLinqVersion 6.4.0 → linq2db [6.0.0, 6.4.0); suffix CTE.
+      * LinqToDbVersion 6.4.0 (no max) → linq2db >= 6.4.0; native IsMaterialized.
       FireboltNetSDK is a peer dependency.
     -->
     <PackageTags>linq2db;firebolt;orm</PackageTags>
   </PropertyGroup>
-  <Import Project="PackLinqToDbRange.targets" />
 
   <ItemGroup>
     <PackageReference Include="linq2db" />
     <PackageReference Include="MinVer" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" />
-    <None Include="PackLinqToDbRange.targets" Pack="false" />
-    <None Include="patch_nupkg_range.py" Pack="false" />
   </ItemGroup>
 </Project>

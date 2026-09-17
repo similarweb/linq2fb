@@ -7,17 +7,16 @@ the format of [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ## [6.4.0-rc.1] - 2026-09-17
-- Nupkg compiled against linq2db 6.4.0 (NuGet dependency `linq2db [6.4.0, )`)
+- Nupkg compiled against linq2db 6.4.0 (NuGet dependency `linq2db >= 6.4.0`)
 - Native Materialized CTE (`AsMaterializedCte` → `IsMaterialized` / `SupportsMaterializedCteHint`)
 - `AddDataProvider` rejects linq2db older than 6.4.0
 - Target frameworks: `net8.0`, `net9.0`
 
 ## [6.0.0-rc.2] - 2026-09-17
 - Nupkg compiled against linq2db 6.0.0 (NuGet dependency `linq2db [6.0.0, 6.4.0)`)
-- Runtime-compatible with linq2db 6.0–6.3 (do not restore this line on 6.4+)
+- Intended for linq2db 6.0–6.3; restore of linq2db 6.4+ is NU1608; `AddDataProvider` also rejects 6.4+
 - Materialized CTE via name-suffix fallback (`AsMaterializedCte`)
 - Avoid linq2db 6.4-only internal tokens so a 6.0-built binary does not `MissingMethodException` on 6.3 `AggregateFunctionBuilder.Build`
-- `AddDataProvider` rejects linq2db 6.4+
 - Target frameworks: `net8.0`, `net9.0`
 
 ## [6.1.0] - 2026-06-15

@@ -4,8 +4,8 @@ on:
     push:
         tags:
             # One tag → one nupkg. Package minor is the linq2db ABI line:
-            #   v6.0.*  → compile linq2db 6.0.0, range [6.0.0, 6.4.0)
-            #   v6.4.*  → compile linq2db 6.4.0, range [6.4.0, )
+            #   v6.0.*  → compile 6.0.0, nuspec [6.0.0, 6.4.0)
+            #   v6.4.*  → compile 6.4.0, nuspec >= 6.4.0
             - 'v6.0.*'
             - 'v6.4.*'
 
@@ -27,11 +27,15 @@ jobs:
                   case "$GITHUB_REF_NAME" in
                     v6.0.*)
                       LINQ2DB=6.0.0
+                      MIN=6.0.0
+                      MAX=6.4.0
                       RANGE='[6.0.0, 6.4.0)'
                       ;;
                     v6.4.*)
                       LINQ2DB=6.4.0
-                      RANGE='[6.4.0, )'
+                      MIN=6.4.0
+                      MAX=
+                      RANGE='6.4.0'
                       ;;
                     *)
                       echo "Unexpected tag $GITHUB_REF_NAME"
@@ -41,9 +45,11 @@ jobs:
                   {
                     echo "version=$VERSION"
                     echo "linq2db=$LINQ2DB"
+                    echo "min=$MIN"
+                    echo "max=$MAX"
                     echo "range=$RANGE"
                   } >> "$GITHUB_OUTPUT"
-                  echo "Pack $VERSION against linq2db $LINQ2DB ($RANGE)"
+                  echo "Pack $VERSION against linq2db $LINQ2DB (nuspec $RANGE)"
 
             - name: Setup .NET SDKs
               uses: actions/setup-dotnet@v4
@@ -78,20 +84,34 @@ jobs:
 
             - name: Smoke test (linq2db ${{ steps.line.outputs.linq2db }})
               run: |
+                  RANGE_ARGS=(-p:MinLinqVersion="${{ steps.line.outputs.min }}")
+                  if [ -n "${{ steps.line.outputs.max }}" ]; then
+                    RANGE_ARGS+=(-p:MaxAllowedLinqVersion="${{ steps.line.outputs.max }}")
+                  fi
                   dotnet restore \
                     -p:LinqToDbVersion=${{ steps.line.outputs.linq2db }} \
-                    -p:FireboltSdkVersion=1.9.1
+                    -p:FireboltSdkVersion=1.9.1 \
+                    "${RANGE_ARGS[@]}"
                   dotnet build -c Release --warnAsError --no-restore \
                     -p:LinqToDbVersion=${{ steps.line.outputs.linq2db }} \
-                    -p:FireboltSdkVersion=1.9.1
+                    -p:FireboltSdkVersion=1.9.1 \
+                    "${RANGE_ARGS[@]}"
                   dotnet test -c Release --no-build \
                     -p:LinqToDbVersion=${{ steps.line.outputs.linq2db }} \
-                    -p:FireboltSdkVersion=1.9.1
+                    -p:FireboltSdkVersion=1.9.1 \
+                    "${RANGE_ARGS[@]}"
 
             - name: Pack (symbols + notes)
               run: |
                   VERSION="${{ steps.line.outputs.version }}"
                   LINQ2DB="${{ steps.line.outputs.linq2db }}"
+                  MIN="${{ steps.line.outputs.min }}"
+                  MAX="${{ steps.line.outputs.max }}"
+                  RANGE="${{ steps.line.outputs.range }}"
+                  RANGE_ARGS=(-p:MinLinqVersion="$MIN")
+                  if [ -n "$MAX" ]; then
+                    RANGE_ARGS+=(-p:MaxAllowedLinqVersion="$MAX")
+                  fi
                   mkdir -p artifacts
                   {
                     echo '<Project>'
@@ -108,12 +128,14 @@ jobs:
                   dotnet restore src/Similarweb.LinqToDb.Firebolt/Similarweb.LinqToDB.Firebolt.csproj \
                     -p:Version="$VERSION" \
                     -p:LinqToDbVersion="$LINQ2DB" \
-                    -p:FireboltSdkVersion=1.9.1
+                    -p:FireboltSdkVersion=1.9.1 \
+                    "${RANGE_ARGS[@]}"
                   dotnet build src/Similarweb.LinqToDb.Firebolt/Similarweb.LinqToDB.Firebolt.csproj \
                     -c Release --warnAsError --no-restore \
                     -p:Version="$VERSION" \
                     -p:LinqToDbVersion="$LINQ2DB" \
-                    -p:FireboltSdkVersion=1.9.1
+                    -p:FireboltSdkVersion=1.9.1 \
+                    "${RANGE_ARGS[@]}"
                   dotnet pack src/Similarweb.LinqToDb.Firebolt/Similarweb.LinqToDB.Firebolt.csproj \
                     --no-build \
                     -c Release \
@@ -122,15 +144,16 @@ jobs:
                     -p:PackageVersion="$VERSION" \
                     -p:MinVerSkip=true \
                     -p:LinqToDbVersion="$LINQ2DB" \
-                    -p:CustomBeforeDirectoryBuildProps="$PWD/artifacts/PackageReleaseNotes.props"
+                    -p:CustomBeforeDirectoryBuildProps="$PWD/artifacts/PackageReleaseNotes.props" \
+                    "${RANGE_ARGS[@]}"
 
                   echo "Packed artifacts:"
                   ls -la artifacts/*.nupkg artifacts/*.snupkg
                   python3 - << PY
                   from pathlib import Path
                   import zipfile, re, sys
-                  version = "${{ steps.line.outputs.version }}"
-                  want = "${{ steps.line.outputs.range }}"
+                  version = "$VERSION"
+                  want = "$RANGE"
                   name = f"Similarweb.LinqToDB.Firebolt.{version}.nupkg"
                   nupkg = Path("artifacts") / name
                   if not nupkg.is_file():

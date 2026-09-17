@@ -14,8 +14,8 @@ We in [Similarweb](https://similarweb.com) use this package to fetch data from [
   * Install [FireboltNetSDK](https://github.com/firebolt-db/firebolt-net-sdk) **1.9.1 or 1.10.x** yourself (peer dependency; not bundled).
 * LinqToDB: pick the nupkg line that matches your linq2db (same package id):
   * **6.0.0-rc.2** — linq2db **6.0–6.3** (`linq2db [6.0.0, 6.4.0)`). `AsMaterializedCte` uses the name-suffix fallback.
-  * **6.4.0-rc.1** — linq2db **6.4+** (`linq2db [6.4.0, )`). `AsMaterializedCte` uses native `IsMaterialized`.
-  * If you also pin `linq2db` yourself, match the line. A mismatch is NU1608 at restore (warning; restore still succeeds) and `Registration.AddDataProvider` throws.
+  * **6.4.0-rc.1** — linq2db **6.4+** (`linq2db >= 6.4.0`). `AsMaterializedCte` uses native `IsMaterialized`.
+  * Match the line to your linq2db. A 6.0 package + linq2db 6.4 pin is NU1608; `Registration.AddDataProvider` also rejects a mismatch.
   * CI still recompiles against `{6.0.0, 6.1.0, 6.2.0, 6.3.0, 6.4.0}` × FireboltNetSDK `{1.9.1, 1.10.1}` × TFM `{net8.0, net9.0}`.
 
 ## How to use
