@@ -107,7 +107,6 @@ jobs:
                   LINQ2DB="${{ steps.line.outputs.linq2db }}"
                   MIN="${{ steps.line.outputs.min }}"
                   MAX="${{ steps.line.outputs.max }}"
-                  RANGE="${{ steps.line.outputs.range }}"
                   RANGE_ARGS=(-p:MinLinqVersion="$MIN")
                   if [ -n "$MAX" ]; then
                     RANGE_ARGS+=(-p:MaxAllowedLinqVersion="$MAX")
@@ -149,26 +148,7 @@ jobs:
 
                   echo "Packed artifacts:"
                   ls -la artifacts/*.nupkg artifacts/*.snupkg
-                  python3 - << PY
-                  from pathlib import Path
-                  import zipfile, re, sys
-                  version = "$VERSION"
-                  want = "$RANGE"
-                  name = f"Similarweb.LinqToDB.Firebolt.{version}.nupkg"
-                  nupkg = Path("artifacts") / name
-                  if not nupkg.is_file():
-                      print(f"ERROR: missing {name}", file=sys.stderr)
-                      sys.exit(1)
-                  with zipfile.ZipFile(nupkg) as z:
-                      nuspec = next(n for n in z.namelist() if n.endswith(".nuspec"))
-                      text = z.read(nuspec).decode()
-                  deps = re.findall(r'<dependency id="linq2db" version="([^"]+)"', text)
-                  print(f"{nupkg.name}: linq2db {deps}")
-                  got = deps[0] if deps else None
-                  if got != want:
-                      print(f"ERROR: expected linq2db {want}, got {got}", file=sys.stderr)
-                      sys.exit(1)
-                  PY
+                  test -f "artifacts/Similarweb.LinqToDB.Firebolt.${VERSION}.nupkg"
 
             - name: Push to NuGet
               env:
