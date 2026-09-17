@@ -8,6 +8,14 @@
     -->
     <FireboltSdkVersion Condition="'$(FireboltSdkVersion)' == ''">1.10.1</FireboltSdkVersion>
     <LinqToDbVersion Condition="'$(LinqToDbVersion)' == ''">6.0.0</LinqToDbVersion>
+    <!--
+      Two nupkg lines (same package id):
+      * compiled against 6.0.0 → linq2db [6.0.0, 6.4.0)
+      * compiled against 6.4.0 → linq2db [6.4.0, )
+      Restore still uses the single LinqToDbVersion above; pack rewrites the nuspec range.
+    -->
+    <LinqToDbDependencyRange Condition="'$(LinqToDbDependencyRange)' == '' AND $([MSBuild]::VersionLessThan('$(LinqToDbVersion)', '6.4.0'))">[6.0.0, 6.4.0)</LinqToDbDependencyRange>
+    <LinqToDbDependencyRange Condition="'$(LinqToDbDependencyRange)' == ''">[6.4.0, )</LinqToDbDependencyRange>
   </PropertyGroup>
   <ItemGroup>
     <!-- Build / analyzers -->
@@ -36,5 +44,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(LinqToDbHasMaterializedCte)' == 'true'">
     <DefineConstants>$(DefineConstants);LINQ2DB_HAS_MATERIALIZED_CTE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(LinqToDbVersion)', '6.4.0'))">
+    <DefineConstants>$(DefineConstants);LINQ2DB_6_4_LINE</DefineConstants>
   </PropertyGroup>
 </Project>

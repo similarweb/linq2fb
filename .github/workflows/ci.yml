@@ -12,8 +12,9 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                tfm: [net8.0, net9.0, net10.0]
-                # Materialized CTE is skipped when linq2db < 6.3.0 (see Directory.Build.Props).
+                tfm: [net8.0, net9.0]
+                # Materialized CTE native API is compiled only when linq2db >= 6.3.0.
+                # Published nupkgs: 6.0.x for linq2db [6.0.0, 6.4.0), 6.4.x for linq2db [6.4.0, ).
                 linq2db: ["6.0.0", "6.1.0", "6.2.0", "6.3.0", "6.4.0"]
                 fb: ["1.9.1", "1.10.1"]
         steps:
@@ -28,8 +29,6 @@ jobs:
                       SDK_VER="8.0.414";;
                     net9.0)
                       SDK_VER="9.0.305";;
-                    net10.0)
-                      SDK_VER="10.0.301";;
                     *)
                       echo "Unknown TFM ${{ matrix.tfm }}" >&2
                       exit 1;;

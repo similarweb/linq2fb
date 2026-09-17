@@ -1,0 +1,16 @@
+<Project>
+  <!--
+    Restore uses a single LinqToDbVersion. After pack, rewrite the nupkg nuspec
+    dependency to a range. A direct linq2db pin outside that range is NU1608
+    (warning, restore still succeeds); Registration.AddDataProvider then throws.
+  -->
+  <Target Name="PatchLinqToDbNupkgRange" AfterTargets="Pack" Condition="'$(IsPackable)' != 'false'">
+    <PropertyGroup>
+      <_LinqToDbNupkg>$([System.IO.Path]::Combine('$(PackageOutputAbsolutePath)', '$(PackageId).$(PackageVersion).nupkg'))</_LinqToDbNupkg>
+      <_LinqToDbNupkg Condition="!Exists('$(_LinqToDbNupkg)')">$([System.IO.Path]::Combine('$(PackageOutputPath)', '$(PackageId).$(PackageVersion).nupkg'))</_LinqToDbNupkg>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(_LinqToDbNupkg)')" Text="Packed nupkg not found: $(_LinqToDbNupkg)" />
+    <Exec
+      Command="python3 &quot;$(MSBuildThisFileDirectory)patch_nupkg_range.py&quot; &quot;$(_LinqToDbNupkg)&quot; &quot;$(LinqToDbDependencyRange)&quot;" />
+  </Target>
+</Project>
