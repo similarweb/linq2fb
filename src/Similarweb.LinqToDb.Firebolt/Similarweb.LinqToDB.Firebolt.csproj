@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 
     <ImplicitUsings>enable</ImplicitUsings>
@@ -13,9 +13,10 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <!--
-      Pack against the lowest supported linq2db (6.0.0). NuGet dependency becomes >= 6.0.0,
-      covering 6.0–6.4. Materialized CTE uses a name-suffix + BuildWithClause fallback on &lt; 6.3
-      and native IsMaterialized / SupportsMaterializedCteHint on ≥ 6.3. FireboltNetSDK is a peer dependency.
+      Two pack lines (tag v6.0.* vs v6.4.*):
+      * LinqToDbVersion 6.0.0, MaxAllowedLinqVersion 6.4.0 → linq2db [6.0.0, 6.4.0); suffix CTE.
+      * LinqToDbVersion 6.4.0 (no max) → linq2db >= 6.4.0; native IsMaterialized.
+      FireboltNetSDK is a peer dependency.
     -->
     <PackageTags>linq2db;firebolt;orm</PackageTags>
   </PropertyGroup>

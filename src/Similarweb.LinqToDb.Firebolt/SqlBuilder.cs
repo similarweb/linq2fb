@@ -159,10 +159,14 @@ internal class SqlBuilder : BasicSqlBuilder
 
 #if !LINQ2DB_HAS_MATERIALIZED_CTE
     /// <summary>
-    /// Copied from linq2db <c>BasicSqlBuilder.BuildWithClause</c> with Firebolt
-    /// <c>MATERIALIZED</c> injected when the CTE name contains
-    /// <see cref="LinqExtensions.CteMaterializedEnding"/> (linq2db &lt; 6.3 fallback).
+    /// linq2db &lt; 6.3 fallback: emit Firebolt <c>MATERIALIZED</c> when the CTE name contains
+    /// <see cref="LinqExtensions.CteMaterializedEnding"/>.
     /// </summary>
+    /// <remarks>
+    /// Must not touch <c>CteClause.Fields</c>: that getter is <c>List&lt;SqlField&gt;</c> in 6.0–6.3 and
+    /// <c>List&lt;SqlCteField&gt;</c> in 6.4, so a 6.0-compiled nupkg would fail to JIT this override
+    /// on 6.4 (even for queries with no CTE). Call <c>base</c> and splice the keyword into the SQL.
+    /// </remarks>
     /// <param name="with"><see cref="SqlWithClause"/> clause.</param>
     protected override void BuildWithClause(SqlWithClause? with)
     {
@@ -171,109 +175,66 @@ internal class SqlBuilder : BasicSqlBuilder
             return;
         }
 
-        var first = true;
+        var start = StringBuilder.Length;
+        base.BuildWithClause(with);
 
-        foreach (var cte in with.Clauses)
+        for (var i = with.Clauses.Count - 1; i >= 0; i--)
         {
-            if (first)
+            var cte = with.Clauses[i];
+            if (cte.Name?.Contains(LinqExtensions.CteMaterializedEnding, StringComparison.Ordinal) != true)
             {
-                AppendIndent();
-                StringBuilder.Append("WITH ");
-
-                if (IsRecursiveCteKeywordRequired && with.Clauses.Any(static c => c.IsRecursive))
-                {
-                    StringBuilder.Append("RECURSIVE ");
-                }
-
-                first = false;
-            }
-            else
-            {
-                StringBuilder.AppendLine(Comma);
-                AppendIndent();
+                continue;
             }
 
-            var isMaterialized = cte.Name?.Contains(LinqExtensions.CteMaterializedEnding, StringComparison.Ordinal) == true;
-
-            BuildObjectName(StringBuilder, new(cte.Name!), ConvertType.NameToCteName, true, TableOptions.NotSet);
-
-            if (IsCteColumnListSupported)
-            {
-                if (cte.Fields.Count > 3)
-                {
-                    StringBuilder.AppendLine();
-                    AppendIndent();
-                    StringBuilder.AppendLine(OpenParens);
-                    ++Indent;
-
-                    var firstField = true;
-                    foreach (var field in cte.Fields)
-                    {
-                        if (!firstField)
-                        {
-                            StringBuilder.AppendLine(Comma);
-                        }
-
-                        firstField = false;
-                        AppendIndent();
-                        Convert(StringBuilder, field.PhysicalName, ConvertType.NameToQueryField);
-                    }
-
-                    --Indent;
-                    StringBuilder.AppendLine();
-                    AppendIndent();
-                    StringBuilder.AppendLine(")");
-                }
-                else if (cte.Fields.Count > 0)
-                {
-                    StringBuilder.Append(" (");
-
-                    var firstField = true;
-                    foreach (var field in cte.Fields)
-                    {
-                        if (!firstField)
-                        {
-                            StringBuilder.Append(InlineComma);
-                        }
-
-                        firstField = false;
-                        Convert(StringBuilder, field.PhysicalName, ConvertType.NameToQueryField);
-                    }
-
-                    StringBuilder.AppendLine(")");
-                }
-                else
-                {
-                    StringBuilder.Append(' ');
-                }
-            }
-            else
-            {
-                StringBuilder.Append(' ');
-            }
-
-            AppendIndent();
-            StringBuilder.AppendLine("AS");
-            AppendIndent();
-            if (isMaterialized)
-            {
-                StringBuilder.Append("MATERIALIZED ");
-                AppendIndent();
-            }
-
-            StringBuilder.AppendLine(OpenParens);
-
-            Indent++;
-
-            BuildCteBody(cte.Body!);
-
-            Indent--;
-
-            AppendIndent();
-            StringBuilder.Append(')');
+            InsertMaterializedKeyword(start, cte.Name);
         }
 
-        StringBuilder.AppendLine();
+        void InsertMaterializedKeyword(int withClauseStart, string cteName)
+        {
+            var renderedName = new StringBuilder();
+            Convert(renderedName, cteName, ConvertType.NameToCteName);
+
+            var withSql = StringBuilder.ToString(withClauseStart, StringBuilder.Length - withClauseStart);
+            var nameOffset = withSql.IndexOf(renderedName.ToString(), StringComparison.Ordinal);
+            if (nameOffset < 0)
+            {
+                return;
+            }
+
+            var asOffset = IndexOfAsKeyword(withSql, nameOffset + renderedName.Length);
+            if (asOffset < 0)
+            {
+                return;
+            }
+
+            var insertAt = withClauseStart + asOffset + 2;
+            while (insertAt < StringBuilder.Length && char.IsWhiteSpace(StringBuilder[insertAt]))
+            {
+                insertAt++;
+            }
+
+            StringBuilder.Insert(insertAt, "MATERIALIZED ");
+        }
+
+        static int IndexOfAsKeyword(string sql, int from)
+        {
+            for (var i = from; i < sql.Length - 1; i++)
+            {
+                if (sql[i] != 'A' || sql[i + 1] != 'S')
+                {
+                    continue;
+                }
+
+                var precededByNonWord = i == 0 || !char.IsLetterOrDigit(sql[i - 1]);
+                var followedByNonWord = i + 2 >= sql.Length || !char.IsLetterOrDigit(sql[i + 2]);
+                if (precededByNonWord && followedByNonWord)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
     }
 #endif
 

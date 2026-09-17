@@ -8,6 +8,15 @@
     -->
     <FireboltSdkVersion Condition="'$(FireboltSdkVersion)' == ''">1.10.1</FireboltSdkVersion>
     <LinqToDbVersion Condition="'$(LinqToDbVersion)' == ''">6.0.0</LinqToDbVersion>
+    <!--
+      Compile pin is LinqToDbVersion. The nupkg dependency is assembled as:
+        MaxAllowedLinqVersion empty → MinLinqVersion (i.e. >= min)
+        otherwise → [MinLinqVersion, MaxAllowedLinqVersion)
+      CI only sets LinqToDbVersion. Release pack for 6.0.x also sets MaxAllowedLinqVersion=6.4.0.
+    -->
+    <MinLinqVersion Condition="'$(MinLinqVersion)' == ''">$(LinqToDbVersion)</MinLinqVersion>
+    <LinqToDbPackageVersion Condition="'$(MaxAllowedLinqVersion)' != ''">[$(MinLinqVersion), $(MaxAllowedLinqVersion))</LinqToDbPackageVersion>
+    <LinqToDbPackageVersion Condition="'$(LinqToDbPackageVersion)' == ''">$(MinLinqVersion)</LinqToDbPackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <!-- Build / analyzers -->
@@ -24,7 +33,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Testcontainers" Version="4.13.0" />
     <!-- LinqToDb -->
-    <PackageVersion Include="linq2db" Version="$(LinqToDbVersion)" />
+    <PackageVersion Include="linq2db" Version="$(LinqToDbPackageVersion)" />
     <!-- Firebolt -->
     <PackageVersion Include="FireboltNetSDK" Version="$(FireboltSdkVersion)" />
   </ItemGroup>
@@ -36,5 +45,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(LinqToDbHasMaterializedCte)' == 'true'">
     <DefineConstants>$(DefineConstants);LINQ2DB_HAS_MATERIALIZED_CTE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(LinqToDbVersion)', '6.4.0'))">
+    <DefineConstants>$(DefineConstants);LINQ2DB_6_4_LINE</DefineConstants>
   </PropertyGroup>
 </Project>
