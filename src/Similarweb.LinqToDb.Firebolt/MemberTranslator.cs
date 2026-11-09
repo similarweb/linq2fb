@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Reflection;
 using LinqToDB;
 using LinqToDB.Internal.DataProvider.Translation;
 using LinqToDB.Internal.Expressions;
@@ -36,7 +37,7 @@ internal class MemberTranslator : ProviderMemberTranslatorDefault
 #pragma warning restore SA1313
         )
         {
-            return new AggregateFunctionBuilder()
+            var builder = new AggregateFunctionBuilder()
                 .ConfigureAggregate(c => c
                     .HasSequenceIndex(0)
                     .HasValue(hasValue: false)
@@ -62,27 +63,39 @@ internal class MemberTranslator : ProviderMemberTranslatorDefault
                         var factory = buildInfo.Factory;
                         var resultType = factory.GetDbDataType(methodCall.Method.ReturnType);
 
-                        var modifier = buildInfo.IsDistinct
-                            ? Sql.AggregateModifier.Distinct
-                            : Sql.AggregateModifier.None;
-
-                        var result = factory.Function(
-                            resultType,
-                            "ARRAY_AGG",
-                            [new SqlFunctionArgument(sql, modifier)],
-                            [true, true],
-                            canBeNull: true,
-                            withinGroup: null,
-                            partitionBy: null,
-                            orderBy: null,
-                            frameClause: null,
-                            filter: null,
-                            isAggregate: true,
-                            canBeAffectedByOrderBy: false);
+                        // 4-arg Function exists on 6.0–6.4. The window/aggregate overload grew extra
+                        // parameters in 6.4, so a 6.0-compiled nupkg must not call it.
+                        var argument = buildInfo.IsDistinct
+                            ? factory.Expression(resultType, "DISTINCT {0}", sql)
+                            : sql;
+                        var result = factory.Function(resultType, "ARRAY_AGG", argument);
 
                         composer.SetResult(result);
-                    }))
-                .Build(translationContext, methodCall);
+                    }));
+
+            // linq2db 6.3 added a bool argument to Build; a 6.0-compiled nupkg must not
+            // emit a 2-arg call token or ARRAY_AGG translation MissingMethodExceptions on 6.3+.
+            return InvokeBuild(builder, translationContext, methodCall);
+
+            static Expression? InvokeBuild(
+                AggregateFunctionBuilder aggregateBuilder,
+                ITranslationContext context,
+                MethodCallExpression call)
+            {
+                var build = typeof(AggregateFunctionBuilder)
+                    .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                    .Single(method => method.Name == nameof(AggregateFunctionBuilder.Build));
+                var parameters = build.GetParameters();
+                var args = new object?[parameters.Length];
+                args[0] = context;
+                args[1] = call;
+                for (var i = 2; i < parameters.Length; i++)
+                {
+                    args[i] = parameters[i].HasDefaultValue ? parameters[i].DefaultValue : false;
+                }
+
+                return (Expression?)build.Invoke(aggregateBuilder, args);
+            }
         }
     }
 
