@@ -21,7 +21,7 @@
   <ItemGroup>
     <!-- Build / analyzers -->
     <PackageVersion Include="MinVer" Version="5.0.0" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.403" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
     <!-- Test stack -->
     <PackageVersion Include="xunit.v3" Version="3.1.0" />
@@ -31,7 +31,7 @@
     <PackageVersion Include="Xunit.DependencyInjection" Version="11.0.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageVersion Include="Testcontainers" Version="4.13.0" />
+    <PackageVersion Include="Testcontainers" Version="4.14.0" />
     <!-- LinqToDb -->
     <PackageVersion Include="linq2db" Version="$(LinqToDbPackageVersion)" />
     <!-- Firebolt -->
