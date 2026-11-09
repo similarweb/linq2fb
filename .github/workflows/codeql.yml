@@ -22,6 +22,14 @@ jobs:
               with:
                   fetch-depth: 0
 
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: |
+                      8.0.x
+                      9.0.x
+                      10.0.x
+
             - name: Init CodeQL
               uses: github/codeql-action/init@v3
               with:

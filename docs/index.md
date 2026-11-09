@@ -4,7 +4,8 @@ Documentation for the LinqToDB **6.x**-based package ([`6.0.0-rc.2`](https://www
 
 ## Target platforms
 - [NET8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (8.0.414) — backporting
-- [NET9](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) (9.0.305) — mainstream
+- [NET9](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) (9.0.305)
+- [NET10](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) (10.0.301) — current
 
 ## Dogfooding
 We in [Similarweb](https://similarweb.com) use this package to fetch data from [Firebolt V2](https://firebolt.io), so we keep improving it.
@@ -16,7 +17,7 @@ We in [Similarweb](https://similarweb.com) use this package to fetch data from [
   * **6.0.0-rc.2** — linq2db **6.0–6.3** (`linq2db [6.0.0, 6.4.0)`). `AsMaterializedCte` uses the name-suffix fallback.
   * **6.4.0-rc.1** — linq2db **6.4+** (`linq2db >= 6.4.0`). `AsMaterializedCte` uses native `IsMaterialized`.
   * Match the line to your linq2db. A 6.0 package + linq2db 6.4 pin is NU1608; `Registration.AddDataProvider` also rejects a mismatch.
-  * CI still recompiles against `{6.0.0, 6.1.0, 6.2.0, 6.3.0, 6.4.0}` × FireboltNetSDK `{1.9.1, 1.10.1}` × TFM `{net8.0, net9.0}`.
+  * CI still recompiles against `{6.0.0, 6.1.0, 6.2.0, 6.3.0, 6.4.0}` × FireboltNetSDK `{1.9.1, 1.10.1}` × TFM `{net8.0, net9.0, net10.0}`.
 
 ## How to use
 1. Install this package (see [how to install](#installing-package))
