@@ -19,7 +19,13 @@
       FireboltNetSDK is a peer dependency.
     -->
     <PackageTags>linq2db;firebolt;orm</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>CHANGELOG.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\CHANGELOG.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="linq2db" />
