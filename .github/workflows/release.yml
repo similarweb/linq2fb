@@ -14,6 +14,7 @@ jobs:
         runs-on: ubuntu-latest
         permissions:
             contents: write   # to create GitHub Release
+            id-token: write   # OIDC token for NuGet trusted publishing
             packages: write   # for GitHub Packages if you use it later
         steps:
             - uses: actions/checkout@v4
@@ -151,9 +152,15 @@ jobs:
                   ls -la artifacts/*.nupkg artifacts/*.snupkg
                   test -f "artifacts/Similarweb.LinqToDB.Firebolt.${VERSION}.nupkg"
 
+            - name: NuGet login
+              id: login
+              uses: NuGet/login@v1
+              with:
+                  user: ${{ secrets.NUGET_USER }}
+
             - name: Push to NuGet
               env:
-                  NUGET_API_KEY: ${{ secrets.NUGET_KEY }}
+                  NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
               run: >
                   dotnet nuget push "artifacts/*.nupkg"
                   -k "$NUGET_API_KEY"
@@ -162,7 +169,7 @@ jobs:
 
             - name: Push symbols to NuGet
               env:
-                  NUGET_API_KEY: ${{ secrets.NUGET_KEY }}
+                  NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
               run: >
                   dotnet nuget push "artifacts/*.snupkg"
                   -k "$NUGET_API_KEY"
