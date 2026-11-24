@@ -6,7 +6,7 @@ the format of [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-## [6.4.1-rc.1] - 2026-11-09
+## [6.4.1] - 2026-11-24
 - Nupkg compiled against linq2db 6.4.0 (NuGet dependency `linq2db >= 6.4.0`)
 - Native Materialized CTE (`AsMaterializedCte` → `IsMaterialized` / `SupportsMaterializedCteHint`)
 - `AddDataProvider` rejects linq2db older than 6.4.0
@@ -26,7 +26,7 @@ the format of [Keep a Changelog](https://keepachangelog.com/).
 - Target frameworks: `net8.0`, `net9.0`, `net10.0`
 
 ## [6.1.0] - 2026-06-15
-- Not published on NuGet (`net10.0` ships with the 6.0 and 6.4 package lines; see 6.4.1-rc.1)
+- Not published on NuGet (`net10.0` ships with the 6.0 and 6.4 package lines; see 6.4.1)
 
 ## [6.0.0] - 2026-08-12
 - Migrate provider to LinqToDB 6.x (compatible with 6.0–6.4; NuGet package built against 6.0.0)
